@@ -1,7 +1,7 @@
 import React from 'react'
 import { IconButton, Tooltip } from '@mui/material'
 import { ExitToAppRounded } from '@mui/icons-material'
-import { Strings } from '@waystone'
+import { Strings } from '@medicorp'
 export default function NavProfile() {
     // const { oktaAuth } = useOktaAuth()
     const logout = async (e) => {

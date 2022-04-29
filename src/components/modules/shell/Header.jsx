@@ -1,8 +1,8 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { AppBar, Grid, IconButton, Toolbar } from "@mui/material"
+import { AppBar, Grid, IconButton, Toolbar, Typography } from "@mui/material"
 import { Menu } from "@mui/icons-material"
-import { useStyles, NavProfile,appSettings } from '@waystone'
+import { useStyles, NavProfile, appSettings } from '@medicorp'
 
 export default function Header(props) {
     const classes = useStyles()
@@ -17,9 +17,9 @@ export default function Header(props) {
                     <Menu />
                 </IconButton>
                 <Grid item xs sx={classes.title}>
-                    <Link to="/">
-                        <img src={appSettings.appLogo} alt="Waystone" style={{ height: '1.5rem' }} />
-                    </Link>
+                    <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold' }}>
+                        MEDICORP
+                    </Typography>
                 </Grid>
                 <NavProfile />
             </Toolbar>

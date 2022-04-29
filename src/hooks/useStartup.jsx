@@ -1,4 +1,4 @@
-import { appSettings } from '@waystone'
+import { appSettings } from '@medicorp'
 
 const useStartup = (navigate) => {
     const { routeConfig, oktaConfig } = appSettings

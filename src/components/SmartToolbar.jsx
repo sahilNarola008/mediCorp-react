@@ -6,7 +6,7 @@ import {
     Typography,
     Tooltip
 } from "@mui/material"
-import { useStyles } from "@waystone"
+import { useStyles } from "@medicorp"
 
 const SmartToolBar = ({ title, icons, onAction, canCreate }) => {
     const classes = useStyles()

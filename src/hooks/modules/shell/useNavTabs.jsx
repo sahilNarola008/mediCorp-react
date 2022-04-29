@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useMenus } from '@waystone'
+import { useMenus } from '@medicorp'
 
 const useNavTabs = () => {
     const url = useLocation()
@@ -10,7 +10,7 @@ const useNavTabs = () => {
     const tabItems = menuItems.find(item => item.id === base)?.children ?? []
     const selectedIndex = tabItems.length > 0 ?
         tabItems.findIndex(item => item.navigate.split('/').join('') === location.split('/').join('')) : -1
-        
+
     const [value, setValue] = useState(0)
 
     const handleChange = (event, newValue) => {

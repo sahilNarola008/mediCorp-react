@@ -1,11 +1,11 @@
 import {
     Dashboard,
-    Schedule,
-    SettingsApplications,
-    ViewList,
-    Help
+    Category,
+    Group,
+    Inventory,
+    Slideshow
 } from "@mui/icons-material"
-import { Strings, appSettings, uuidv4, moment, PropTypes } from "@waystone"
+import { Strings, appSettings, uuidv4, moment, PropTypes } from "@medicorp"
 
 export const getDefaultValueArray = (options, data) => {
     if (!Array.isArray(data)) return []
@@ -32,12 +32,13 @@ export const validator = {
 }
 
 export const useMenus = () => {
-    const { dashboard, datasource, jobScheduling, settings, help } = appSettings.routeConfig
+    const { dashboard, categories, presentation, products, users } = appSettings.routeConfig
     const {
         MENU_DASHBOARD_TITLE,
-        MENU_INSIGHTS_TITLE,
-        MENU_REMEDIAL_ACTION_TITLE,
-        MENU_SUMMARY_TITLE
+        MENU_PRODUCTS_TITLE,
+        MENU_CATEGORIESS_TITLE,
+        MENU_USERS_TITLE,
+        MENU_PRESENTATIONSS_TITLE
     } = Strings
 
     const menuItems = [
@@ -46,26 +47,35 @@ export const useMenus = () => {
             labelText: MENU_DASHBOARD_TITLE,
             isVisible: true,
             icon: Dashboard,
-            children: [
-                {
-                    id: "dashboard_summary",
-                    labelText: MENU_SUMMARY_TITLE,
-                    isVisible: true,
-                    navigate: dashboard.summary,
-                },
-                {
-                    id: "dashboard_insight",
-                    labelText: MENU_INSIGHTS_TITLE,
-                    isVisible: true,
-                    navigate: dashboard.insight,
-                },
-                {
-                    id: "dashboard_remedial_action",
-                    labelText: MENU_REMEDIAL_ACTION_TITLE,
-                    isVisible: true,
-                    navigate: dashboard.remedialActions,
-                },
-            ],
+            navigate: dashboard.baseURL
+        },
+        {
+            id: "products",
+            labelText: MENU_PRODUCTS_TITLE,
+            isVisible: true,
+            icon: Inventory,
+            navigate: products.baseURL
+        },
+        {
+            id: "categories",
+            labelText: MENU_CATEGORIESS_TITLE,
+            isVisible: true,
+            icon: Category,
+            navigate: categories.baseURL
+        },
+        {
+            id: "users",
+            labelText: MENU_USERS_TITLE,
+            isVisible: true,
+            icon: Group,
+            navigate: users.baseURL
+        },
+        {
+            id: "presentations",
+            labelText: MENU_PRESENTATIONSS_TITLE,
+            isVisible: true,
+            icon: Slideshow,
+            navigate: presentation.baseURL
         },
 
     ]

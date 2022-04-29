@@ -2,7 +2,7 @@ import React from 'react'
 import { Paper, Typography, TextField, InputAdornment } from '@mui/material'
 import { Search } from '@mui/icons-material'
 import { Droppable } from 'react-beautiful-dnd'
-import { Widget, styled, useTableIcons, useStyles } from '@waystone'
+import { Widget, styled, useTableIcons, useStyles } from '@medicorp'
 
 const ItemsContainer = styled('div')(({ theme, isDraggingOver }) => ({
     padding: theme.spacing(1),

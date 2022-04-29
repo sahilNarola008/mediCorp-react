@@ -6,7 +6,7 @@ import {
   Provider,
   AppShell,
   appSettings
-} from "@waystone"
+} from "@medicorp"
 
 const Startup = () => {
   const navigate = useNavigate()

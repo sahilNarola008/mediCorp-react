@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react"
-import { configure, axios, appSettings } from '@waystone'
+import { configure, axios, appSettings } from '@medicorp'
 
 const Context = createContext()
 

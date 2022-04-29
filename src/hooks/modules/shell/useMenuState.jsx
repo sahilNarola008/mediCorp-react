@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useLocalStorage } from '@waystone'
+import { useLocalStorage } from '@medicorp'
 
 function useMenuState() {
     const { setAppItem, getAppItem } = useLocalStorage()

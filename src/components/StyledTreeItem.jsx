@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
 import { NavLink, useLocation } from 'react-router-dom'
-import { PropTypes, styled, TreeItem, treeItemClasses } from '@waystone'
+import { PropTypes, styled, TreeItem, treeItemClasses } from '@medicorp'
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   color: theme.palette.text.secondary,

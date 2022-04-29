@@ -1,5 +1,5 @@
 import { Avatar, Button, Grid, IconButton, Paper, Stack, Tooltip, Typography } from "@mui/material"
-import { SearchBox, useStyles, useTableIcons } from "@waystone"
+import { SearchBox, useStyles, useTableIcons } from "@medicorp"
 import React from "react"
 
 const SearchBar = ({ options, CTAButtons, CTAButton2, filterReportLabel }) => {

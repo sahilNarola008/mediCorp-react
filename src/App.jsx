@@ -1,7 +1,7 @@
 import React from 'react'
 import { CssBaseline } from '@mui/material'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { Themeify, Startup, ConfirmProvider } from '@waystone'
+import { Themeify, Startup, ConfirmProvider } from '@medicorp'
 
 const App = () => (
     <div>

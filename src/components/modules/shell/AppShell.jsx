@@ -9,7 +9,7 @@ import {
   Main,
   appSettings,
   Context
-} from "@waystone"
+} from "@medicorp"
 
 const AppShell = () => {
   const { snak_open, setSnackOpen, snackContent } = useContext(Context)

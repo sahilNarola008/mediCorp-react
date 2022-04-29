@@ -9,7 +9,7 @@ import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material"
 import AceEditor from "react-ace"
 import "ace-builds/src-noconflict/mode-csharp"
 import "ace-builds/src-noconflict/theme-textmate"
-import { Switch, useStyles, LoadingButton, appSettings, groupBy, Counter, useTableIcons, MaterialTable } from "@waystone"
+import { Switch, useStyles, LoadingButton, appSettings, groupBy, Counter, useTableIcons, MaterialTable } from "@medicorp"
 
 const SmartContent = ({
     formHeader,

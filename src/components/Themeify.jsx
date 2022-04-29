@@ -5,7 +5,7 @@ import {
     ThemeProvider,
     StyledEngineProvider
 } from '@mui/material/styles'
-import { appSettings } from '@waystone'
+import { appSettings } from '@medicorp'
 
 const Themeify = (props) => {
     const { colors } = appSettings.calendarConfig
@@ -13,8 +13,8 @@ const Themeify = (props) => {
         palette: {
             mode: "light",
             primary: {
-                dark: '#0d783d',
-                main: "#0bb202",
+                dark: '#a7262a',
+                main: "#d67155",
                 contrastText: '#fff',
             },
             secondary: {

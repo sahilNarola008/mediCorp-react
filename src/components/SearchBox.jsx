@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Autocomplete, Checkbox, TextField } from '@mui/material'
 import { CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material'
-import { PropTypes, Strings } from "@waystone"
+import { PropTypes, Strings } from "@medicorp"
 
 
 function SearchBox(props) {

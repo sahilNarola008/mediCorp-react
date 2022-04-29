@@ -1,5 +1,5 @@
 import React from "react"
-import { StyledTreeItem, useMenus } from "@waystone"
+import { StyledTreeItem, useMenus } from "@medicorp"
 
 function useFlyoutMenus() {
   const menuItems = useMenus()

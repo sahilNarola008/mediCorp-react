@@ -3,7 +3,7 @@ import { styled } from '@mui/system'
 import { Collapse, Grid, IconButton, Paper, Stack } from "@mui/material"
 import { Delete, Edit } from "@mui/icons-material"
 import { Draggable } from 'react-beautiful-dnd'
-import { SmartContent } from '@waystone'
+import { SmartContent } from '@medicorp'
 
 const Item = styled('div')(
     ({ theme, isDragging, background, colIndex }) => `
@@ -75,7 +75,7 @@ const Widget = ({ widget, index, colIndex, onEditClick, onDeleteClick, actions }
                                         </Grid>
                                     </Header>
                                     <Collapse in={widget.open}>
-                                        <Paper elevation={6} sx={{padding:2}}>
+                                        <Paper elevation={6} sx={{ padding: 2 }}>
                                             <Stack spacing={2}>
                                                 <SmartContent
                                                     formHeader={{ alignActions: 'flex-start' }}

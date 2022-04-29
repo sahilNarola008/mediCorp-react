@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Drawer, Toolbar, SwipeableDrawer, Paper, Grid, Box } from "@mui/material"
 import { ArrowDropDown, ArrowRight } from '@mui/icons-material'
-import { useStyles, PropTypes, useFlyoutMenus, TreeView, appSettings } from '@waystone'
+import { useStyles, PropTypes, useFlyoutMenus, TreeView, appSettings } from '@medicorp'
 const Flyout = (props) => {
     const classes = useStyles()
     const { window, menuObj } = props

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Tabs, Tab } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { useNavTabs } from '@waystone'
+import { useNavTabs } from '@medicorp'
 
 const LinkTab = ({ to, ...props }) => {
   const navigate = useNavigate()
@@ -17,7 +17,7 @@ const LinkTab = ({ to, ...props }) => {
 }
 
 export default function NavTabs() {
-  
+
   const { tabItems, value, handleChange } = useNavTabs()
   return (
     <>

@@ -7,7 +7,7 @@ import {
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { useForm, Controller } from "react-hook-form"
 import { Clear, CheckBoxOutlineBlank, CheckBox, CalendarToday } from "@mui/icons-material"
-import { Counter, Switch, MaterialTable, useStyles, useTableIcons, LoadingButton, appSettings, AdapterMoment, MobileDateRangePicker } from "@waystone"
+import { Counter, Switch, MaterialTable, useStyles, useTableIcons, LoadingButton, appSettings, AdapterMoment, MobileDateRangePicker } from "@medicorp"
 import { DatePicker, DateRangePicker, LocalizationProvider, StaticDateRangePicker } from "@mui/lab"
 
 import AceEditor from "react-ace"
