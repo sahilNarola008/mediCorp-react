@@ -28,7 +28,15 @@ export const validator = {
     hourValidator: {
         required: { value: true, message: "Time is required" },
         pattern: { value: /^([0]{0,1}[1-9]{1}|[1]\d|[2][0-3])$/g, message: "Interval is invalid. Must be a whole number between 1 to 23" }
-    }
+    },
+    PriceValidator: {
+        required: { value: true, message: "Price is required" },
+        pattern: {
+            value:
+                /^[0-9]*$/,
+            message: "Price is invalid",
+        },
+    },
 }
 
 export const useMenus = () => {

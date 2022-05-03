@@ -16,8 +16,10 @@ const Strings = {
     COLUMN_PHONE: "Phone",
     COLUMN_PROTOCOL: "Protocol",
     COLUMN_HOST: "Host",
+    COLUMN_MRP: "MRP",
     COLUMN_USER_NAME: "User Name",
     COLUMN_PASSWORD: "Password",
+    COLUMN_UPLOAD_IMAGES: "Upload Images",
     COLUMN_PORT: "Port",
     COLUMN_DATA_CONNECTION_TITLE: "Connection",
     COLUMN_DATA_CONNECTION_SOURCE: "Source",
@@ -46,6 +48,7 @@ const Strings = {
     COLUMN_USERS_USER_ROLE: "User Role",
     COLUMN_USERS_TITLE: "Users",
     COLUMN_USERS_IS_ACTIVE: "Is Active",
+    COLUMN_PRODUCT_IS_ACTIVE: "Is Active",
     COLUMN_CALENDAR_NAME: "Calendar Name",
     COLUMN_CALENDAR_YEAR: "Calendar Year",
     COLUMN_CALENDAR_FREQUENCY_TAG: "Frequency Tsg",
@@ -181,5 +184,8 @@ const Strings = {
     SUMMARY_SMS_CAPTION: "SMS",
     SUMMARY_COUNT_CAPTION: "Count",
     SUMMARY_REQUIRES_ATTENTION: "Requires attention",
+
+    ADD_PRODUCTS: "Add Products",
+    EDIT_PRODUCTS: "Edit Products",
 }
 export { Strings }

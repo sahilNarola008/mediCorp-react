@@ -656,7 +656,7 @@ const SmartContent = ({
                         }
                     </Grid>
             }
-            <Box sx={{ display: freeAction ? 'none' : 'inline-flex' }}>
+            <Box sx={{ display: freeAction ? 'none' : 'inline-flex', width: "100%" }}>
                 <button
                     onClick={handleSubmit(freeAction)}
                     hidden

@@ -1,7 +1,7 @@
 import { appSettings } from '@medicorp'
 
 const useStartup = (navigate) => {
-    const { routeConfig, oktaConfig } = appSettings
+    // const { routeConfig, oktaConfig } = appSettings
 
 
 

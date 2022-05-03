@@ -15,7 +15,6 @@ const appSettings = {
     },
     routeConfig: {
         login: '/login',
-        loginCallback: '/login/callback',
         dashboard: {
             baseURL: '/dashboard',
         },
