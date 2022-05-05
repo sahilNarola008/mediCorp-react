@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react'
 import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator } from "@medicorp"
-const useUsers = () => {
+
+export default function useDoctors() {
     const { logMessage } = useContext(Context)
     const { endpointConfig, fieldTypes, statusType } = appSettings
     const { tableIcons } = useTableIcons()
@@ -13,25 +14,23 @@ const useUsers = () => {
     const [modalFormResetKeys, setModalFormResetKeys] = useState([])
     const [modalTaskRunning, setModalTaskRunning] = useState(false)
 
-
-
-    const [{ data: users, loading: usersLoading }, refetchUsers] = useAxios(endpointConfig.users.getAll)
-    const [{ }, refetchUsersById] = useAxios(endpointConfig.users.getUsersById, { manual: true })
+    const [{ data: doctors, loading: doctorsLoading }, refetchDoctors] = useAxios(endpointConfig.doctors.getAll)
+    const [{ }, refetchDoctorsById] = useAxios(endpointConfig.doctors.getDoctorsById, { manual: true })
     const [{ }, saveUsers] = useAxios(
         {
-            url: endpointConfig.users.postUsers,
+            url: endpointConfig.doctors.postDoctors,
             method: "POST"
         },
         { manual: true })
-    const [{ }, updateUsers] = useAxios(
+    const [{ }, updateDoctors] = useAxios(
         {
-            url: endpointConfig.users.updateUsers,
+            url: endpointConfig.doctors.updateDoctors,
             method: "PUT"
         },
         { manual: true })
     const [{ }, deleteTag] = useAxios(
         {
-            url: endpointConfig.users.deleteUsersById,
+            url: endpointConfig.doctors.deleteDoctorsById,
             method: "DELETE"
         },
         { manual: true })
@@ -39,7 +38,7 @@ const useUsers = () => {
     const actions = [
         {
             icon: tableIcons.Add,
-            tooltip: "Add User",
+            tooltip: "Add Doctor",
             isFreeAction: true,
             onClick: (event, rowData) => handleActionClick(event, false, false, {})
         },
@@ -48,7 +47,7 @@ const useUsers = () => {
             tooltip: "Edit Application",
             onClick: (event, rowData) => new Promise((resolve) => {
                 setModalFormResetKeys([])
-                refetchUsersById({ url: format(endpointConfig.users.getUsersById, rowData.id) })
+                refetchDoctorsById({ url: format(endpointConfig.doctors.getDoctorsById, rowData.id) })
                     .then(res => {
                         if (res.status === 200) {
                             resolve(res.data)
@@ -60,14 +59,14 @@ const useUsers = () => {
             icon: tableIcons.Delete,
             tooltip: "Delete Application",
             onClick: (event, rowData) => new Promise((resolve) => {
-                confirm({ description: "Are you sure you want to Delete" })
+                confirm({ description: "Are You Sure You Want To Delete" })
                     .then(() => {
                         setModalFormResetKeys([])
-                        deleteTag({ url: format(endpointConfig.users.deleteUsersById, rowData.id) })
+                        deleteTag({ url: format(endpointConfig.doctors.deleteDoctorsById, rowData.id) })
                             .then((res) => {
                                 const { msg, errorMessage, message, title } = res.data
                                 if (res.status === 200) {
-                                    refetchUsers()
+                                    refetchDoctors()
                                     resolve()
                                 }
                                 logMessage({
@@ -81,16 +80,11 @@ const useUsers = () => {
         }
     ]
 
-    const user = [
-        { id: "1", firstName: "vishal", lastName: "makavana", gender: "male", email: "vishal@gmail.com", phone: "9033179395" },
-
-    ]
-
     const handleActionClick = (event, isEdit = false, isView = false, rowData = {}) => {
         setModalHeader({
             isForm: true,
-            title: isEdit === true ? "Edit Users" : "Add Users",
-            header: isEdit === true ? "Edit in existing Users" : "Create a new Users",
+            title: isEdit === true ? "Edit Doctors" : "Add Doctor",
+            header: isEdit === true ? "Edit in existing Doctors" : "Create a new Doctors",
             modalWidth: 'md'
         })
         setModalContent({
@@ -127,7 +121,7 @@ const useUsers = () => {
                 ],
                 disabled: isView === true,
                 validator: {
-                    required: { value: true, message: "Users gender is required" }
+                    required: { value: true, message: "Doctors gender is required" }
                 }
             },
             email: {
@@ -149,6 +143,40 @@ const useUsers = () => {
                 value: rowData?.phone ?? "",
                 disabled: isView === true,
                 validator: validator.phoneValidator
+            },
+            address: {
+                label: "Address",
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.textArea.type,
+                value: rowData?.address ?? "",
+                disabled: isView === true,
+                validator: validator.textAreaValidator
+            },
+            city: {
+                label: "City",
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.text.type,
+                value: rowData?.city ?? "",
+                disabled: isView === true,
+                validator: {
+                    required: { value: true, message: "City is required" }
+                }
+            },
+            state: {
+                label: "State",
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.text.type,
+                value: rowData?.state ?? "",
+                disabled: isView === true,
+                validator: {
+                    required: { value: true, message: "State is required" }
+                }
             }
         })
         setModalActions(isView === true ? [] : [
@@ -163,7 +191,7 @@ const useUsers = () => {
     }
     const handleSubmit = (data, isEdit, id) => {
         setModalTaskRunning(true)
-        const response = isEdit === true ? updateUsers({
+        const response = isEdit === true ? updateDoctors({
             data: {
                 id: Number(id),
                 ...data
@@ -173,7 +201,7 @@ const useUsers = () => {
             const { msg, errorMessage, message, title } = res.data
             if (res.status === 200) {
                 handleModalClose()
-                refetchUsers()
+                refetchDoctors()
             }
             logMessage({
                 severity: res.status === 200 ? statusType.success : statusType.error,
@@ -189,7 +217,7 @@ const useUsers = () => {
         setModalFormResetKeys([])
     }
     return {
-        user, users, actions, usersLoading,
+        doctors, actions, doctorsLoading,
         openDialog,
         handleModalClose,
         handleActionClick,
@@ -201,4 +229,3 @@ const useUsers = () => {
 
     }
 }
-export default useUsers

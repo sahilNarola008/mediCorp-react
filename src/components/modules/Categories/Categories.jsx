@@ -1,8 +1,45 @@
 import React from 'react'
+import { categoriesDataColumns, SmartDialog, Strings, useCategories, MaterialTable, useStyles } from "@medicorp"
 
 const Categories = () => {
+    const { columns } = categoriesDataColumns()
+    const {
+        openDialog,
+        modalHeader,
+        modalContent,
+        modalActions,
+        modalFormResetKeys,
+        modalTaskRunning,
+        actions,
+        AllCategories,
+        allCategoriesLoading,
+        handleModalClose,
+        category
+    } = useCategories()
+    const { materialTableStyle: tableStyle } = useStyles()
     return (
-        <div>Categories</div>
+        <>
+            <MaterialTable
+                columns={columns}
+                data={category}
+                title={Strings.MENU_CATEGORIESS_TITLE}
+                actions={actions}
+                options={{
+                    ...tableStyle,
+                    selection: false
+                }}
+                isLoading={allCategoriesLoading}
+            />
+
+            <SmartDialog open={openDialog}
+                handleClose={handleModalClose}
+                modalHeader={modalHeader}
+                modalContent={modalContent}
+                modalActions={modalActions}
+                modalFormResetKeys={modalFormResetKeys}
+                modalTaskRunning={modalTaskRunning}
+            />
+        </>
     )
 }
 

@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator } from "@medicorp"
-const useUsers = () => {
+function useSpecialization() {
     const { logMessage } = useContext(Context)
     const { endpointConfig, fieldTypes, statusType } = appSettings
     const { tableIcons } = useTableIcons()
@@ -15,23 +15,23 @@ const useUsers = () => {
 
 
 
-    const [{ data: users, loading: usersLoading }, refetchUsers] = useAxios(endpointConfig.users.getAll)
-    const [{ }, refetchUsersById] = useAxios(endpointConfig.users.getUsersById, { manual: true })
+    const [{ data: specialization, loading: specializationLoading }, refetchSpecialization] = useAxios(endpointConfig.specialization.getAll)
+    const [{ }, refetchSpecializationById] = useAxios(endpointConfig.specialization.getSpecializationById, { manual: true })
     const [{ }, saveUsers] = useAxios(
         {
-            url: endpointConfig.users.postUsers,
+            url: endpointConfig.specialization.postSpecialization,
             method: "POST"
         },
         { manual: true })
     const [{ }, updateUsers] = useAxios(
         {
-            url: endpointConfig.users.updateUsers,
+            url: endpointConfig.specialization.updateSpecialization,
             method: "PUT"
         },
         { manual: true })
     const [{ }, deleteTag] = useAxios(
         {
-            url: endpointConfig.users.deleteUsersById,
+            url: endpointConfig.specialization.deleteSpecializationById,
             method: "DELETE"
         },
         { manual: true })
@@ -48,7 +48,7 @@ const useUsers = () => {
             tooltip: "Edit Application",
             onClick: (event, rowData) => new Promise((resolve) => {
                 setModalFormResetKeys([])
-                refetchUsersById({ url: format(endpointConfig.users.getUsersById, rowData.id) })
+                refetchSpecializationById({ url: format(endpointConfig.specialization.getSpecializationById, rowData.id) })
                     .then(res => {
                         if (res.status === 200) {
                             resolve(res.data)
@@ -63,11 +63,11 @@ const useUsers = () => {
                 confirm({ description: "Are you sure you want to Delete" })
                     .then(() => {
                         setModalFormResetKeys([])
-                        deleteTag({ url: format(endpointConfig.users.deleteUsersById, rowData.id) })
+                        deleteTag({ url: format(endpointConfig.users.deleteSpecializationById, rowData.id) })
                             .then((res) => {
                                 const { msg, errorMessage, message, title } = res.data
                                 if (res.status === 200) {
-                                    refetchUsers()
+                                    refetchSpecialization()
                                     resolve()
                                 }
                                 logMessage({
@@ -81,10 +81,7 @@ const useUsers = () => {
         }
     ]
 
-    const user = [
-        { id: "1", firstName: "vishal", lastName: "makavana", gender: "male", email: "vishal@gmail.com", phone: "9033179395" },
 
-    ]
 
     const handleActionClick = (event, isEdit = false, isView = false, rowData = {}) => {
         setModalHeader({
@@ -94,62 +91,31 @@ const useUsers = () => {
             modalWidth: 'md'
         })
         setModalContent({
-            firstName: {
-                label: "First Name",
+            specialization: {
+                label: "Specialization",
                 size: "small",
                 variant: "outlined",
                 col: 12,
                 type: fieldTypes.text.type,
-                value: rowData?.firstName ?? "",
-                disabled: isView === true,
-                validator: validator.nameValidator
-            },
-            lastName: {
-                label: "Last Name",
-                size: "small",
-                variant: "outlined",
-                col: 12,
-                type: fieldTypes.text.type,
-                value: rowData?.lastName ?? "",
-                disabled: isView === true,
-                validator: validator.nameValidator
-            },
-            gender: {
-                label: "Gender",
-                size: "small",
-                variant: "outlined",
-                col: 12,
-                type: fieldTypes.radioGroup.type,
-                value: rowData?.gender ?? "",
-                options: [
-                    { text: "Male", val: "male" },
-                    { text: "Female", val: "female" }
-                ],
+                value: rowData?.specialization ?? "",
                 disabled: isView === true,
                 validator: {
-                    required: { value: true, message: "Users gender is required" }
+                    required: { value: true, message: "Specialization required" }
                 }
             },
-            email: {
-                label: "Email",
+            description: {
+                label: "Description",
                 size: "small",
                 variant: "outlined",
                 col: 12,
                 type: fieldTypes.text.type,
-                value: rowData?.email ?? "",
+                value: rowData?.description ?? "",
                 disabled: isView === true,
-                validator: validator.emailValidator
+                validator: {
+                    required: { value: true, message: "Description required" }
+                }
             },
-            phone: {
-                label: "Phone",
-                size: "small",
-                variant: "outlined",
-                col: 12,
-                type: fieldTypes.text.type,
-                value: rowData?.phone ?? "",
-                disabled: isView === true,
-                validator: validator.phoneValidator
-            }
+
         })
         setModalActions(isView === true ? [] : [
             {
@@ -173,7 +139,7 @@ const useUsers = () => {
             const { msg, errorMessage, message, title } = res.data
             if (res.status === 200) {
                 handleModalClose()
-                refetchUsers()
+                refetchSpecialization()
             }
             logMessage({
                 severity: res.status === 200 ? statusType.success : statusType.error,
@@ -189,7 +155,7 @@ const useUsers = () => {
         setModalFormResetKeys([])
     }
     return {
-        user, users, actions, usersLoading,
+        specialization, actions, specializationLoading,
         openDialog,
         handleModalClose,
         handleActionClick,
@@ -201,4 +167,5 @@ const useUsers = () => {
 
     }
 }
-export default useUsers
+
+export default useSpecialization

@@ -2,11 +2,11 @@ import React, { useEffect } from "react"
 import { Route, Routes, useNavigate, useLocation, matchPath } from "react-router-dom"
 import { Box, Toolbar } from "@mui/material"
 import {
-  appSettings, NavTabs, Dashboard, Categories, Users, Presentation, Products
+  appSettings, NavTabs, Dashboard, Categories, Users, Doctors, Specialization, Presentation, Products
 } from "@medicorp"
 
 function Main({ mainClassName }) {
-  const { dashboard, categories, users, products, presentation } = appSettings.routeConfig
+  const { dashboard, categories, products, doctors, specialization, users, presentation } = appSettings.routeConfig
   const { pathname } = useLocation()
   const navigate = useNavigate()
   // const match = matchPath(
@@ -31,8 +31,10 @@ function Main({ mainClassName }) {
       <Routes>
         <Route path={dashboard.baseURL} element={<Dashboard />} />
         <Route path={categories.baseURL} element={<Categories />} />
-        <Route path={users.baseURL} element={<Users />} />
         <Route path={products.baseURL} element={<Products />} />
+        <Route path={doctors.baseURL} element={<Doctors />} />
+        <Route path={specialization.baseURL} element={<Specialization />} />
+        <Route path={users.baseURL} element={<Users />} />
         <Route path={presentation.baseURL} element={<Presentation />} />
       </Routes>
       <Toolbar />

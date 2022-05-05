@@ -1,29 +1,33 @@
-import { usersDataColumn, useUsers, useStyles, Strings, MaterialTable, SmartDialog } from '@medicorp'
 import React from 'react'
+import { SmartDialog, Strings, MaterialTable, useStyles, specializationDataColumn, useSpecialization } from "@medicorp"
+function Specialization() {
+    const { columns } = specializationDataColumn()
+    const {
 
-const Users = () => {
-    const { user, users, actions, usersLoading,
         openDialog,
-        handleModalClose,
         modalHeader,
         modalContent,
         modalActions,
         modalFormResetKeys,
-        modalTaskRunning } = useUsers()
-    const { columns } = usersDataColumn()
+        modalTaskRunning,
+        actions,
+        specialization, specializationLoading,
+        handleModalClose
+    } = useSpecialization()
     const { materialTableStyle: tableStyle } = useStyles()
     return (
         <>
             <MaterialTable
                 columns={columns}
-                data={user}
-                title={Strings.COLUMN_USERS_TITLE}
+                data={specialization}
+                title={Strings.MENU_DOCTORS_SPECIALIZATION_TITLE}
                 actions={actions}
                 options={{
                     ...tableStyle,
                     selection: false
                 }}
-                isLoading={usersLoading} />
+                isLoading={specializationLoading}
+            />
 
             <SmartDialog open={openDialog}
                 handleClose={handleModalClose}
@@ -33,9 +37,9 @@ const Users = () => {
                 modalFormResetKeys={modalFormResetKeys}
                 modalTaskRunning={modalTaskRunning}
             />
-
         </>
     )
 }
 
-export default Users
+export default Specialization
+
