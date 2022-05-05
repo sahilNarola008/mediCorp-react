@@ -1,18 +1,21 @@
-import React, { Fragment, useEffect } from "react"
+import React, { Fragment, useEffect, useState } from "react"
 import {
     Box, Grid, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
     Button, MenuItem, TextField, Chip, Checkbox, ListItemText, InputAdornment, FormControlLabel,
-    Switch as MUSwitch, Icon, Autocomplete, Typography, Stack, Radio, RadioGroup, FormLabel, FormControl
+    Switch as MUSwitch, Icon, Autocomplete, Typography, Stack, Radio, RadioGroup, FormLabel, FormControl, ButtonGroup, Card, CardMedia, CardActions
 } from "@mui/material"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { useForm, Controller } from "react-hook-form"
-import { Clear, CheckBoxOutlineBlank, CheckBox, CalendarToday } from "@mui/icons-material"
+import { Clear, CheckBoxOutlineBlank, CheckBox, CalendarToday, Delete, Visibility, UploadFile } from "@mui/icons-material"
 import { Counter, Switch, MaterialTable, useStyles, useTableIcons, LoadingButton, appSettings, AdapterMoment, MobileDateRangePicker } from "@medicorp"
 import { DatePicker, DateRangePicker, LocalizationProvider, StaticDateRangePicker } from "@mui/lab"
-
+import { styled } from '@mui/material/styles';
 import AceEditor from "react-ace"
+import Lightbox from "react-awesome-lightbox";
 import "ace-builds/src-noconflict/mode-csharp";
 import "ace-builds/src-noconflict/theme-textmate";
+import "react-awesome-lightbox/build/style.css";
+
 const SmartDialog = ({
     open,
     handleClose,
@@ -22,6 +25,11 @@ const SmartDialog = ({
     modalFormResetKeys,
     modalTaskRunning,
 }) => {
+    const [selectedImage, setSelectedImage] = useState();
+    const [uploadImgViewURL, setUploadImgViewURL] = useState()
+    const Input = styled('input')({
+        display: 'none',
+    });
     const { isForm, title, header, modalWidth, isReadOnly } = modalHeader
     const {
         handleSubmit,
@@ -36,6 +44,32 @@ const SmartDialog = ({
     const { tableIcons } = useTableIcons()
     const { fieldTypes, fieldGroupTypes } = appSettings
 
+    var imgeObj = []
+    var imgArray = []
+    const imageChange = (e) => {
+        imgeObj.push(e.target.files)
+        for (let i = 0; i < imgeObj[0].length; i++) {
+            imgArray.push(imgeObj[0][i])
+        }
+        setSelectedImage(imgArray)
+    }
+
+    const removeSelectedImage = (imgName) => {
+        var newSelectedValue = []
+
+        for (let index = 0; index < selectedImage.length; index++) {
+            console.log("selectedImage", selectedImage)
+            if (selectedImage[index].name !== imgName) {
+                newSelectedValue.push(selectedImage[index])
+            }
+        }
+        setSelectedImage(newSelectedValue);
+    }
+
+    const viewSelectedImage = (imgUrl, imgTitle) => {
+        console.log(imgUrl);
+        setUploadImgViewURL([imgUrl, imgTitle])
+    }
     const arrayFieldTypes = Object.entries(fieldTypes)
         .filter(([key, item]) => item.group === fieldGroupTypes.array)
         .map((item) => item[1].type)
@@ -703,6 +737,89 @@ const SmartDialog = ({
                                                         </>
                                                     )}
                                                 />
+
+                                                <Controller
+                                                    case={fieldTypes.image.type}
+                                                    name={`${key}`}
+                                                    control={control}
+                                                    rules={item.validator}
+                                                    defaultValue={item.value}
+                                                    render={({ field }) => (
+                                                        <>
+
+                                                            <label htmlFor="contained-button-file" >
+                                                                <Input
+                                                                    {...field}
+                                                                    accept="image/*"
+                                                                    id="contained-button-file"
+                                                                    multiple
+                                                                    type="file"
+                                                                    onChange={imageChange}
+                                                                    error={!!errors[`${key}`]}
+                                                                />
+                                                                <Button
+                                                                    variant="contained"
+                                                                    component="span"
+                                                                    size={item.size}
+                                                                    disabled={
+                                                                        (item.disabled && true) ||
+                                                                        (isReadOnly ?? false)
+                                                                    }
+                                                                >
+                                                                    {item.label || <UploadFile />}
+                                                                </Button>
+                                                            </label>
+                                                            {errors[`${key}`] && (
+                                                                <Typography variant="subtitle1" sx={classes.invalid}>
+                                                                    {errors[`${key}`].message}
+                                                                </Typography>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                />
+                                                <Controller
+                                                    case={fieldTypes.image.type}
+                                                    name={`${key}`}
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <>
+
+                                                            <Grid container direction={"row"} spacing={1}>
+                                                                {selectedImage && Object.values(selectedImage).map((imageValue) => {
+                                                                    return (
+                                                                        <Grid item xs={3} spacing={3} sx={{
+                                                                            margin: '20px 0px 6px 0px',
+                                                                            display: "flex",
+                                                                            flexDirection: "column",
+                                                                            justifyContent: "space-between",
+                                                                        }}>
+
+                                                                            <Card sx={{ maxWidth: 345 }}>
+                                                                                <CardMedia
+                                                                                    component="img"
+                                                                                    height="140"
+                                                                                    image={URL.createObjectURL(imageValue)}
+                                                                                    alt={imageValue.name}
+                                                                                    key={imageValue.name}
+                                                                                />
+                                                                                <CardActions>
+                                                                                    <ButtonGroup variant="contained" fullWidth aria-label="outlined primary button group">
+                                                                                        <Button onClick={() => { removeSelectedImage(imageValue.name) }}>{<Delete />}</Button>
+                                                                                        <Button style={styles.imgUploadPreviewBTN} onClick={() => { viewSelectedImage(URL.createObjectURL(imageValue, imageValue.name)) }}>{<Visibility />}</Button>
+                                                                                    </ButtonGroup>
+                                                                                </CardActions>
+                                                                            </Card>
+
+
+                                                                        </Grid>
+                                                                    )
+                                                                })}
+                                                                {uploadImgViewURL && <Lightbox image={uploadImgViewURL[0]} title={uploadImgViewURL[1]} onClose={() => setUploadImgViewURL()}></Lightbox>}
+                                                            </Grid>
+                                                        </>
+                                                    )}
+                                                />
+
                                             </Switch>
                                         }
                                     </Grid>
@@ -772,5 +889,22 @@ const SmartDialog = ({
         </Dialog>
     )
 }
-
+const styles = {
+    container: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 50,
+    },
+    preview: {
+        marginTop: 50,
+        display: "flex",
+        flexDirection: "column",
+    },
+    image: { maxWidth: "100%", maxHeight: '205px', objectFit: "contain" },
+    imgUploadPreviewBTN: {
+        backgroundColor: "#5db6fd"
+    }
+};
 export default SmartDialog

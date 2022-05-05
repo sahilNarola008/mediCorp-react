@@ -1,10 +1,11 @@
 import { appSettings, productsDataColumns, Strings, useTableIcons, validator } from '@medicorp'
 import React, { useState } from 'react'
+import { useConfirm } from "material-ui-confirm"
 
 const useProducts = () => {
     const { productsColumn } = productsDataColumns()
     const { tableIcons } = useTableIcons()
-
+    const confirm = useConfirm()
     const { endpointConfig, fieldTypes } = appSettings
 
 
@@ -50,7 +51,10 @@ const useProducts = () => {
         {
             icon: tableIcons.Delete,
             tooltip: 'Delete Application',
-            onClick: () => handleActionClick()
+            onClick: () => {
+                confirm({ description: 'Are you sure you want to delete?' })
+                    .then(() => { })
+            }
         }
     ]
 
@@ -112,18 +116,18 @@ const useProducts = () => {
                 value: rowData?.model?.connectionName ?? "",
                 disabled: isView === true,
             },
-            uploadImage: {
-                label: "Upload Image",
+            image: {
+                // label: 'Upload Images',
                 size: "small",
                 variant: "outlined",
                 col: 12,
                 type: fieldTypes.image.type,
                 value: rowData?.model?.connectionName ?? "",
                 disabled: isView === true,
-                validator: {
-                    required: { value: true, message: "uploadImage is required" }
-                }
-            },
+                // validator: {
+                //     required: { value: true, message: "image is required" }
+                // }
+            }
         })
         setModalActions([
             {

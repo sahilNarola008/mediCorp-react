@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react"
-import { DeleteOutline, EditOutlined, Visibility, AddCircle, Save, ZoomIn, ZoomOut, Close, Done, VisibilityOff, CopyAll, RestartAlt, Search, PlayArrow, Download, ChevronRight, ChevronLeft, Login } from '@mui/icons-material'
+import { DeleteOutline, EditOutlined, Visibility, AddCircle, Save, ZoomIn, ZoomOut, Close, Done, VisibilityOff, CopyAll, RestartAlt, Search, PlayArrow, Download, ChevronRight, ChevronLeft, Login, UploadFile } from '@mui/icons-material'
 function useTableIcons() {
     const tableIcons = {
         View: forwardRef((props, ref) => <Visibility {...props} ref={ref} color={props.color ?? "secondary"} fontSize="small" />),
@@ -19,7 +19,8 @@ function useTableIcons() {
         Download: forwardRef((props, ref) => <Download {...props} ref={ref} />),
         ChevronRight: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
         ChevronLeft: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-        Login: forwardRef((props, ref) => <Login {...props} ref={ref} />)
+        Login: forwardRef((props, ref) => <Login {...props} ref={ref} />),
+        Upload: forwardRef((props, ref) => <UploadFile {...props} ref={ref} />)
     }
     return { tableIcons }
 }
