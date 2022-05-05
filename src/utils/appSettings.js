@@ -24,8 +24,23 @@ const appSettings = {
     categories: {
       baseURL: "/categories",
     },
-    products: {
-      baseURL: "/products",
+    routeConfig: {
+      login: "/login",
+      dashboard: {
+        baseURL: "/dashboard",
+      },
+      categories: {
+        baseURL: "/categories",
+      },
+      users: {
+        baseURL: "/users",
+      },
+      products: {
+        baseURL: "/products",
+      },
+      presentation: {
+        baseURL: "/presentation",
+      },
     },
     doctors: {
       baseURL: "/doctors",

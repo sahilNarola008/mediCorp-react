@@ -50,7 +50,6 @@ export { default as useLocalStorage } from "hooks/useLocalStorage";
 export { default as useFlyoutMenus } from "hooks/modules/shell/useFlyoutMenus";
 export { default as useMenuState } from "hooks/modules/shell/useMenuState";
 export { default as useNavTabs } from "hooks/modules/shell/useNavTabs";
-
 export { default as useDashboard } from "hooks/modules/Dashboard/useDashboard";
 export { default as useCategories } from "hooks/modules/Categories/useCategories";
 export { default as useProducts } from "hooks/modules/Products/useProducts";
@@ -61,6 +60,7 @@ export { default as usePresentation } from "hooks/modules/Presentation/usePresen
 export { default as useTableIcons } from "hooks/useTableIcons";
 export { SearchBar } from "components/SearchBar";
 export { SearchBox } from "components/SearchBox";
+export { default as useLogin } from "hooks/modules/auth/useLogin";
 
 //#endregion
 
@@ -88,6 +88,7 @@ export { default as Doctors } from "components/modules/Doctors/Doctors";
 export { default as Specialization } from "components/modules/specialization/Specialization";
 export { default as Users } from "components/modules/Users/Users";
 export { default as Presentation } from "components/modules/Presentation/Presentation";
+export { default as Login } from "components/modules/auth/Login";
 
 //#endregion
 
@@ -97,4 +98,6 @@ export { default as productsDataColumns } from "dataColumns/productsDataColumns"
 export { default as doctorsDataColumns } from "dataColumns/doctorsDataColumns";
 export { default as specializationDataColumn } from "dataColumns/specializationDataColumn";
 export { default as usersDataColumn } from "dataColumns/usersDataColumn";
+export { default as productsDataColumns } from "dataColumns/productsDataColumns";
+
 //#endregion
