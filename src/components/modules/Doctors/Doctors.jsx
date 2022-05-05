@@ -1,8 +1,10 @@
 import React from 'react'
-import { useDoctors, useStyles, Strings, MaterialTable, SmartDialog, doctorsDataColumns } from '@medicorp'
+import { useDoctors, useStyles, Strings, MaterialTable, SmartDialog } from '@medicorp'
 
 export default function Doctors() {
-    const { doctors, actions, doctorsLoading,
+    const {
+        columns,
+        doctors, actions, doctorsLoading,
         openDialog,
         handleModalClose,
         modalHeader,
@@ -10,11 +12,10 @@ export default function Doctors() {
         modalActions,
         modalFormResetKeys,
         modalTaskRunning } = useDoctors()
-    const { columns } = doctorsDataColumns()
     const { materialTableStyle: tableStyle } = useStyles()
     return (
         <>
-            <MaterialTable
+            {/* <MaterialTable
                 columns={columns}
                 data={doctors}
                 title={Strings.COLUMN_DOCTORS_TITLE}
@@ -32,7 +33,7 @@ export default function Doctors() {
                 modalActions={modalActions}
                 modalFormResetKeys={modalFormResetKeys}
                 modalTaskRunning={modalTaskRunning}
-            />
+            /> */}
 
         </>
     )

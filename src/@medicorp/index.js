@@ -98,6 +98,5 @@ export { default as productsDataColumns } from "dataColumns/productsDataColumns"
 export { default as doctorsDataColumns } from "dataColumns/doctorsDataColumns";
 export { default as specializationDataColumn } from "dataColumns/specializationDataColumn";
 export { default as usersDataColumn } from "dataColumns/usersDataColumn";
-export { default as productsDataColumns } from "dataColumns/productsDataColumns";
 
 //#endregion
