@@ -11,13 +11,15 @@ export default function Doctors() {
         modalContent,
         modalActions,
         modalFormResetKeys,
-        modalTaskRunning } = useDoctors()
+        modalTaskRunning,
+        doctorsDummyData
+    } = useDoctors()
     const { materialTableStyle: tableStyle } = useStyles()
     return (
         <>
-            {/* <MaterialTable
+            <MaterialTable
                 columns={columns}
-                data={doctors}
+                data={doctorsDummyData}
                 title={Strings.COLUMN_DOCTORS_TITLE}
                 actions={actions}
                 options={{
@@ -33,7 +35,7 @@ export default function Doctors() {
                 modalActions={modalActions}
                 modalFormResetKeys={modalFormResetKeys}
                 modalTaskRunning={modalTaskRunning}
-            /> */}
+            />
 
         </>
     )
