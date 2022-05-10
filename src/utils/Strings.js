@@ -236,5 +236,14 @@ const Strings = {
   COLUMN_USERS_GENDER: "Gender",
   COLUMN_USERS_PHONE: "Phone",
   COLUMN_DOCTORS_TITLE: "Doctors",
+  COLUMNS_DOCTORNAME_TILTLE: "Doctor Name",
+  COLUMNS_USERNAME_TILTLE: "User Name",
+  SEARCH_TITLE: "Search",
+  SEARCH_TITLE_DATERANGE: "Daterange",
+  SEARCH_TITLE_CATEGORY: "Category",
+  SEARCH_TITLE_PRODUCTS: "Products",
+  SEARCH_TITLE_DOCTOR: "Doctor",
+  SEARCH_TITLE_USER: "User",
+
 };
 export { Strings };

@@ -113,6 +113,7 @@ const appSettings = {
     label: { type: "label" },
     counter: { type: "counter", group: "nullable" },
     aceEditor: { type: "aceEditor" },
+    search: { type: "search" },
   },
   statusType: {
     error: "error",

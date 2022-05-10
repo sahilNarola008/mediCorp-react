@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator } from "@medicorp"
+import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator, usersDataColumn } from "@medicorp"
 const useUsers = () => {
     const { logMessage } = useContext(Context)
     const { endpointConfig, fieldTypes, statusType } = appSettings
@@ -83,7 +83,7 @@ const useUsers = () => {
 
     const user = [
         { id: "1", firstName: "vishal", lastName: "makavana", gender: "male", email: "vishal@gmail.com", phone: "9033179395" },
-
+        { id: "2", firstName: "makavana", lastName: "makavana", gender: "male", email: "makavana@gmail.com", phone: "9033179395" },
     ]
 
     const handleActionClick = (event, isEdit = false, isView = false, rowData = {}) => {
@@ -184,6 +184,8 @@ const useUsers = () => {
             .finally(() => setModalTaskRunning(false))
     }
 
+    const { columns } = usersDataColumn()
+
     const handleModalClose = () => {
         setOpenDialog(false)
         setModalFormResetKeys([])
@@ -198,6 +200,7 @@ const useUsers = () => {
         modalActions,
         modalFormResetKeys,
         modalTaskRunning,
+        columns,
 
     }
 }
