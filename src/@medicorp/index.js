@@ -75,6 +75,7 @@ export { default as SmartDialog } from "components/SmartDialog";
 export { default as SmartContent } from "components/SmartContent";
 export { default as SmartToolbar } from "components/SmartToolbar";
 export { default as SmartLayout } from "components/SmartLayout";
+export { default as SearchBox2 } from "components/SearchBox2";
 export { default as Column } from "components/Column";
 export { default as Widget } from "components/Widget";
 export { default as Startup } from "components/Startup";

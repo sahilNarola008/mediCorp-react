@@ -28,6 +28,35 @@ const usePresentation = () => {
     });
 
 
+    const searchCategoryMenuItems = [
+        { val: "category1", text: "Category1" },
+        { val: "category2", text: "Category2" },
+        { val: "category3", text: "Category3" },
+        { val: "category4", text: "Category4" },
+        { val: "category5", text: "Category5" },
+    ]
+    const searchProductsMenuItems = [
+        { val: "Product1", text: "product1" },
+        { val: "Product2", text: "product2" },
+        { val: "Product3", text: "product3" },
+        { val: "Product4", text: "product4" },
+        { val: "Product5", text: "product5" },
+    ]
+    const searchDoctorsMenuItems = [
+        { val: "Doctor1", text: "Doctor1" },
+        { val: "Doctor2", text: "Doctor2" },
+        { val: "Doctor3", text: "Doctor3" },
+        { val: "Doctor4", text: "Doctor4" },
+        { val: "Doctor5", text: "Doctor5" },
+    ]
+    const searchUserMenuItems = [
+        { val: "User1", text: "User1" },
+        { val: "User2", text: "User2" },
+        { val: "User3", text: "User3" },
+        { val: "User4", text: "User4" },
+        { val: "User5", text: "User5" },
+    ]
+
     const presentationData = [
         {
             id: 1,
@@ -93,80 +122,80 @@ const usePresentation = () => {
     const searchOptions = {
         title: "",
         spacing: 1,
-        searchItems: [
-            {
-                name: "Daterange",
+        searchItems: {
+            Daterange: {
                 label: Strings.SEARCH_TITLE_DATERANGE,
+                size: "small",
+                variant: "outlined",
+                col: 4,
                 type: fieldTypes.dateRange.type,
                 minDate: new Date("1900-01-01"),
                 maxDate: new Date().toLocaleDateString(),
-                defaultValue: [openSearchData["sFromDate"], openSearchData["sToDate"]],
+                value: [openSearchData["sFromDate"], openSearchData["sToDate"]],
                 onChange: handleSearchChange,
             },
-            {
-                name: "categories",
+            categories: {
                 label: Strings.SEARCH_TITLE_CATEGORY,
                 type: fieldTypes.select.type,
-                menuItems: [
-                    { val: "category1", text: "Category1" },
-                    { val: "category2", text: "Category2" },
-                    { val: "category3", text: "Category3" },
-                    { val: "category4", text: "Category4" },
-                    { val: "category5", text: "Category5" },
-                ],
-                isSelect: true,
-                onChange: handleSearchChange,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                value: "",
+                menuItems: searchCategoryMenuItems.map(g => ({
+                    text: g.text,
+                    val: g.value
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+                onSelectionChange: handleSearchChange
             },
-            {
-                name: "products",
+            products: {
                 label: Strings.SEARCH_TITLE_PRODUCTS,
                 type: fieldTypes.select.type,
-                menuItems: [
-                    { val: "Product1", text: "product1" },
-                    { val: "Product2", text: "product2" },
-                    { val: "Product3", text: "product3" },
-                    { val: "Product4", text: "product4" },
-                    { val: "Product5", text: "product5" },
-                ],
-                isSelect: true,
-                onChange: handleSearchChange,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                value: "",
+                menuItems: searchProductsMenuItems.map(g => ({
+                    text: g.text,
+                    val: g.value
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+                onSelectionChange: handleSearchChange
             },
-            {
-                name: "doctorList",
+            doctorList: {
                 label: Strings.SEARCH_TITLE_DOCTOR,
                 type: fieldTypes.select.type,
-                menuItems: [
-                    { val: "Doctor1", text: "Doctor1" },
-                    { val: "Doctor2", text: "Doctor2" },
-                    { val: "Doctor3", text: "Doctor3" },
-                    { val: "Doctor4", text: "Doctor4" },
-                    { val: "Doctor5", text: "Doctor5" },
-                ],
-                isSelect: true,
-                onChange: handleSearchChange,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                value: "",
+                menuItems: searchDoctorsMenuItems.map(g => ({
+                    text: g.text,
+                    val: g.value
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+                onSelectionChange: handleSearchChange
             },
-            {
-                name: "doctorList",
+            userList: {
                 label: Strings.SEARCH_TITLE_USER,
                 type: fieldTypes.select.type,
-                menuItems: [
-                    { val: "User1", text: "User1" },
-                    { val: "User2", text: "User2" },
-                    { val: "User3", text: "User3" },
-                    { val: "User4", text: "User4" },
-                    { val: "User5", text: "User5" },
-                ],
-                isSelect: true,
-                onChange: handleSearchChange,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                value: "",
+                menuItems: searchUserMenuItems.map(g => ({
+                    text: g.text,
+                    val: g.value
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+                onSelectionChange: handleSearchChange
             },
-            {
-                name: "search",
+            search: {
                 label: Strings.SEARCH_TITLE,
                 type: fieldTypes.search.type,
-                defaultValue: openSearchData["sType"],
-                onChange: handleSearchChange,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                value: "",
+                onSelectionChange: handleSearchChange
             },
-        ],
+        },
         handleSearch: handleOpenSearch,
     };
 
