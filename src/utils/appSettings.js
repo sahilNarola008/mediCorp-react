@@ -40,6 +40,9 @@ const appSettings = {
       baseURL: "/presentation",
     },
   },
+
+
+
   endpointConfig: {
     register: {
       register: "/Account/register",
@@ -55,25 +58,25 @@ const appSettings = {
       deleteSourceById: "/Source/{0}",
     },
     categories: {
-      getAll: "/Categories",
-      postCategories: "/Categories",
-      updateCategories: "/Categories",
-      getCategoriesById: "/Categories/{0}",
-      deleteCategoriesById: "/Categories/{0}",
+      getAll: "/CategoryMaster/GetCategory",
+      postCategories: "/CategoryMaster/CreateCategory",
+      updateCategories: "/CategoryMaster/UpdateCategory/{0}",
+      getCategoriesById: "/CategoryMaster/GetCategory/{0}",
+      deleteCategoriesById: "/CategoryMaster/DeleteCategory/{0}",
     },
     products: {
-      getAll: "/Products",
-      addProducts: "/Products",
-      updateProducts: "/Products/{0}",
-      getProductsById: "/Products/{0}",
-      deleteProductsById: "/Products/{0}",
+      getAll: "/ProductMaster/GetProduct",
+      addProducts: "/ProductMaster/InsertProduct",
+      updateProducts: "/ProductMaster/UpdateProduct{0}",
+      getProductsById: "/ProductMaster/GetProduct/{0}",
+      deleteProductsById: "/ProductMaster/DeleteProduct/{0}",
     },
     doctors: {
-      getAll: "/Doctors",
-      postDoctors: "/Doctors",
-      updateDoctors: "/Doctors",
-      getDoctorsById: "/Doctors/{0}",
-      deleteDoctorsById: "/Doctors/{0}",
+      getAll: "/DoctorMaster/getDoctor",
+      postDoctors: "/DoctorMaster/createDoctor",
+      updateDoctors: "/DoctorMaster/updateDoctor",
+      getDoctorsById: "/DoctorMaster/getDoctor/{0}",
+      deleteDoctorsById: "/DoctorMaster/deleteDoctor/{0}",
     },
     specialization: {
       getAll: "/Specialization",
@@ -83,12 +86,26 @@ const appSettings = {
       deleteSpecializationById: "/Specialization/{0}",
     },
     users: {
-      getAll: "/Users",
-      postUsers: "/Users",
-      updateUsers: "/Users",
-      getUsersById: "/Users/{0}",
-      deleteUsersById: "/Users/{0}",
+      getAll: "/UserMaster/GetUser",
+      postUsers: "/UserMaster/InsertUser",
+      updateUsers: "/UserMaster/UpdateUser",
+      getUsersById: "/UserMaster/GetUser/{0}",
+      deleteUsersById: "/UserMaster/DeleteUser/{0}",
     },
+    city: {
+      getAll: "/CityMaster/getCity",
+      postCity: "/CityMaster/createCity"
+    },
+    roles: {
+      getAll: "/Roles/GetRoles"
+    },
+    state: {
+      getAll: "/StateMaster/getState",
+      createState: "/StateMaster/createState"
+    },
+    userRoles: {
+      getAll: "/UserRoles/GetUserRoles"
+    }
   },
   fieldGroupTypes: {
     array: "array",
