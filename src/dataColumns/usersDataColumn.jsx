@@ -8,6 +8,7 @@ function usersDataColumn() {
         { title: Strings.COLUMN_USERS_GENDER, field: 'gender' },
         { title: Strings.COLUMN_USERS_EMAIL, field: 'email' },
         { title: Strings.COLUMN_USERS_PHONE, field: 'phone' },
+        { title: Strings.COLUMN_USERS_IS_ACTIVE, field: 'isActive', type: 'boolean' },
     ]
     return { columns }
 
