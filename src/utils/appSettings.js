@@ -41,6 +41,12 @@ const appSettings = {
     },
   },
   endpointConfig: {
+    register: {
+      register: "/Account/register",
+    },
+    authentication: {
+      authentication: "/Account/authentication",
+    },
     sources: {
       getAll: "/Source",
       postSource: "/Source",
