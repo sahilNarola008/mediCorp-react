@@ -118,7 +118,15 @@ function useCategories() {
                     required: { value: true, message: "Category name is required" }
                 }
             },
-
+            isActive: {
+                label: "Is Active",
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.checkbox.type,
+                value: rowData?.model?.connectionName ?? "",
+                disabled: isView === true,
+            },
         })
         setModalActions(isView === true ? [] : [
             {

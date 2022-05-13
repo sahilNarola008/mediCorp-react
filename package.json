@@ -27,7 +27,8 @@
     "react-mui-counter": "^1.0.9",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
-    "react-string-format": "^1.0.0"
+    "react-string-format": "^1.0.0",
+    "react-text-mask": "^5.4.3"
   },
   "scripts": {
     "start": "env-cmd -f ./config/.env.dev react-scripts start",

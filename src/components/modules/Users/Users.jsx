@@ -9,8 +9,10 @@ const Users = () => {
         modalContent,
         modalActions,
         modalFormResetKeys,
-        modalTaskRunning } = useUsers()
-    const { columns } = usersDataColumn()
+        modalTaskRunning,
+        columns
+    } = useUsers()
+
     const { materialTableStyle: tableStyle } = useStyles()
     return (
         <>

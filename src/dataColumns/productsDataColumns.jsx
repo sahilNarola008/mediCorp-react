@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Chip } from "@mui/material"
 import { Strings } from "@medicorp"
-export default function productsDataColumns(handleRemedialActionStatusClick) {
+export default function productsDataColumns() {
     const productsColumn = [
         { title: Strings.COLUMN_ID, field: 'id' },
         { title: Strings.COLUMN_NAME, field: 'name' },

@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator } from "@medicorp"
+import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator, usersDataColumn } from "@medicorp"
 const useUsers = () => {
     const { logMessage } = useContext(Context)
     const { endpointConfig, fieldTypes, statusType } = appSettings
@@ -83,7 +83,7 @@ const useUsers = () => {
 
     const user = [
         { id: "1", firstName: "vishal", lastName: "makavana", gender: "male", email: "vishal@gmail.com", phone: "9033179395" },
-
+        { id: "2", firstName: "makavana", lastName: "makavana", gender: "male", email: "makavana@gmail.com", phone: "9033179395" },
     ]
 
     const handleActionClick = (event, isEdit = false, isView = false, rowData = {}) => {
@@ -98,7 +98,7 @@ const useUsers = () => {
                 label: "First Name",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.firstName ?? "",
                 disabled: isView === true,
@@ -108,7 +108,7 @@ const useUsers = () => {
                 label: "Last Name",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.lastName ?? "",
                 disabled: isView === true,
@@ -125,6 +125,9 @@ const useUsers = () => {
                     { text: "Male", val: "male" },
                     { text: "Female", val: "female" }
                 ],
+                alignItems: 'center',
+                flexDirection: 'column',
+                row: true,
                 disabled: isView === true,
                 validator: {
                     required: { value: true, message: "Users gender is required" }
@@ -134,7 +137,7 @@ const useUsers = () => {
                 label: "Email",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.email ?? "",
                 disabled: isView === true,
@@ -144,7 +147,7 @@ const useUsers = () => {
                 label: "Phone",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.phone ?? "",
                 disabled: isView === true,
@@ -184,6 +187,8 @@ const useUsers = () => {
             .finally(() => setModalTaskRunning(false))
     }
 
+    const { columns } = usersDataColumn()
+
     const handleModalClose = () => {
         setOpenDialog(false)
         setModalFormResetKeys([])
@@ -198,6 +203,7 @@ const useUsers = () => {
         modalActions,
         modalFormResetKeys,
         modalTaskRunning,
+        columns,
 
     }
 }

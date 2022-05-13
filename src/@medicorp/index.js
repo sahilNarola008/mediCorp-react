@@ -41,6 +41,8 @@ export { default as Counter } from "react-mui-counter";
 export { default as moment } from "moment";
 export { v4 as uuidv4 } from "uuid";
 export { default as LRU } from "lru-cache";
+export { default as MaskedInput } from "react-text-mask";
+
 //#endregion
 
 //#region Hooks
@@ -61,6 +63,7 @@ export { default as useTableIcons } from "hooks/useTableIcons";
 export { SearchBar } from "components/SearchBar";
 export { SearchBox } from "components/SearchBox";
 export { default as useLogin } from "hooks/modules/auth/useLogin";
+export { default as usePresentationDetailPanel } from "hooks/modules/Presentation/usePresentationDetailPanel";
 
 //#endregion
 
@@ -72,6 +75,7 @@ export { default as SmartDialog } from "components/SmartDialog";
 export { default as SmartContent } from "components/SmartContent";
 export { default as SmartToolbar } from "components/SmartToolbar";
 export { default as SmartLayout } from "components/SmartLayout";
+export { default as SearchBox2 } from "components/SearchBox2";
 export { default as Column } from "components/Column";
 export { default as Widget } from "components/Widget";
 export { default as Startup } from "components/Startup";
@@ -89,6 +93,7 @@ export { default as Specialization } from "components/modules/specialization/Spe
 export { default as Users } from "components/modules/Users/Users";
 export { default as Presentation } from "components/modules/Presentation/Presentation";
 export { default as Login } from "components/modules/auth/Login";
+export { default as PresentationDetailPanel } from "components/modules/Presentation/PresentationDetailPanel";
 
 //#endregion
 
@@ -98,5 +103,6 @@ export { default as productsDataColumns } from "dataColumns/productsDataColumns"
 export { default as doctorsDataColumns } from "dataColumns/doctorsDataColumns";
 export { default as specializationDataColumn } from "dataColumns/specializationDataColumn";
 export { default as usersDataColumn } from "dataColumns/usersDataColumn";
+export { default as presentationDataColumns } from "dataColumns/presentationDataColumns";
 
 //#endregion

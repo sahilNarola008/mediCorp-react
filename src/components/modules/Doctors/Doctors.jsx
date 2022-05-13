@@ -1,22 +1,25 @@
 import React from 'react'
-import { useDoctors, useStyles, Strings, MaterialTable, SmartDialog, doctorsDataColumns } from '@medicorp'
+import { useDoctors, useStyles, Strings, MaterialTable, SmartDialog } from '@medicorp'
 
 export default function Doctors() {
-    const { doctors, actions, doctorsLoading,
+    const {
+        columns,
+        doctors, actions, doctorsLoading,
         openDialog,
         handleModalClose,
         modalHeader,
         modalContent,
         modalActions,
         modalFormResetKeys,
-        modalTaskRunning } = useDoctors()
-    const { columns } = doctorsDataColumns()
+        modalTaskRunning,
+        doctorsDummyData
+    } = useDoctors()
     const { materialTableStyle: tableStyle } = useStyles()
     return (
         <>
             <MaterialTable
                 columns={columns}
-                data={doctors}
+                data={doctorsDummyData}
                 title={Strings.COLUMN_DOCTORS_TITLE}
                 actions={actions}
                 options={{

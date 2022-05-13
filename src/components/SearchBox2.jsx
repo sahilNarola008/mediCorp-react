@@ -9,9 +9,11 @@ import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material"
 import AceEditor from "react-ace"
 import "ace-builds/src-noconflict/mode-csharp"
 import "ace-builds/src-noconflict/theme-textmate"
-import { Switch, useStyles, LoadingButton, appSettings, groupBy, Counter, useTableIcons, MaterialTable } from "@medicorp"
+import { Switch, useStyles, LoadingButton, appSettings, groupBy, Counter, useTableIcons, MaterialTable, MaskedInput } from "@medicorp"
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { DatePicker, DateRangePicker, LocalizationProvider } from "@mui/lab"
 
-const SmartContent = ({
+const SearchBox2 = ({
     formHeader,
     formContent,
     formActions,
@@ -30,8 +32,8 @@ const SmartContent = ({
         reset,
         getValues,
     } = useForm()
+
     const classes = useStyles()
-    const stylingOptions = classes.materialTableStyle
     const { tableIcons } = useTableIcons()
     const { fieldTypes, fieldGroupTypes } = appSettings
     const refSubmitButton = useRef()
@@ -66,9 +68,7 @@ const SmartContent = ({
             reset(formObj)
         }
     }
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault()
-    }
+
     useEffect(() => {
         if (formResetKeys && formResetKeys.length > 0) {
             if (formContent) {
@@ -95,6 +95,28 @@ const SmartContent = ({
         clearData()
     }
 
+    // const CardMaskInput = (props) => {
+    //     const { inputRef, ...other } = props;
+
+    //     return (
+    //         <MaskedInput
+    //             {...other}
+    //             ref={(ref) => {
+    //                 inputRef(ref ? ref.inputElement : null);
+    //             }}
+    //             mask={[/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+    //             keepCharPositions
+    //             guide
+    //             placeholderChar='X'
+    //             placeholder="XXXX-XXXX-XXXX-XXXX"
+    //         />
+    //     )
+    // }
+
+    // CardMaskInput.propTypes = {
+    //     inputRef: propTypes.func.isRequired,
+    // }
+
     const formBody = (key, item) => (
         <Grid
             key={key}
@@ -106,27 +128,6 @@ const SmartContent = ({
         >
             {
                 <Switch on={item.type ?? fieldTypes.text.type}>
-                    <MaterialTable
-                        case={fieldTypes.table.type}
-                        tableRef={item.ref}
-                        title={item.title ?? item.label}
-                        icons={tableIcons}
-                        columns={item.columns}
-                        data={item.data}
-                        actions={item.actions}
-                        editable={item.editable}
-                        detailPanel={item.detailPanel}
-                        components={item.components}
-                        localization={item.localization}
-                        options={{
-                            ...stylingOptions,
-                            pageSize: 3,
-                            pageSizeOptions: [3, 5, 10, 20],
-                            search: true,
-                            padding: "dense",
-                            ...item.tableOptions,
-                        }}
-                    />
                     <Typography case={fieldTypes.label.type} variant={item.variant} sx={item.sx}>{item.value}</Typography>
                     <Controller
                         case={fieldTypes.select.type}
@@ -243,7 +244,33 @@ const SmartContent = ({
                         )}
                     />
                     <Controller
-                        case={fieldTypes.text.type}
+                        case={fieldTypes.switch.type}
+                        name={`${key}`}
+                        control={control}
+                        rules={item.validator}
+                        defaultValue={item.value}
+                        render={({ field }) => (
+                            <FormControlLabel
+                                control={
+                                    <MUSwitch
+                                        {...field}
+                                        color="primary"
+                                        onChange={(e) => {
+                                            field.onChange(e)
+                                            item.onSwitchChange &&
+                                                item.onSwitchChange(e)
+                                        }}
+                                    // sx={item.display ?? classes.shown}
+                                    />
+                                }
+                                label={item.label}
+                                labelPlacement="end"
+                            // sx={item.display ?? classes.shown}
+                            />
+                        )}
+                    />
+                    <Controller
+                        case={fieldTypes.search.type}
                         name={`${key}`}
                         control={control}
                         rules={item.validator}
@@ -273,91 +300,6 @@ const SmartContent = ({
                         )}
                     />
                     <Controller
-                        case={fieldTypes.password.type}
-                        name={`${key}`}
-                        control={control}
-                        rules={
-                            item.match
-                                ? {
-                                    validate: (value) =>
-                                        getValues(`${item.match.field}`) === value,
-                                }
-                                : item.validator
-                        }
-                        defaultValue={item.value}
-                        render={({ field }) => (
-                            <>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    size={item.size}
-                                    variant={item.variant}
-                                    label={item.label}
-                                    type={item.showPassword ? "text" : "password"}
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    }
-                                    error={!!errors[`${key}`]}
-                                    onChange={(e) => {
-                                        field.onChange(e)
-                                        item.onTextChange && item.onTextChange(e)
-                                    }}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    sx={classes.no_pading}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    onClick={() =>
-                                                        item.setShowPassword(getValues(`${key}`)
-                                                        )
-                                                    }
-                                                >
-                                                    <Icon fontSize="small">{`visibility${!!!item.showPassword && "_off"}`}</Icon>
-                                                </IconButton>
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                ></TextField>
-                                {errors[`${key}`] && (
-                                    <Typography variant="subtitle1" sx={classes.invalid}>
-                                        {errors[`${key}`].type === "validate"
-                                            ? `${item.match.errorMsg}`
-                                            : errors[`${key}`].message}
-                                    </Typography>
-                                )}
-                            </>
-                        )}
-                    />
-                    <Controller
-                        case={fieldTypes.switch.type}
-                        name={`${key}`}
-                        control={control}
-                        rules={item.validator}
-                        defaultValue={item.value}
-                        render={({ field }) => (
-                            <FormControlLabel
-                                control={
-                                    <MUSwitch
-                                        {...field}
-                                        color="primary"
-                                        onChange={(e) => {
-                                            field.onChange(e)
-                                            item.onSwitchChange &&
-                                                item.onSwitchChange(e)
-                                        }}
-                                    // sx={item.display ?? classes.shown}
-                                    />
-                                }
-                                label={item.label}
-                                labelPlacement="end"
-                            // sx={item.display ?? classes.shown}
-                            />
-                        )}
-                    />
-                    <Controller
                         case={fieldTypes.checkbox.type}
                         name={`${key}`}
                         control={control}
@@ -381,6 +323,78 @@ const SmartContent = ({
                                 labelPlacement="end"
                             // sx={item.display ?? classes.shown}
                             />
+                        )}
+                    />
+                    <Controller
+                        case={fieldTypes.dateRange.type}
+                        name={`${key}`}
+                        control={control}
+                        rules={item.validator}
+                        defaultValue={item.value}
+                        render={({ field }) => (
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DateRangePicker
+                                    {...field}
+                                    startText="Start Date"
+                                    endText="End Date"
+                                    fullWidth
+                                    size={item.size}
+                                    inputVariant={item.variant}
+                                    label={item.label}
+                                    clearable
+                                    format={item.format || "MM/dd/yyyy"}
+                                    disabled={
+                                        (item.disabled && true) ||
+                                        (isReadOnly ?? false)
+                                    }
+                                    minDate={item.minDate}
+                                    maxDate={item.maxDate}
+                                    onChange={(e) => {
+                                        field.onChange(e)
+                                        item.onSelectionChange &&
+                                            item.handleDateChange(e)
+                                    }}
+                                    renderInput={(startProps, endProps) => (
+                                        <>
+                                            <TextField {...startProps} />
+                                            <Box sx={{ mx: 2 }}> to </Box>
+                                            <TextField {...endProps} />
+                                        </>
+                                    )}
+                                />
+                            </LocalizationProvider>
+
+                        )}
+                    />
+                    <Controller
+                        case={fieldTypes.date.type}
+                        name={`${key}`}
+                        control={control}
+                        rules={item.validator}
+                        defaultValue={item.value}
+                        render={({ field }) => (
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DatePicker
+                                    {...field}
+                                    fullWidth
+                                    size={item.size}
+                                    inputVariant={item.variant}
+                                    label={item.label}
+                                    clearable
+                                    format={item.format || "MM/dd/yyyy"}
+                                    disabled={
+                                        (item.disabled && true) ||
+                                        (isReadOnly ?? false)
+                                    }
+                                    minDate={item.minDate}
+                                    onChange={(e) => {
+                                        field.onChange(e)
+                                        item.onSelectionChange &&
+                                            item.onDateChange(e)
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
                         )}
                     />
                     <Controller
@@ -437,36 +451,6 @@ const SmartContent = ({
                                     }
                                 </RadioGroup>
                             </FormControl>
-                        )}
-                    />
-                    <Controller
-                        case={fieldTypes.textArea.type}
-                        name={`${key}`}
-                        control={control}
-                        rules={item.validator}
-                        defaultValue={item.value}
-                        render={({ field }) => (
-                            <>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    size={item.size}
-                                    variant={item.variant}
-                                    label={item.label}
-                                    multiline
-                                    minRows={item.minRows ? item.minRows : 4}
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    }
-                                    error={!!errors[`${key}`]}
-                                />
-                                {errors[`${key}`] && (
-                                    <Typography variant="subtitle1" sx={classes.invalid}>
-                                        {errors[`${key}`].message}
-                                    </Typography>
-                                )}
-                            </>
                         )}
                     />
                     <Controller
@@ -571,51 +555,6 @@ const SmartContent = ({
                             </>
                         )}
                     />
-                    <Controller
-                        case={fieldTypes.counter.type}
-                        control={control}
-                        rules={item.validator}
-                        name={`${key}`}
-                        defaultValue={item.value}
-                        render={({ field }) => (
-                            <>
-                                <Counter
-                                    {...field}
-                                    sx={item.sx}
-                                    size={item.size}
-                                    fullWidth
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    } />
-                                {errors[`${key}`] && (
-                                    <Typography variant="subtitle1" sx={classes.invalid}>
-                                        {errors[`${key}`].message}
-                                    </Typography>
-                                )}
-                            </>
-                        )}
-                    />
-                    <Controller
-                        case={fieldTypes.aceEditor.type}
-                        name={`${key}`}
-                        control={control}
-                        defaultValue={item.value}
-                        value={item.value}
-                        render={({ field }) => (
-                            <>
-                                <AceEditor
-                                    {...field}
-                                    mode="csharp"
-                                    theme="textmate"
-                                    onChange={(e) => {
-                                        field.onChange(e)
-                                    }}
-                                    editorProps={{ $blockScrolling: true }}
-                                />
-                            </>
-                        )}
-                    />
                 </Switch>
             }
         </Grid>
@@ -656,7 +595,7 @@ const SmartContent = ({
                         }
                     </Grid>
             }
-            <Box sx={{ display: freeAction ? 'none' : 'inline-flex', width: "100%" }}>
+            <Box sx={{ display: freeAction ? 'none' : 'inline-flex' }}>
                 <button
                     onClick={handleSubmit(freeAction)}
                     hidden
@@ -701,5 +640,4 @@ const SmartContent = ({
         </>
     )
 }
-
-export default SmartContent
+export default SearchBox2

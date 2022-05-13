@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator } from "@medicorp"
+import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator, doctorsDataColumns } from "@medicorp"
 
 export default function useDoctors() {
     const { logMessage } = useContext(Context)
@@ -14,9 +14,40 @@ export default function useDoctors() {
     const [modalFormResetKeys, setModalFormResetKeys] = useState([])
     const [modalTaskRunning, setModalTaskRunning] = useState(false)
 
+    const genderOptions = [
+        { text: "Male", val: "male" },
+        { text: "Female", val: "female" }
+    ]
+
     const [{ data: doctors, loading: doctorsLoading }, refetchDoctors] = useAxios(endpointConfig.doctors.getAll)
+
+    const doctorsDummyData = [
+        {
+            id: 1,
+            firstName: "vikas",
+            lastName: "pandya",
+            gender: "male",
+            email: "viks@gmail.com",
+            phone: "98598569583",
+            address: "89-98th avenue las vegas la",
+            city: "Las Vegas",
+            state: "LA",
+        },
+        {
+            id: 2,
+            firstName: "vikas",
+            lastName: "pandya",
+            gender: "male",
+            email: "viks@gmail.com",
+            phone: "98598569583",
+            address: "89-98th avenue las vegas la",
+            city: "Las Vegas",
+            state: "LA",
+        }
+    ]
+
     const [{ }, refetchDoctorsById] = useAxios(endpointConfig.doctors.getDoctorsById, { manual: true })
-    const [{ }, saveUsers] = useAxios(
+    const [{ }, saveDoctors] = useAxios(
         {
             url: endpointConfig.doctors.postDoctors,
             method: "POST"
@@ -46,13 +77,7 @@ export default function useDoctors() {
             icon: tableIcons.Edit,
             tooltip: "Edit Application",
             onClick: (event, rowData) => new Promise((resolve) => {
-                setModalFormResetKeys([])
-                refetchDoctorsById({ url: format(endpointConfig.doctors.getDoctorsById, rowData.id) })
-                    .then(res => {
-                        if (res.status === 200) {
-                            resolve(res.data)
-                        }
-                    }).catch(err => err)
+
             }).then(data => handleActionClick(event, true, false, data))
         },
         {
@@ -60,22 +85,7 @@ export default function useDoctors() {
             tooltip: "Delete Application",
             onClick: (event, rowData) => new Promise((resolve) => {
                 confirm({ description: "Are You Sure You Want To Delete" })
-                    .then(() => {
-                        setModalFormResetKeys([])
-                        deleteTag({ url: format(endpointConfig.doctors.deleteDoctorsById, rowData.id) })
-                            .then((res) => {
-                                const { msg, errorMessage, message, title } = res.data
-                                if (res.status === 200) {
-                                    refetchDoctors()
-                                    resolve()
-                                }
-                                logMessage({
-                                    severity: res.status === 200 ? statusType.success : statusType.error,
-                                    msg: msg ?? errorMessage ?? message ?? title
-                                })
-                            })
-                            .catch(err => err)
-                    })
+                    .then(() => { })
             })
         }
     ]
@@ -92,7 +102,7 @@ export default function useDoctors() {
                 label: "First Name",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.firstName ?? "",
                 disabled: isView === true,
@@ -102,7 +112,7 @@ export default function useDoctors() {
                 label: "Last Name",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.lastName ?? "",
                 disabled: isView === true,
@@ -110,16 +120,15 @@ export default function useDoctors() {
             },
             gender: {
                 label: "Gender",
-                size: "small",
-                variant: "outlined",
                 col: 12,
                 type: fieldTypes.radioGroup.type,
-                value: rowData?.gender ?? "",
-                options: [
-                    { text: "Male", val: "male" },
-                    { text: "Female", val: "female" }
-                ],
+                value: rowData?.gender ?? "male",
+                options: genderOptions,
                 disabled: isView === true,
+                row: true,
+                isContainer: true,
+                alignItems: 'center',
+                flexDirection: 'column',
                 validator: {
                     required: { value: true, message: "Doctors gender is required" }
                 }
@@ -128,7 +137,7 @@ export default function useDoctors() {
                 label: "Email",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.email ?? "",
                 disabled: isView === true,
@@ -138,7 +147,7 @@ export default function useDoctors() {
                 label: "Phone",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.phone ?? "",
                 disabled: isView === true,
@@ -158,7 +167,7 @@ export default function useDoctors() {
                 label: "City",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.city ?? "",
                 disabled: isView === true,
@@ -170,7 +179,7 @@ export default function useDoctors() {
                 label: "State",
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 6,
                 type: fieldTypes.text.type,
                 value: rowData?.state ?? "",
                 disabled: isView === true,
@@ -196,7 +205,7 @@ export default function useDoctors() {
                 id: Number(id),
                 ...data
             }
-        }) : saveUsers({ data })
+        }) : saveDoctors({ data })
         response.then((res) => {
             const { msg, errorMessage, message, title } = res.data
             if (res.status === 200) {
@@ -216,7 +225,10 @@ export default function useDoctors() {
         setOpenDialog(false)
         setModalFormResetKeys([])
     }
+    const { columns } = doctorsDataColumns()
+
     return {
+        columns,
         doctors, actions, doctorsLoading,
         openDialog,
         handleModalClose,
@@ -226,6 +238,7 @@ export default function useDoctors() {
         modalActions,
         modalFormResetKeys,
         modalTaskRunning,
+        doctorsDummyData
 
     }
 }

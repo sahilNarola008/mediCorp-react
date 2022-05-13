@@ -13,8 +13,8 @@ const Themeify = (props) => {
         palette: {
             mode: "light",
             primary: {
-                dark: '#a7262a',
-                main: "#d67155",
+                dark: '#0d783d',
+                main: "#0bb202",
                 contrastText: '#fff',
             },
             secondary: {
