@@ -2,9 +2,10 @@ import { Avatar, Box, Button, Chip } from "@mui/material"
 import { Strings } from "@medicorp"
 export default function productsDataColumns() {
     const productsColumn = [
-        { title: Strings.COLUMN_ID, field: 'id' },
-        { title: Strings.COLUMN_NAME, field: 'name' },
-        { title: Strings.COLUMN_FIELD_DESCRIPTION, field: 'description' },
+        { title: Strings.COLUMN_ID, field: 'productId' },
+        { title: Strings.COLUMN_ID, field: 'categoryId' },
+        { title: Strings.COLUMN_NAME, field: 'productName' },
+        { title: Strings.COLUMN_FIELD_DESCRIPTION, field: 'productDescription' },
         { title: Strings.COLUMN_MRP, field: 'mrp' },
         { title: Strings.COLUMN_PRODUCT_IS_ACTIVE, field: 'isActive', type: 'boolean' },
         {

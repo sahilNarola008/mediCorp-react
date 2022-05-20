@@ -82,6 +82,7 @@ const SmartDialog = ({
         .map((item) => item[1].type)
 
     const clearData = (keepDefaultValues = false) => {
+        setSelectedImage([])
         if (modalContent) {
             const formObj = Object.assign(
                 {},

@@ -1,6 +1,7 @@
 //#region utils
 export { ContextProvider as Provider, Context } from "utils/context";
 export { Strings } from "utils/Strings";
+export { default as config } from "utils/config";
 export { appSettings } from "utils/appSettings";
 export {
   getDefaultValueArray,
@@ -94,6 +95,7 @@ export { default as Users } from "components/modules/Users/Users";
 export { default as Presentation } from "components/modules/Presentation/Presentation";
 export { default as Login } from "components/modules/auth/Login";
 export { default as PresentationDetailPanel } from "components/modules/Presentation/PresentationDetailPanel";
+export { default as ApiDemo } from "components/modules/ApiDemo";
 
 //#endregion
 

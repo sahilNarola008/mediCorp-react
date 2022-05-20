@@ -1,9 +1,10 @@
-import { appSettings, useTableIcons, useAxios, useLocalStorage } from '@medicorp'
+import { appSettings, useTableIcons, useAxios, useLocalStorage, config } from '@medicorp'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const useLogin = () => {
 
+    const { parseJwt } = config()
     const { fieldTypes, endpointConfig } = appSettings
     const { setAppItem, getAppItem } = useLocalStorage()
     const { tableIcons } = useTableIcons()
@@ -16,6 +17,7 @@ const useLogin = () => {
     const [freeAction, setFreeAction] = useState(null)
 
     const [token, setToken] = useState(getAppItem("token") || null)
+    const [statusCode, setstatusCode] = useState();
 
     const [{ }, authData] = useAxios(
         {
@@ -41,14 +43,17 @@ const useLogin = () => {
             },
             password: {
                 label: "Password",
-                type: fieldTypes.password.type,
                 size: "small",
                 variant: "outlined",
                 col: 12,
+                type: fieldTypes.password.type,
+                value: "",
                 validator: {
-                    required: { value: true, message: "Please Enter Password" }
-                }
-            }
+                    required: { value: true, message: "Password is required" }
+                },
+                // showPassword: true
+            },
+
         });
         setFormActions([{
             label: "Login",
@@ -66,19 +71,27 @@ const useLogin = () => {
     }
 
     const handleSubmit = (data) => {
+        setFormTaskRunning(true)
         authData({
             data: {
-                "email": data.email,
-                "password": data.password
+                userName: data.email,
+                password: data.password,
+                fcmToken: "",
+                organizationId: 1
             }
         }).then((res) => {
-            console.log(res.data.result.token);
-            setAppItem("token", res.data.result.token)
+            console.log(res);
+            setstatusCode(res.status)
+            const useDetails = parseJwt(res.data)
+            console.log(useDetails)
+            setAppItem("token", res.data)
+            setInterval(() => {
+                setFormTaskRunning(false)
+            }, 2000);
             navigate(`/`)
         }).catch((error) => {
-            console.log('====================================');
-            console.log(error);
-            console.log('====================================');
+            console.log(error)
+            setFormTaskRunning(false)
         })
     }
 
@@ -89,7 +102,8 @@ const useLogin = () => {
         formResetKeys,
         formTaskRunning,
         freeAction,
-        token
+        token,
+        statusCode
     }
 }
 

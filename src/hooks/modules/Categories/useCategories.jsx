@@ -1,6 +1,6 @@
 import { appSettings, Context, useTableIcons, useAxios, useConfirm, format } from "@medicorp"
-import { useContext, useState } from "react"
-
+import { useContext, useEffect, useState } from "react"
+import axios from "axios"
 function useCategories() {
     const { logMessage } = useContext(Context)
     const { endpointConfig, fieldTypes, statusType } = appSettings
@@ -14,11 +14,13 @@ function useCategories() {
     const [modalFormResetKeys, setModalFormResetKeys] = useState([])
     const [modalTaskRunning, setModalTaskRunning] = useState(false)
 
-    const [{ data: AllCategories, loading: allCategoriesLoading, allCategoriesErrors }, refetchAllCategories] = useAxios(endpointConfig.categories.getAll)
+
+    const [{ data: AllCategories, loading: allCategoriesLoading }, refetchAllCategories] = useAxios(endpointConfig.categories.getAll)
     const [{ }, refetchCategoriesById] = useAxios(endpointConfig.categories.getCategoriesById, { manual: true })
-    const [{ }, saveCategories] = useAxios(
+
+    const [{ }, postCategories] = useAxios(
         {
-            url: endpointConfig.categories.addCategories,
+            url: endpointConfig.categories.postCategories,
             method: "POST"
         },
         { manual: true })
@@ -45,22 +47,29 @@ function useCategories() {
         },
         {
             icon: tableIcons.Edit,
-            tooltip: 'Edit Application',
-            onClick: (event, rowData) => handleActionClick(event, true, false, {})
+            tooltip: 'Edit Category',
+            onClick: (event, rowData) => new Promise((resolve) => {
+                setModalFormResetKeys([])
+                refetchCategoriesById({ url: format(endpointConfig.categories.getCategoriesById, rowData.categoryId) })
+                    .then(res => {
+                        if (res.status === 200) {
+                            resolve(res.data)
+                        }
+                    }).catch(err => err)
+            }).then(data => handleActionClick(event, true, false, data.data[0]))
         },
         {
             icon: tableIcons.Delete,
-            tooltip: 'Delete Application',
+            tooltip: 'Delete Category',
             onClick: (event, rowData) => new Promise((resolve) => {
-                // setIsLoading(true)
                 confirm({ description: 'Are you sure you want to delete?' })
                     .then(() => {
-                        setModalFormResetKeys([])
-                        deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, rowData.id) })
+                        // setModalFormResetKeys([])
+                        deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, rowData.categoryId) })
                             .then((res) => {
                                 if (res.status === 200) {
                                     refetchAllCategories()
-                                    resolve()
+                                    resolve(res.data)
                                 }
                             })
                             .catch(err => err)
@@ -68,18 +77,24 @@ function useCategories() {
             })
         }
     ]
+
+
+
     const category = [
         { id: "1", categoryName: "INJECTABLES" },
         { id: "2", categoryName: "ORALS" }
     ]
     const handleSubmit = (data, isEdit, id) => {
+        console.log(data);
+        setModalTaskRunning(true)
         const response = isEdit === true ? updateCategories({
             url: format(endpointConfig.categories.updateCategories, id),
             data: {
-                id: Number(id),
+                categoryId: Number(id),
+                organizationId: 1,
                 ...data
             }
-        }) : saveCategories({ data })
+        }) : postCategories({ data: { ...data, organizationId: 1 } })
         response.then((res) => {
             const { msg, errorMessage, message, title } = res.data
             if (res.status === 200 || res.status === 201) {
@@ -87,8 +102,9 @@ function useCategories() {
                 refetchAllCategories()
             }
             logMessage({
-                severity: res.status === 200 ? statusType.success : statusType.error,
-                msg: msg ?? errorMessage ?? message ?? title
+                severity:
+                    !errorMessage ? statusType.success : statusType.error,
+                msg: msg ?? errorMessage ?? message ?? title ?? "Category Added Successfully"
             })
         })
             .catch(err => err)
@@ -118,6 +134,14 @@ function useCategories() {
                     required: { value: true, message: "Category name is required" }
                 }
             },
+            isActive: {
+                label: "Is Active",
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.checkbox.type,
+                value: rowData?.isActive ?? true,
+            }
 
         })
         setModalActions(isView === true ? [] : [
@@ -125,7 +149,7 @@ function useCategories() {
                 label: isEdit === true ? "Update" : "Save",
                 icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
                 isSubmit: true,
-                action: isEdit === true ? (data) => handleSubmit(data, true, rowData?.id) : (data) => handleSubmit(data, false)
+                action: isEdit === true ? (data) => handleSubmit(data, true, rowData?.categoryId) : (data) => handleSubmit(data, false, rowData?.id)
             }
         ])
         setOpenDialog(true)
@@ -135,6 +159,7 @@ function useCategories() {
         setOpenDialog(false)
         setModalFormResetKeys([])
     }
+
 
     return {
         openDialog,

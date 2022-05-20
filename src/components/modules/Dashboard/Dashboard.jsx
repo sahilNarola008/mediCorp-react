@@ -1,7 +1,10 @@
 import { Box, Card, Typography } from '@mui/material'
 import React from 'react'
-
+import { useDashboard } from "@medicorp"
 const Dashboard = () => {
+    const {
+
+    } = useDashboard()
     return (
         <Card>
             <Box sx={{ backgroundColor: "#ff0000ad" }}>

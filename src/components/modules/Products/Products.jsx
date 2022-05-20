@@ -14,7 +14,9 @@ const Products = () => {
         modalFormResetKeys,
         modalTaskRunning,
         handleModalClose,
-        openDialog
+        openDialog,
+        AllProducts,
+        allProductsLoading
 
     } = useProducts()
     const { materialTableStyle: tableStyle } = useStyles()
@@ -23,14 +25,14 @@ const Products = () => {
         <>
             <MaterialTable
                 columns={productsColumn}
-                data={producstsData}
+                data={AllProducts?.data}
                 title={Strings.MENU_PRODUCTS_TITLE}
                 actions={actions}
                 options={{
                     ...tableStyle,
                     selection: false
                 }}
-                isLoading={false}
+                isLoading={allProductsLoading}
             />
 
             <SmartDialog open={openDialog}

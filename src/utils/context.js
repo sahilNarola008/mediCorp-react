@@ -16,7 +16,6 @@ function ContextProvider(props) {
     //#region axios interceptors
     axios.interceptors.request.use(
         async (config) => {
-            debugger
             config.headers = {
                 Authorization: `Bearer ${token}`
             }

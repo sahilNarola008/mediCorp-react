@@ -27,12 +27,14 @@ const AppShell = () => {
           <Box component="div" sx={classes.root}>
             <Header handleDrawerToggle={handleDrawerToggle} />
             <Flyout menuObj={{ mobileOpen, handleDrawerToggle, open }} />
-            <Box component="div" sx={[classes.mainRoot, classes.smUp]}>
-              <Main mainClassName={classes.content} />
-            </Box>
-            <Box component="div" sx={[classes.mainRoot, classes.smDown]}>
+            {window.innerWidth <= 600 &&
+              <Box component="div" sx={[classes.mainRoot, classes.smUp]}>
+                <Main mainClassName={classes.content} />
+              </Box>
+            }
+            {window.innerWidth > 600 && <Box component="div" sx={[classes.mainRoot, classes.smDown]}>
               <Main mainClassName={open === true ? classes.content : classes.contentShift} />
-            </Box>
+            </Box>}
           </Box>
 
           : <Navigate to={routeConfig.login} replace />

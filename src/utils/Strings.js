@@ -244,6 +244,7 @@ const Strings = {
   SEARCH_TITLE_PRODUCTS: "Products",
   SEARCH_TITLE_DOCTOR: "Doctor",
   SEARCH_TITLE_USER: "User",
+  COLUMN_CATREGORY_IS_ACTIVE: "Is Active",
 
 };
 export { Strings };
