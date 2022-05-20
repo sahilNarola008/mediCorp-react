@@ -15,7 +15,7 @@ const useLogin = () => {
     const [formResetKeys, setFormResetKeys] = useState([])
     const [formTaskRunning, setFormTaskRunning] = useState(false)
     const [freeAction, setFreeAction] = useState(null)
-
+    const [showPassword, setShowPassword] = useState(false)
     const [token, setToken] = useState(getAppItem("token") || null)
     const [statusCode, setstatusCode] = useState();
 
@@ -25,50 +25,6 @@ const useLogin = () => {
             method: "POST"
         },
         { manual: true })
-
-    useEffect(() => {
-        setLoginFormContent()
-    }, [])
-    const setLoginFormContent = () => {
-        setFormContent({
-            email: {
-                label: "Email",
-                type: fieldTypes.text.type,
-                size: "small",
-                variant: "outlined",
-                col: 12,
-                validator: {
-                    required: { value: true, message: "Please Enter Email Address" }
-                },
-            },
-            password: {
-                label: "Password",
-                size: "small",
-                variant: "outlined",
-                col: 12,
-                type: fieldTypes.password.type,
-                value: "",
-                validator: {
-                    required: { value: true, message: "Password is required" }
-                },
-                // showPassword: true
-            },
-
-        });
-        setFormActions([{
-            label: "Login",
-            endIcon: tableIcons.Login,
-            loadingPosition: "end",
-            isSubmit: true,
-            color: 'primary',
-            action: (data) => { handleSubmit(data) },
-            sx: { margin: "10px auto", width: "100%", borderRadius: "23px" },
-            cnt_sx: { width: "100%" }
-        }]);
-
-
-
-    }
 
     const handleSubmit = (data) => {
         setFormTaskRunning(true)
@@ -89,11 +45,50 @@ const useLogin = () => {
                 setFormTaskRunning(false)
             }, 2000);
             navigate(`/`)
-        }).catch((error) => {
-            console.log(error)
-            setFormTaskRunning(false)
-        })
+        }).catch(error => error).finally(() => setFormTaskRunning(false))
     }
+
+    const setLoginFormContent = () => {
+        setFormContent({
+            email: {
+                label: "Email",
+                type: fieldTypes.text.type,
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                validator: {
+                    required: { value: true, message: "Please Enter Email Address" }
+                },
+            },
+            password: {
+                label: "Password",
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.password.type,
+                value: '',
+                validator: {
+                    required: { value: true, message: "Password is required" }
+                },
+            },
+
+        });
+        setFormActions([{
+            label: "Login",
+            endIcon: tableIcons.Login,
+            loadingPosition: "end",
+            isSubmit: true,
+            color: 'primary',
+            action: (data) => { handleSubmit(data) },
+            sx: { margin: "10px auto", width: "100%", borderRadius: "23px" },
+            cnt_sx: { width: "100%" }
+        }]);
+    }
+
+
+    useEffect(() => {
+        setLoginFormContent()
+    }, [])
 
     return {
         formHeader,

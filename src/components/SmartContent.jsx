@@ -1,4 +1,4 @@
-import React, { useRef, Fragment, useEffect } from "react"
+import React, { useRef, Fragment, useEffect, useState } from "react"
 import {
     Box, Grid, IconButton, Button, MenuItem, TextField, Chip, Checkbox,
     Radio, RadioGroup, ListItemText, InputAdornment, FormControlLabel, FormControl,
@@ -36,6 +36,7 @@ const SmartContent = ({
     const { fieldTypes, fieldGroupTypes } = appSettings
     const refSubmitButton = useRef()
 
+    const [showPassword, setShowPassword] = useState(false)
     const arrayFieldTypes = Object.entries(fieldTypes)
         .filter(([key, item]) => item.group === fieldGroupTypes.array)
         .map((item) => item[1].type)
@@ -293,7 +294,7 @@ const SmartContent = ({
                                     size={item.size}
                                     variant={item.variant}
                                     label={item.label}
-                                    type={item.showPassword ? "text" : "password"}
+                                    type={item.showPassword || showPassword ? "text" : "password"}
                                     disabled={
                                         (item.disabled && true) ||
                                         (isReadOnly ?? false)
@@ -311,11 +312,10 @@ const SmartContent = ({
                                                     sx={classes.no_pading}
                                                     onMouseDown={handleMouseDownPassword}
                                                     onClick={() =>
-                                                        item.setShowPassword(getValues(`${key}`)
-                                                        )
+                                                        setShowPassword(!showPassword)
                                                     }
                                                 >
-                                                    <Icon fontSize="small">{`visibility${!!!item.showPassword && "_off"}`}</Icon>
+                                                    <Icon fontSize="small">{`visibility${showPassword && "_off"}`}</Icon>
                                                 </IconButton>
                                             </InputAdornment>
                                         ),
