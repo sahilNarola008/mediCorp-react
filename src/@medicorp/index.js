@@ -95,7 +95,6 @@ export { default as Users } from "components/modules/Users/Users";
 export { default as Presentation } from "components/modules/Presentation/Presentation";
 export { default as Login } from "components/modules/auth/Login";
 export { default as PresentationDetailPanel } from "components/modules/Presentation/PresentationDetailPanel";
-export { default as ApiDemo } from "components/modules/ApiDemo";
 
 //#endregion
 
