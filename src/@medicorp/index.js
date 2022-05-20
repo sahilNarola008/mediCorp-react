@@ -1,6 +1,7 @@
 //#region utils
 export { ContextProvider as Provider, Context } from "utils/context";
 export { Strings } from "utils/Strings";
+export { default as config } from "utils/config";
 export { appSettings } from "utils/appSettings";
 export {
   getDefaultValueArray,

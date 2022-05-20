@@ -45,10 +45,10 @@ const appSettings = {
 
   endpointConfig: {
     register: {
-      register: "/Account/register",
+      register: "/ApiAccount/Register",
     },
     authentication: {
-      authentication: "/Account/authentication",
+      authentication: "/ApiAccount/Authenticate",
     },
     sources: {
       getAll: "/Source",
@@ -58,18 +58,18 @@ const appSettings = {
       deleteSourceById: "/Source/{0}",
     },
     categories: {
-      getAll: "/CategoryMaster/GetCategory",
-      postCategories: "/CategoryMaster/CreateCategory",
-      updateCategories: "/CategoryMaster/UpdateCategory/{0}",
-      getCategoriesById: "/CategoryMaster/GetCategory/{0}",
-      deleteCategoriesById: "/CategoryMaster/DeleteCategory/{0}",
+      getAll: "/ApiProductCategory/GetProductCategory",
+      postCategories: "/ApiProductCategory/CreateCategory",
+      updateCategories: "/ApiProductCategory/UpdateCategory",
+      getCategoriesById: "/ApiProductCategory/GetProductCategoryById?id={0}",
+      deleteCategoriesById: "/ApiProductCategory/DeleteCategory?id={0}",
     },
     products: {
-      getAll: "/ProductMaster/GetProduct",
-      addProducts: "/ProductMaster/InsertProduct",
-      updateProducts: "/ProductMaster/UpdateProduct{0}",
-      getProductsById: "/ProductMaster/GetProduct/{0}",
-      deleteProductsById: "/ProductMaster/DeleteProduct/{0}",
+      getAll: "/ApiProductMaster/GetProduct",
+      addProducts: "/ApiProductMaster/CreateProduct",
+      updateProducts: "/ApiProductMaster/UpdateProduct",
+      getProductsById: "/ApiProductMaster/GetProductById?id={0}",
+      deleteProductsById: "/ApiProductMaster/DeleteProduct/{0}",
     },
     doctors: {
       getAll: "/DoctorMaster/getDoctor",
@@ -93,15 +93,21 @@ const appSettings = {
       deleteUsersById: "/UserMaster/DeleteUser/{0}",
     },
     city: {
-      getAll: "/CityMaster/getCity",
-      postCity: "/CityMaster/createCity"
+      getAll: "/ApiCityMaster/GetCity",
+      getCityById: "/ApiCityMaster/GetCityById?id={0}",
+      postCity: "/ApiCityMaster/CreateCity"
+    },
+    country: {
+      getAll: "/ApiCountryMaster/GetCountry",
+      getCountryById: "/ApiCountryMaster/GetCountryById?id={0}",
     },
     roles: {
       getAll: "/Roles/GetRoles"
     },
     state: {
-      getAll: "/StateMaster/getState",
-      createState: "/StateMaster/createState"
+      getAll: "/ApiStateMaster/GetState",
+      getStateById: "/ApiStateMaster/GetStateById?id={0}",
+      createState: "/ApiStateMaster/CreateState"
     },
     userRoles: {
       getAll: "/UserRoles/GetUserRoles"

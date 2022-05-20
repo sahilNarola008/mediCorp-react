@@ -21,7 +21,7 @@ const Categories = () => {
         <>
             <MaterialTable
                 columns={columns}
-                data={AllCategories}
+                data={AllCategories?.data}
                 title={Strings.MENU_CATEGORIESS_TITLE}
                 actions={actions}
                 options={{

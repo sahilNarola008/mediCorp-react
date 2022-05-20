@@ -1,13 +1,13 @@
-import { appSettings, productsDataColumns, Strings, useTableIcons, validator } from '@medicorp'
-import React, { useState } from 'react'
+import { appSettings, productsDataColumns, Strings, useTableIcons, validator, useAxios, format, Context } from '@medicorp'
+import React, { useContext, useState } from 'react'
 import { useConfirm } from "material-ui-confirm"
 
 const useProducts = () => {
     const { productsColumn } = productsDataColumns()
     const { tableIcons } = useTableIcons()
     const confirm = useConfirm()
-    const { endpointConfig, fieldTypes } = appSettings
-
+    const { endpointConfig, fieldTypes, statusType } = appSettings
+    const { logMessage } = useContext(Context)
 
     const [openDialog, setOpenDialog] = useState(false)
     const [modalHeader, setModalHeader] = useState({})
@@ -35,22 +35,53 @@ const useProducts = () => {
         }
     ])
 
+    const [{ data: AllProducts, loading: allProductsLoading }, refetchAllProducts] = useAxios(endpointConfig.products.getAll)
+    const [{ }, refetchProductsById] = useAxios(endpointConfig.products.getCategoriesById, { manual: true })
+
+    const [{ }, postProduct] = useAxios(
+        {
+            url: endpointConfig.products.addProducts,
+            method: "POST"
+        },
+        { manual: true })
+    const [{ }, updateProduct] = useAxios(
+        {
+            url: endpointConfig.products.updateProducts,
+            method: "PUT"
+        },
+        { manual: true })
+
+    const [{ }, deleteProduct] = useAxios(
+        {
+            url: endpointConfig.products.getProductsById,
+            method: "DELETE"
+        },
+        { manual: true })
 
     const actions = [
         {
             icon: tableIcons.Add,
-            tooltip: 'Add Application',
+            tooltip: 'Add Product',
             isFreeAction: true,
             onClick: () => handleActionClick()
         },
         {
             icon: tableIcons.Edit,
-            tooltip: 'Edit Application',
-            onClick: () => handleActionClick()
+            tooltip: 'Edit Product',
+            onClick: (event, rowData) => new Promise((resolve) => {
+                console.log(rowData)
+                // setModalFormResetKeys([])
+                refetchProductsById({ url: format(endpointConfig.products.getProductsById, rowData.productId) })
+                    .then(res => {
+                        if (res.status === 200) {
+                            resolve(res.data)
+                        }
+                    }).catch(err => err)
+            }).then(data => handleActionClick(event, true, false, data.data[0]))
         },
         {
             icon: tableIcons.Delete,
-            tooltip: 'Delete Application',
+            tooltip: 'Delete Product',
             onClick: () => {
                 confirm({ description: 'Are you sure you want to delete?' })
                     .then(() => { })
@@ -62,10 +93,11 @@ const useProducts = () => {
 
     const handleModalClose = () => {
         setOpenDialog(false)
-        setModalFormResetKeys([])
+        setModalFormResetKeys(["image"])
     }
 
     const handleActionClick = (event, isEdit = false, isView = false, rowData = {}) => {
+
         setModalHeader({
             isForm: true,
             title: isEdit ? Strings.EDIT_PRODUCTS : Strings.ADD_PRODUCTS,
@@ -73,25 +105,37 @@ const useProducts = () => {
             modalWidth: 'md'
         })
         setModalContent({
-            name: {
+            categoryId: {
+                label: "Category",
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.text.type,
+                value: rowData?.categoryId ?? "",
+                disabled: isView === true,
+                validator: {
+                    required: { value: true, message: "category is required" }
+                }
+            },
+            productName: {
                 label: "Name",
                 size: "small",
                 variant: "outlined",
                 col: 12,
                 type: fieldTypes.text.type,
-                value: rowData?.model?.connectionName ?? "",
+                value: rowData?.productName ?? "",
                 disabled: isView === true,
                 validator: {
                     required: { value: true, message: "name is required" }
                 }
             },
-            description: {
+            productDescription: {
                 label: "Description",
                 size: "small",
                 variant: "outlined",
                 col: 12,
                 type: fieldTypes.textArea.type,
-                value: rowData?.model?.connectionName ?? "",
+                value: rowData?.productDescription ?? "",
                 disabled: isView === true,
                 validator: {
                     required: { value: true, message: "description is required" }
@@ -103,7 +147,7 @@ const useProducts = () => {
                 variant: "outlined",
                 col: 12,
                 type: fieldTypes.text.type,
-                value: rowData?.model?.connectionName ?? "",
+                value: rowData?.mrp ?? "",
                 disabled: isView === true,
                 validator: validator.PriceValidator
             },
@@ -113,20 +157,16 @@ const useProducts = () => {
                 variant: "outlined",
                 col: 12,
                 type: fieldTypes.checkbox.type,
-                value: rowData?.model?.connectionName ?? "",
+                value: rowData?.isActive ?? false,
                 disabled: isView === true,
             },
             image: {
-                // label: 'Upload Images',
                 size: "small",
                 variant: "outlined",
                 col: 12,
                 type: fieldTypes.image.type,
                 value: rowData?.model?.connectionName ?? "",
                 disabled: isView === true,
-                // validator: {
-                //     required: { value: true, message: "image is required" }
-                // }
             }
         })
         setModalActions([
@@ -134,15 +174,40 @@ const useProducts = () => {
                 label: "Run",
                 icon: "Run",
                 isSubmit: true,
-                action: (data) => handleSubmit(data, rowData)
+                action: (data) => handleSubmit(data, isEdit, rowData,)
             }
         ])
         setOpenDialog(true)
     }
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (data, isEdit, rowData) => {
+        console.log(data);
+        setModalTaskRunning(true)
+        const response = isEdit === true ? updateProduct({
+            url: format(endpointConfig.products.updateProducts, rowData.productId),
+            data: {
+                productId: Number(rowData.productId),
+                organizationId: 1,
+                ...data
+            }
+        }) : postProduct({ data: { ...data, organizationId: 1 } })
+        response.then((res) => {
+            const { msg, errorMessage, message, title, isError } = res.data
+            console.log(res.data);
+            if (res.status === 200 || res.status === 201) {
+                handleModalClose()
+                refetchAllProducts()
+            }
+            logMessage({
+                severity:
+                    !isError ? statusType.success : statusType.error,
+                msg: msg ?? errorMessage ?? message ?? title ?? isEdit ? "Product Edited Successfully" : "Product Added Successfully"
+            })
+        })
+            .catch(err => err)
+            .finally(() => setModalTaskRunning(false))
     }
+
 
     return {
         productsColumn,
@@ -154,7 +219,9 @@ const useProducts = () => {
         modalFormResetKeys,
         modalTaskRunning,
         handleModalClose,
-        openDialog
+        openDialog,
+        AllProducts,
+        allProductsLoading
 
     }
 }
