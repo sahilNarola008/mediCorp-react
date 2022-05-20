@@ -47,7 +47,7 @@ export default function useDoctors() {
     ]
 
     const [{ }, refetchDoctorsById] = useAxios(endpointConfig.doctors.getDoctorsById, { manual: true })
-    const [{ }, saveUsers] = useAxios(
+    const [{ }, saveDoctors] = useAxios(
         {
             url: endpointConfig.doctors.postDoctors,
             method: "POST"
@@ -205,7 +205,7 @@ export default function useDoctors() {
                 id: Number(id),
                 ...data
             }
-        }) : saveUsers({ data })
+        }) : saveDoctors({ data })
         response.then((res) => {
             const { msg, errorMessage, message, title } = res.data
             if (res.status === 200) {

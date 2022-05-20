@@ -141,8 +141,8 @@ function useCategories() {
                 col: 12,
                 type: fieldTypes.checkbox.type,
                 value: rowData?.isActive ?? true,
-            }
-
+                disabled: isView === true,
+            },
         })
         setModalActions(isView === true ? [] : [
             {

@@ -11,6 +11,7 @@ export default function doctorsDataColumns() {
         { title: Strings.COLUMN_DOCTORS_ADDRESS, field: 'address' },
         { title: Strings.COLUMN_DOCTORS_CITY, field: 'city' },
         { title: Strings.COLUMN_DOCTORS_STATE, field: 'state' },
+        { title: Strings.COLUMN_DOCTORS_IS_ACTIVE, field: 'isActive', type: 'boolean' },
     ]
     return { columns }
 

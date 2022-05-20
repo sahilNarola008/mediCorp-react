@@ -17,7 +17,7 @@ function Specialization() {
     const { materialTableStyle: tableStyle } = useStyles()
     return (
         <>
-            {/* <MaterialTable
+            <MaterialTable
                 columns={columns}
                 data={specialization}
                 title={Strings.MENU_DOCTORS_SPECIALIZATION_TITLE}
@@ -36,7 +36,7 @@ function Specialization() {
                 modalActions={modalActions}
                 modalFormResetKeys={modalFormResetKeys}
                 modalTaskRunning={modalTaskRunning}
-            /> */}
+            />
         </>
     )
 }
