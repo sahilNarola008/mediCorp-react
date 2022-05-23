@@ -29,7 +29,7 @@ function useSpecialization() {
     endpointConfig.specialization.getSpecializationById,
     { manual: true }
   );
-  const [{}, saveSpecialization] = useAxios(
+  const [{}, postSpecialization] = useAxios(
     {
       url: endpointConfig.specialization.postSpecialization,
       method: "POST",
@@ -80,7 +80,7 @@ function useSpecialization() {
     },
     {
       icon: tableIcons.Delete,
-      tooltip: "Delete Application",
+      tooltip: "Delete Specialization ",
       onClick: (event, rowData) =>
         new Promise((resolve) => {
           confirm({ description: "Are you sure you want to Delete" }).then(
@@ -121,8 +121,11 @@ function useSpecialization() {
   ) => {
     setModalHeader({
       isForm: true,
-      title: isEdit === true ? "Edit Users" : "Add Users",
-      header: isEdit === true ? "Edit in existing Users" : "Create a new Users",
+      title: isEdit === true ? "Edit Specialization" : "Add Specialization",
+      header:
+        isEdit === true
+          ? "Edit in existing Specialization"
+          : "Create a new Specialization",
       modalWidth: "md",
     });
     setModalContent({
@@ -183,11 +186,17 @@ function useSpecialization() {
       isEdit === true
         ? updateSpecialization({
             data: {
-              id: Number(id),
+              specialityId: Number(id),
+              organizationId: 1,
               ...data,
             },
           })
-        : saveSpecialization({ data });
+        : postSpecialization({
+            data: {
+              organizationId: 1,
+              ...data,
+            },
+          });
     response
       .then((res) => {
         const { msg, errorMessage, message, title } = res.data;
