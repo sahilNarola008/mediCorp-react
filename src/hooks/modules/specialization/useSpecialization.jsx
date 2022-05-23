@@ -88,7 +88,7 @@ function useSpecialization() {
               setModalFormResetKeys([]);
               deleteSpecialization({
                 url: format(
-                  endpointConfig.users.deleteSpecializationById,
+                  endpointConfig.specialization.deleteSpecializationById,
                   rowData.specialityId
                 ),
               })
