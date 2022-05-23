@@ -41,8 +41,6 @@ const appSettings = {
     },
   },
 
-
-
   endpointConfig: {
     register: {
       register: "/ApiAccount/Register",
@@ -79,11 +77,11 @@ const appSettings = {
       deleteDoctorsById: "/DoctorMaster/deleteDoctor/{0}",
     },
     specialization: {
-      getAll: "/Specialization",
-      postSpecialization: "/Specialization",
-      updateSpecialization: "/Specialization",
-      getSpecializationById: "/Specialization/{0}",
-      deleteSpecializationById: "/Specialization/{0}",
+      getAll: "ApiSpecialityMaster/GetSpeciality",
+      postSpecialization: "/ApiSpecialityMaster/CreateSpeciality",
+      updateSpecialization: "/ApiSpecialityMaster/UpdateSpeciality",
+      getSpecializationById: "/ApiSpecialityMaster/GetSpecialityById?id{0}",
+      deleteSpecializationById: "/ApiSpecialityMaster/DeleteSpeciality",
     },
     users: {
       getAll: "/UserMaster/GetUser",
@@ -95,23 +93,23 @@ const appSettings = {
     city: {
       getAll: "/ApiCityMaster/GetCity",
       getCityById: "/ApiCityMaster/GetCityById?id={0}",
-      postCity: "/ApiCityMaster/CreateCity"
+      postCity: "/ApiCityMaster/CreateCity",
     },
     country: {
       getAll: "/ApiCountryMaster/GetCountry",
       getCountryById: "/ApiCountryMaster/GetCountryById?id={0}",
     },
     roles: {
-      getAll: "/Roles/GetRoles"
+      getAll: "/Roles/GetRoles",
     },
     state: {
       getAll: "/ApiStateMaster/GetState",
       getStateById: "/ApiStateMaster/GetStateById?id={0}",
-      createState: "/ApiStateMaster/CreateState"
+      createState: "/ApiStateMaster/CreateState",
     },
     userRoles: {
-      getAll: "/UserRoles/GetUserRoles"
-    }
+      getAll: "/UserRoles/GetUserRoles",
+    },
   },
   fieldGroupTypes: {
     array: "array",
