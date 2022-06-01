@@ -31,7 +31,7 @@
     "react-text-mask": "^5.4.3"
   },
   "scripts": {
-    "start": "env-cmd -f ./config/.env.dev react-scripts start",
+    "start": "set PORT=3006 && env-cmd -f ./config/.env.dev react-scripts start",
     "start-staging": "env-cmd -f ./config/.env.staging react-scripts start",
     "start-prod": "env-cmd -f ./config/.env.prod react-scripts start",
     "start-qa": "env-cmd -f ./config/.env.qa react-scripts start",

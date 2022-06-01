@@ -66,7 +66,10 @@ const useStyles = () => {
             display: 'flex',
         },
         mainRoot: {
-            width: `calc(${theme.spacing(12.5).as('%')} - ${drawerWidth}px)`,
+            width: {
+                xs: theme.spacing(12.5).as('%'),
+                md: `calc(${theme.spacing(12.5).as('%')} - ${drawerWidth}px)`
+            }
         },
         content: {
             flexGrow: 1,

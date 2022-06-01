@@ -1,5 +1,5 @@
 import { appSettings, productsDataColumns, Strings, useTableIcons, validator, useAxios, format, Context } from '@medicorp'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useConfirm } from "material-ui-confirm"
 
 const useProducts = () => {
@@ -36,7 +36,9 @@ const useProducts = () => {
     ])
 
     const [{ data: AllProducts, loading: allProductsLoading }, refetchAllProducts] = useAxios(endpointConfig.products.getAll)
+    const [{ data: AllCategories, loading: allCategoriesLoading }, refetchAllCategories] = useAxios(endpointConfig.categories.getAll)
     const [{ }, refetchProductsById] = useAxios(endpointConfig.products.getCategoriesById, { manual: true })
+
 
     const [{ }, postProduct] = useAxios(
         {
@@ -58,19 +60,33 @@ const useProducts = () => {
         },
         { manual: true })
 
+
+    const allProductsData = AllProducts?.data && AllProducts?.data.map(
+        (data) => {
+            var catName = null
+            const categoryName = AllCategories?.data && AllCategories.data.filter((cat) => {
+                if (cat.categoryId === data.categoryId) {
+                    catName = cat.categoryName
+                    // return cat.categoryName
+                }
+            })
+            Object.assign(data, { categoryName: catName })
+            return data
+        })
+
     const actions = [
         {
             icon: tableIcons.Add,
             tooltip: 'Add Product',
             isFreeAction: true,
-            onClick: () => handleActionClick()
+            onClick: (event) => handleActionClick(event, false, false)
         },
         {
             icon: tableIcons.Edit,
             tooltip: 'Edit Product',
             onClick: (event, rowData) => new Promise((resolve) => {
                 console.log(rowData)
-                // setModalFormResetKeys([])
+                setModalFormResetKeys([])
                 refetchProductsById({ url: format(endpointConfig.products.getProductsById, rowData.productId) })
                     .then(res => {
                         if (res.status === 200) {
@@ -82,10 +98,20 @@ const useProducts = () => {
         {
             icon: tableIcons.Delete,
             tooltip: 'Delete Product',
-            onClick: () => {
+            onClick: (event, rowData) => new Promise((resolve) => {
                 confirm({ description: 'Are you sure you want to delete?' })
-                    .then(() => { })
-            }
+                    .then(() => {
+                        setModalFormResetKeys([])
+                        deleteProduct({ url: format(endpointConfig.products.deleteProductsById, rowData.productId) })
+                            .then((res) => {
+                                if (res.status === 200) {
+                                    refetchAllProducts()
+                                    resolve(res.data)
+                                }
+                            })
+                            .catch(err => err)
+                    })
+            })
         }
     ]
 
@@ -97,7 +123,8 @@ const useProducts = () => {
     }
 
     const handleActionClick = (event, isEdit = false, isView = false, rowData = {}) => {
-
+        console.log(rowData)
+        console.log(rowData?.categoryId)
         setModalHeader({
             isForm: true,
             title: isEdit ? Strings.EDIT_PRODUCTS : Strings.ADD_PRODUCTS,
@@ -107,18 +134,21 @@ const useProducts = () => {
         setModalContent({
             categoryId: {
                 label: "Category",
+                type: fieldTypes.select.type,
                 size: "small",
                 variant: "outlined",
                 col: 12,
-                type: fieldTypes.text.type,
-                value: rowData?.categoryId ?? "",
-                disabled: isView === true,
+                value: rowData?.categoryId ?? '',
+                menuItems: AllCategories && AllCategories?.data.map(g => ({
+                    text: g.categoryName,
+                    val: Number(g.categoryId)
+                })),
                 validator: {
-                    required: { value: true, message: "category is required" }
+                    required: { value: true, message: "Please Select category" }
                 }
             },
             productName: {
-                label: "Name",
+                label: "Product Name",
                 size: "small",
                 variant: "outlined",
                 col: 12,
@@ -174,7 +204,7 @@ const useProducts = () => {
                 label: "Run",
                 icon: "Run",
                 isSubmit: true,
-                action: (data) => handleSubmit(data, isEdit, rowData,)
+                action: (data) => handleSubmit(data, isEdit, rowData)
             }
         ])
         setOpenDialog(true)
@@ -192,7 +222,7 @@ const useProducts = () => {
             }
         }) : postProduct({ data: { ...data, organizationId: 1 } })
         response.then((res) => {
-            const { msg, errorMessage, message, title, isError } = res.data
+            const { msg, errorMessage, message, title, isError, status, errors } = res.data
             console.log(res.data);
             if (res.status === 200 || res.status === 201) {
                 handleModalClose()
@@ -200,8 +230,8 @@ const useProducts = () => {
             }
             logMessage({
                 severity:
-                    !isError ? statusType.success : statusType.error,
-                msg: msg ?? errorMessage ?? message ?? title ?? isEdit ? "Product Edited Successfully" : "Product Added Successfully"
+                    errors === null ? statusType.success : statusType.error,
+                msg: message ?? errors !== null ? "Error Occured While Adding Data" : isEdit === true ? "Product Edited Successfully" : "Product Added Successfully"
             })
         })
             .catch(err => err)

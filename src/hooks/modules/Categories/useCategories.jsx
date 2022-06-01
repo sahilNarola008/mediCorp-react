@@ -64,7 +64,7 @@ function useCategories() {
             onClick: (event, rowData) => new Promise((resolve) => {
                 confirm({ description: 'Are you sure you want to delete?' })
                     .then(() => {
-                        // setModalFormResetKeys([])
+                        setModalFormResetKeys([])
                         deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, rowData.categoryId) })
                             .then((res) => {
                                 if (res.status === 200) {

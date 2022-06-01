@@ -32,9 +32,10 @@ const AppShell = () => {
                 <Main mainClassName={classes.content} />
               </Box>
             }
-            {window.innerWidth > 600 && <Box component="div" sx={[classes.mainRoot, classes.smDown]}>
-              <Main mainClassName={open === true ? classes.content : classes.contentShift} />
-            </Box>}
+            {window.innerWidth > 600 &&
+              <Box component="div" sx={[classes.mainRoot, classes.smDown]}>
+                <Main mainClassName={open === true ? classes.content : classes.contentShift} />
+              </Box>}
           </Box>
 
           : <Navigate to={routeConfig.login} replace />
