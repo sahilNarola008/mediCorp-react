@@ -246,5 +246,6 @@ const Strings = {
   SEARCH_TITLE_USER: "User",
   COLUMN_CATREGORY_IS_ACTIVE: "Is Active",
   COLUMN_DOCTORS_IS_ACTIVE: "Is Active",
+  COLUMN_CATEGORY_NAME: "Category Name",
 };
 export { Strings };

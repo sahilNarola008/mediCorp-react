@@ -14,20 +14,22 @@ function ContextProvider(props) {
   const [token, settoken] = useState(getAppItem("token"));
 
   //#region axios interceptors
-  axios.interceptors.request.use(
-    async (config) => {
-      config.headers = {
-        Authorization: `Bearer ${token}`,
-      };
-    },
-    (error) => Promise.reject(error)
-  );
+  // axios.interceptors.request.use(
+  //     async (config) => {
+  //         config.headers = {
+  //             Authorization: `Bearer ${token}`
+  //         }
+  //     },
+  //     (error) => Promise.reject(error)
+  // )
 
   // response interceptor intercepting 401 responses, refreshing token and retrying the request
+  axios.defaults.baseURL = `${axiosConfig.baseURL}`
+  axios.defaults.headers = { Authorization: `Bearer ${token}` }
   axios.interceptors.response.use(
     (response) => response,
     async (error) => {
-      const config = error.config;
+      const config = error.config
 
       if (error.response.status === 401 && !config._retry) {
         config._retry = true;

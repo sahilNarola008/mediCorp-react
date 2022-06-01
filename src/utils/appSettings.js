@@ -67,7 +67,7 @@ const appSettings = {
       addProducts: "/ApiProductMaster/CreateProduct",
       updateProducts: "/ApiProductMaster/UpdateProduct",
       getProductsById: "/ApiProductMaster/GetProductById?id={0}",
-      deleteProductsById: "/ApiProductMaster/DeleteProduct/{0}",
+      deleteProductsById: "/ApiProductMaster/DeleteProduct?id={0}",
     },
     doctors: {
       getAll: "/DoctorMaster/getDoctor",
