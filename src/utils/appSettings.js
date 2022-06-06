@@ -70,11 +70,11 @@ const appSettings = {
       deleteProductsById: "/ApiProductMaster/DeleteProduct?id={0}",
     },
     doctors: {
-      getAll: "/DoctorMaster/getDoctor",
-      postDoctors: "/DoctorMaster/createDoctor",
-      updateDoctors: "/DoctorMaster/updateDoctor",
-      getDoctorsById: "/DoctorMaster/getDoctor/{0}",
-      deleteDoctorsById: "/DoctorMaster/deleteDoctor/{0}",
+      getAll: "/ApiDoctorMaster/GetDoctor",
+      postDoctors: "/ApiDoctorMaster/CreateDoctor",
+      updateDoctors: "/ApiDoctorMaster/UpdateDoctor",
+      getDoctorsById: "/ApiDoctorMaster/GetDoctorById?id={0}",
+      deleteDoctorsById: "/ApiDoctorMaster/DeleteDoctor?id={0}",
     },
     specialization: {
       getAll: "ApiSpecialityMaster/GetSpeciality",

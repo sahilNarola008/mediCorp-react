@@ -19,7 +19,7 @@ export default function Doctors() {
         <>
             <MaterialTable
                 columns={columns}
-                data={doctorsDummyData}
+                data={doctors && doctors?.data}
                 title={Strings.COLUMN_DOCTORS_TITLE}
                 actions={actions}
                 options={{

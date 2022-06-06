@@ -1,3 +1,5 @@
+import { lazy } from "react";
+
 //#region utils
 export { ContextProvider as Provider, Context } from "utils/context";
 export { Strings } from "utils/Strings";
@@ -6,14 +8,15 @@ export { appSettings } from "utils/appSettings";
 export {
   getDefaultValueArray,
   validator,
-  useMenus,
   groupBy,
   reorderWidget,
   copyWidget,
+  getAppMenus,
   weekDays,
   getRefactoredDates,
   getActualDates,
   enumerateDaysBetweenDates,
+  mainMenuItems
 } from "utils/helper";
 //#endregion
 
@@ -50,7 +53,6 @@ export { default as MaskedInput } from "react-text-mask";
 export { default as useStyles } from "hooks/useStyles";
 export { default as useStartup } from "hooks/useStartup";
 export { default as useLocalStorage } from "hooks/useLocalStorage";
-export { default as useFlyoutMenus } from "hooks/modules/shell/useFlyoutMenus";
 export { default as useMenuState } from "hooks/modules/shell/useMenuState";
 export { default as useNavTabs } from "hooks/modules/shell/useNavTabs";
 export { default as useDashboard } from "hooks/modules/Dashboard/useDashboard";
@@ -87,6 +89,7 @@ export { default as NavTabs } from "components/modules/shell/NavTabs";
 export { default as Flyout } from "components/modules/shell/Flyout";
 export { default as Main } from "components/modules/shell/Main";
 export { default as Dashboard } from "components/modules/Dashboard/Dashboard";
+// const Dashboard = lazy(() => import('components/modules/Dashboard/Dashboard'))
 export { default as Categories } from "components/modules/Categories/Categories";
 export { default as Products } from "components/modules/Products/Products";
 export { default as Doctors } from "components/modules/Doctors/Doctors";
@@ -107,3 +110,5 @@ export { default as usersDataColumn } from "dataColumns/usersDataColumn";
 export { default as presentationDataColumns } from "dataColumns/presentationDataColumns";
 
 //#endregion
+
+// export { Dashboard }

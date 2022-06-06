@@ -25,8 +25,8 @@ export const validator = {
     required: { value: true, message: "Phone Number is required" },
     pattern: {
       value:
-        /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?\d{10}$/,
-      message: "Phone is invalid",
+        /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+      message: "Phone Number is invalid",
     },
   },
   nameValidator: {
@@ -40,7 +40,7 @@ export const validator = {
   textAreaValidator: {
     required: { value: true, message: "Address is required" },
     pattern: {
-      value: /^([a-zA-Z0-9]{3,150})$/,
+      value: /^([a-zA-Z0-9].{3,150})$/,
       message: "Address not more than 150 characters",
     },
   },
@@ -77,79 +77,132 @@ export const validator = {
   },
 };
 
-export const useMenus = () => {
-  const {
-    dashboard,
-    categories,
-    products,
-    doctors,
-    specialization,
-    users,
-    presentation,
-  } = appSettings.routeConfig;
-  const {
-    MENU_DASHBOARD_TITLE,
-    MENU_CATEGORIESS_TITLE,
-    MENU_PRODUCTS_TITLE,
-    MENU_DOCTORS_TITLE,
-    MENU_DOCTORS_SPECIALIZATION_TITLE,
-    MENU_USERS_TITLE,
-    MENU_PRESENTATIONSS_TITLE,
-  } = Strings;
 
-  const menuItems = [
-    {
-      id: "dashboard",
-      labelText: MENU_DASHBOARD_TITLE,
-      isVisible: true,
-      icon: Dashboard,
-      navigate: dashboard.baseURL,
-    },
-    {
-      id: "categories",
-      labelText: MENU_CATEGORIESS_TITLE,
-      isVisible: true,
-      icon: Category,
-      navigate: categories.baseURL,
-    },
-    {
-      id: "products",
-      labelText: MENU_PRODUCTS_TITLE,
-      isVisible: true,
-      icon: Inventory,
-      navigate: products.baseURL,
-    },
-    {
-      id: "doctors",
-      labelText: MENU_DOCTORS_TITLE,
-      isVisible: true,
-      icon: Group,
-      navigate: doctors.baseURL,
-    },
-    {
-      id: "specialization",
-      labelText: MENU_DOCTORS_SPECIALIZATION_TITLE,
-      isVisible: true,
-      icon: Group,
-      navigate: specialization.baseURL,
-    },
-    {
-      id: "users",
-      labelText: MENU_USERS_TITLE,
-      isVisible: true,
-      icon: Group,
-      navigate: users.baseURL,
-    },
-    {
-      id: "presentations",
-      labelText: MENU_PRESENTATIONSS_TITLE,
-      isVisible: true,
-      icon: Slideshow,
-      navigate: presentation.baseURL,
-    },
-  ];
-  return menuItems;
-};
+const {
+  dashboard,
+  categories,
+  products,
+  doctors,
+  specialization,
+  users,
+  presentation,
+} = appSettings.routeConfig;
+const {
+  MENU_DASHBOARD_TITLE,
+  MENU_CATEGORIESS_TITLE,
+  MENU_PRODUCTS_TITLE,
+  MENU_DOCTORS_TITLE,
+  MENU_DOCTORS_SPECIALIZATION_TITLE,
+  MENU_USERS_TITLE,
+  MENU_PRESENTATIONSS_TITLE,
+} = Strings;
+
+const menuItems = [
+  {
+    id: "dashboard",
+    title: MENU_DASHBOARD_TITLE,
+    isVisible: true,
+    icon: Dashboard,
+    to: dashboard.baseURL,
+  },
+  {
+    id: "categories",
+    title: MENU_CATEGORIESS_TITLE,
+    isVisible: true,
+    icon: Category,
+    to: categories.baseURL,
+  },
+  {
+    id: "products",
+    title: MENU_PRODUCTS_TITLE,
+    isVisible: true,
+    icon: Inventory,
+    to: products.baseURL,
+  },
+  {
+    id: "doctors",
+    title: MENU_DOCTORS_TITLE,
+    isVisible: true,
+    icon: Group,
+    to: doctors.baseURL,
+  },
+  {
+    id: "specialization",
+    title: MENU_DOCTORS_SPECIALIZATION_TITLE,
+    isVisible: true,
+    icon: Group,
+    to: specialization.baseURL,
+  },
+  {
+    id: "users",
+    title: MENU_USERS_TITLE,
+    isVisible: true,
+    icon: Group,
+    to: users.baseURL,
+  },
+  {
+    id: "presentations",
+    title: MENU_PRESENTATIONSS_TITLE,
+    isVisible: true,
+    icon: Slideshow,
+    to: presentation.baseURL,
+  },
+];
+
+
+
+export const mainMenuItems = [
+  {
+    id: "dashboard",
+    isVisible: true,
+    children: null
+  },
+  {
+    id: "categories",
+    children: null,
+    isVisible: true,
+  },
+  {
+    id: "products",
+    children: null,
+    isVisible: true,
+  },
+  {
+    id: "doctors",
+    children: null,
+    isVisible: true,
+  },
+  {
+    id: "specialization",
+    children: null,
+    isVisible: true,
+  },
+  {
+    id: "users",
+    children: null,
+    isVisible: true,
+  },
+  {
+    id: "presentations",
+    children: null,
+    isVisible: true,
+  },
+]
+
+export const getAppMenus = (userMenus) => {
+  const getMappedChildMenu = (oc, ac) => oc.map(o => ({
+    ...o,
+    isVisible: ac.find(i => i.id === o.id).isVisible
+  }))
+  return menuItems.map(m => {
+    let api_mi = userMenus && userMenus.find(a => a.id === m.id)
+    return {
+      ...m,
+      isVisible: api_mi?.isVisible,
+      children: m.children && getMappedChildMenu(m.children, api_mi.children)
+    }
+  })
+}
 
 export const groupBy = (xs, key) => {
   return xs.reduce(function (rv, x) {

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useMenus } from '@medicorp'
+import { Context } from '@medicorp'
 
 const useNavTabs = () => {
     const url = useLocation()
-    const menuItems = useMenus()
+    const { menus } = useContext(Context)
     const location = url.pathname.toLowerCase()
     const base = location.split('/')[1]
-    const tabItems = menuItems.find(item => item.id === base)?.children ?? []
+    const tabItems = (menus.find(item => item.id === base && item.isVisible)?.children ?? [])?.filter(item => item?.isVisible === true)
     const selectedIndex = tabItems.length > 0 ?
-        tabItems.findIndex(item => item.navigate.split('/').join('') === location.split('/').join('')) : -1
+        tabItems.findIndex(item => item.to.split('/').join('') === location.split('/').join('')) : -1
 
     const [value, setValue] = useState(0)
 

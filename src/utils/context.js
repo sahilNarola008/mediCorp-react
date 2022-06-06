@@ -9,6 +9,7 @@ function ContextProvider(props) {
   const [snackContent, setSnackContent] = useState(defaultSnackContent);
   const [jobName, setJobName] = useState("");
   const [isManipulation, setIsManipulation] = useState(false);
+  const [menus, setMenus] = useState([])
   const { getAppItem } = useLocalStorage();
 
   const [token, settoken] = useState(getAppItem("token"));
@@ -70,6 +71,8 @@ function ContextProvider(props) {
         logMessage,
         snackContent,
         jobName,
+        menus,
+        setMenus,
         setJobName,
         isManipulation,
         setIsManipulation,

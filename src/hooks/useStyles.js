@@ -9,8 +9,31 @@ Object.defineProperty(String.prototype, "as", {
     configurable: true
 })
 const drawerWidth = 240
+
 const useStyles = () => {
     const theme = useTheme()
+
+    const defaultColor = {
+        color: `${theme.palette.primary.light} !important`,
+        "& svg": {
+            color: `${theme.palette.primary.light} !important`
+        }
+    }
+    const defaultMenuStyle = {
+        mb: 1,
+        color: `${theme.palette.getContrastText(theme.palette.grey[900])} !important`,
+        "& svg": {
+            color: `${theme.palette.getContrastText(theme.palette.grey[900])} !important`
+        },
+        "& .MuiListItemIcon-root": {
+            minWidth: theme.spacing(5)
+        },
+        "&.Mui-selected": {
+            ...defaultColor,
+            boxShadow: '0 8px 14px -6px #000'
+        },
+        "&:hover": defaultColor
+    }
     return {
         loginWrap: {
             backgroundImage: 'url("../img/bg-login2.png")',
@@ -92,7 +115,20 @@ const useStyles = () => {
             height: `${theme.spacing(12.5).as('vh')} s!important`,
         },
         appBar: {
-            zIndex: { sm: theme.zIndex.drawer + 1 },
+            transition: theme.transitions.create('m', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` }
+        },
+        appBarShift: {
+            transition: theme.transitions.create('m', {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            width: { sm: `calc(100% - ${theme.spacing(7.125)})` },
+            ml: { sm: theme.spacing(7.125) }
         },
         title: {
             flexGrow: 1,
@@ -110,14 +146,7 @@ const useStyles = () => {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.enteringScreen,
                 })} !important`,
-                backgroundColor: `${theme.palette.background.paper} !important`,
-                boxShadow: `${theme.shadows[4]} !important`,
-            },
-            '& $menuList': {
-                pl: theme.spacing(3)
-            },
-            '& ul': {
-                pr: theme.spacing(3)
+                backgroundColor: `#121212 !important`,
             }
         },
         drawerClose: {
@@ -127,19 +156,11 @@ const useStyles = () => {
                     duration: theme.transitions.duration.leavingScreen,
                 })} !important`,
                 overflowX: 'hidden',
-                width: parseInt(theme.spacing(8.5).as('')),
-                backgroundColor: `${theme.palette.background.paper} !important`,
-                boxShadow: `${theme.shadows[4]} !important`,
-            },
-            '& $menuList': {
-                pl: theme.spacing(1.5)
-            },
-            '& ul': {
-                pr: theme.spacing(0)
+                width: theme.spacing(7.125),
+                backgroundColor: `#121212 !important`
             }
         },
         drawer: {
-            backgroundColor: `${theme.palette.background.paper} !important`,
             width: { sm: drawerWidth },
             flexShrink: { sm: 0 }
         },
@@ -147,7 +168,7 @@ const useStyles = () => {
             '& .MuiDrawer-paper': {
                 boxSizing: 'border-box',
                 width: drawerWidth,
-                backgroundColor: theme.palette.background.default,
+                backgroundColor: `#121212 !important`,
                 boxShadow: theme.shadows[4]
             },
             '& ul': {
@@ -167,19 +188,7 @@ const useStyles = () => {
         drawerMinWidth: {
             width: theme.spacing(30),//drawerWidth,
         },
-        menuList: {
-            borderRadius: `${theme.spacing(6.25)} !important`,
-            "&:hover": {
-                backgroundColor: `${theme.palette.primary.light} !important`,
-                color: `${theme.palette.primary.contrastText} !important`,
-                "& svg": {
-                    color: `${theme.palette.primary.contrastText} !important`
-                },
-                "& $smallFont": {
-                    fontWeight: `${600} !important`
-                }
-            }
-        },
+        menuList: defaultMenuStyle,
         menuLink: {
             textDecoration: 'none',
             color: 'inherit'
@@ -308,6 +317,48 @@ const useStyles = () => {
         summarySystemOverviewPrimary: {
             fontSize: 60,
             color: "#3dbd36"
+        },
+        lightDivider: {
+            borderColor: '#FFFFFF20',
+            margin: `0 ${theme.spacing(0.125)}`
+        },
+        menu: {
+            '& .MuiPaper-root': {
+                background: '#121212',
+                minWidth: drawerWidth - 40,
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.9))',
+                '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 16,
+                    left: -5,
+                    width: 10,
+                    height: 10,
+                    bgcolor: '#121212',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                },
+                '& .MuiMenuItem-root': {
+                    '& .MuiSvgIcon-root': {
+                        fontSize: 18,
+                        color: theme.palette.text.secondary,
+                        mr: theme.spacing(1.5),
+                    },
+                    ...defaultMenuStyle,
+                },
+                '& .MuiTypography-root': {
+                    p: '0 16px',
+                    fontSize: theme.spacing(0.1).as('rem'),
+                    fontWeight: 500
+                }
+
+            },
+        },
+        menuIcon: {
+            color: theme.palette.getContrastText(theme.palette.grey[900]),
+            ml: theme.spacing(1)
         },
     }
 }

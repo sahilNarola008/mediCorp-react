@@ -213,6 +213,7 @@ const useProducts = () => {
   const handleSubmit = (data, isEdit, rowData) => {
     console.log(data);
     setModalTaskRunning(true)
+    setModalFormResetKeys([])
     const response = isEdit === true ? updateProduct({
       url: format(endpointConfig.products.updateProducts, rowData.productId),
       data: {

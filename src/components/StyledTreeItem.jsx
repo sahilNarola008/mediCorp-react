@@ -66,7 +66,7 @@ export const StyledTreeItem = ({
               }}
               {...other}
             />
-          </NavLink >
+          </NavLink>
           :
           <StyledTreeItemRoot
             label={

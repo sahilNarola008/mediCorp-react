@@ -536,8 +536,22 @@ const SmartDialog = ({
                                                                 options={item.menuItems}
                                                                 disableCloseOnSelect={item.disableCloseOnSelect ?? true}
                                                                 disableClearable={item.disableClearable ?? true}
-                                                                getOptionLabel={(option) => option[item.titleProp]}
+                                                                getOptionLabel={(option) => option.label}
                                                                 isOptionEqualToValue={item.equalityComparer}
+                                                                renderOption={(props, option) => (
+                                                                    <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                                                                        {item?.code &&
+                                                                            <img
+                                                                                loading="lazy"
+                                                                                width="20"
+                                                                                src={`https://flagcdn.com/w20/${item?.code && item?.code.toLowerCase()}.png`}
+                                                                                srcSet={`https://flagcdn.com/w40/${item?.code && item?.code.toLowerCase()}.png 2x`}
+                                                                                alt=""
+                                                                            />
+                                                                        }
+                                                                        {option.label}
+                                                                    </Box>
+                                                                )}
                                                                 renderInput={(params) => (
                                                                     <TextField
                                                                         {...params}
