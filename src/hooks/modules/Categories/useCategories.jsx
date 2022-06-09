@@ -180,86 +180,34 @@ function useCategories() {
         type: fieldTypes.checkbox.type,
         value: rowData?.isActive ?? true,
         disabled: isView === true,
-
       },
     })
+  }
 
-    const handleActionClick = (
-      event,
-      isEdit = false,
-      isView = false,
-      rowData = {}
-    ) => {
-      console.log(rowData);
-      setModalHeader({
-        isForm: true,
-        title: isEdit === true ? "Edit Category" : "Add Category",
-        header:
-          isEdit === true
-            ? "Edit this existing Category"
-            : "Create a new Category",
-        modalWidth: "md",
-      });
-      setModalContent({
-        categoryName: {
-          label: "Category Name",
-          size: "small",
-          variant: "outlined",
-          col: 12,
-          type: fieldTypes.text.type,
-          value: rowData?.categoryName ?? "",
-          disabled: isView === true,
-          validator: {
-            required: { value: true, message: "Category name is required" },
-          },
-        },
-        isActive: {
-          label: "Active",
-          size: "small",
-          variant: "outlined",
-          col: 12,
-          type: fieldTypes.checkbox.type,
-          value: rowData?.isActive ?? true,
-          disabled: isView === true,
-        },
-      });
-      setModalActions(
-        isView === true
-          ? []
-          : [
-            {
-              label: isEdit === true ? "Update" : "Save",
-              icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
-              isSubmit: true,
-              action: isEdit === true ? (data) => handleSubmit(data, true, rowData?.categoryId) : (data) => handleSubmit(data, false, rowData?.id)
-            }
-          ])
-      setOpenDialog(true)
-    }
-
-    const handleModalClose = () => {
-      setOpenDialog(false)
-      setModalFormResetKeys([])
-    }
+  const handleModalClose = () => {
+    setOpenDialog(false)
+    setModalFormResetKeys([])
+  }
 
 
-    return {
-      openDialog,
-      modalHeader,
-      modalContent,
-      modalActions,
-      modalFormResetKeys,
-      modalTaskRunning,
-      actions,
-      AllCategories,
-      allCategoriesLoading,
-      handleModalClose,
-      category,
-      editable
-
-    }
-
+  return {
+    openDialog,
+    modalHeader,
+    modalContent,
+    modalActions,
+    modalFormResetKeys,
+    modalTaskRunning,
+    actions,
+    AllCategories,
+    allCategoriesLoading,
+    handleModalClose,
+    category,
+    editable
 
   }
-}
-export default useCategories
+
+};
+
+
+
+export default useCategories;
