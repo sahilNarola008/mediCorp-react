@@ -3,7 +3,6 @@ import { SmartDialog, Strings, MaterialTable, useStyles, specializationDataColum
 function Specialization() {
     const { columns } = specializationDataColumn()
     const {
-
         openDialog,
         modalHeader,
         modalContent,
@@ -12,7 +11,8 @@ function Specialization() {
         modalTaskRunning,
         actions,
         specialization, specializationLoading,
-        handleModalClose
+        handleModalClose,
+        editable
     } = useSpecialization()
     const { materialTableStyle: tableStyle } = useStyles()
     return (
@@ -22,6 +22,7 @@ function Specialization() {
                 data={specialization?.data}
                 title={Strings.MENU_DOCTORS_SPECIALIZATION_TITLE}
                 actions={actions}
+                editable={editable}
                 options={{
                     ...tableStyle,
                     selection: false

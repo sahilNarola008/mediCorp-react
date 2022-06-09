@@ -45,7 +45,7 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
                     <TabPanel sx={{ backgroundColor: 'grey.200' }} value="1">
                         <MaterialTable
                             columns={productsColumn}
-                            data={producstsData}
+                            data={producstsData?.data}
                             components={{
                                 Toolbar: props => <></>
                             }}
@@ -66,7 +66,7 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
                     <TabPanel sx={{ backgroundColor: 'grey.200' }} value="2">
                         <MaterialTable
                             columns={doctorsCoumns}
-                            data={doctorsData}
+                            data={doctorsData?.data}
                             components={{
                                 Toolbar: props => <></>
                             }}

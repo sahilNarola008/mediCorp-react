@@ -45,38 +45,69 @@ function useCategories() {
             isFreeAction: true,
             onClick: (event, rowData) => handleActionClick(event, false, false, {})
         },
-        {
-            icon: tableIcons.Edit,
-            tooltip: 'Edit Category',
-            onClick: (event, rowData) => new Promise((resolve) => {
-                setModalFormResetKeys([])
-                refetchCategoriesById({ url: format(endpointConfig.categories.getCategoriesById, rowData.categoryId) })
-                    .then(res => {
-                        if (res.status === 200) {
-                            resolve(res.data)
-                        }
-                    }).catch(err => err)
-            }).then(data => handleActionClick(event, true, false, data.data[0]))
-        },
-        {
-            icon: tableIcons.Delete,
-            tooltip: 'Delete Category',
-            onClick: (event, rowData) => new Promise((resolve) => {
-                confirm({ description: 'Are you sure you want to delete?' })
-                    .then(() => {
-                        setModalFormResetKeys([])
-                        deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, rowData.categoryId) })
-                            .then((res) => {
-                                if (res.status === 200) {
-                                    refetchAllCategories()
-                                    resolve(res.data)
-                                }
-                            })
-                            .catch(err => err)
-                    })
-            })
-        }
+        // {
+        //     icon: tableIcons.Edit,
+        //     tooltip: 'Edit Category',
+        //     onClick: (event, rowData) => new Promise((resolve) => {
+        //         setModalFormResetKeys([])
+        //         refetchCategoriesById({ url: format(endpointConfig.categories.getCategoriesById, rowData.categoryId) })
+        //             .then(res => {
+        //                 if (res.status === 200) {
+        //                     resolve(res.data)
+        //                 }
+        //             }).catch(err => err)
+        //     }).then(data => handleActionClick(event, true, false, data.data[0]))
+        // },
+        // {
+        //     icon: tableIcons.Delete,
+        //     tooltip: 'Delete Category',
+        //     onClick: (event, rowData) => new Promise((resolve) => {
+        //         confirm({ description: 'Are you sure you want to delete?' })
+        //             .then(() => {
+        //                 setModalFormResetKeys([])
+        //                 deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, rowData.categoryId) })
+        //                     .then((res) => {
+        //                         if (res.status === 200) {
+        //                             refetchAllCategories()
+        //                             resolve(res.data)
+        //                         }
+        //                     })
+        //                     .catch(err => err)
+        //             })
+        //     })
+        // }
     ]
+
+    const editable = {
+        onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    handleSubmit(newData, true)
+                    resolve();
+                }, 1000)
+            }),
+        onRowDelete: oldData =>
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, oldData.categoryId) })
+                        .then((res) => {
+                            if (res.status === 200) {
+                                refetchAllCategories()
+                                resolve(res.data)
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            logMessage({
+                                severity:
+                                    statusType.error,
+                                msg: "Error Deleting Categories!"
+                            })
+                        })
+                }, 1000)
+            }),
+    }
+
 
 
 
@@ -84,26 +115,26 @@ function useCategories() {
         { id: "1", categoryName: "INJECTABLES" },
         { id: "2", categoryName: "ORALS" }
     ]
-    const handleSubmit = (data, isEdit, id) => {
+    const handleSubmit = (data, isEdit) => {
         console.log(data);
         setModalTaskRunning(true)
         const response = isEdit === true ? updateCategories({
-            url: format(endpointConfig.categories.updateCategories, id),
+            url: format(endpointConfig.categories.updateCategories),
             data: {
-                categoryId: Number(id),
                 organizationId: 1,
+                isDelete: false,
                 ...data
             }
-        }) : postCategories({ data: { ...data, organizationId: 1 } })
+        }) : postCategories({ data: { ...data, organizationId: 1, isDelete: false } })
         response.then((res) => {
-            const { msg, errorMessage, message, title } = res.data
+            const { msg, errorMessage, message, title, isError } = res.data
             if (res.status === 200 || res.status === 201) {
                 handleModalClose()
                 refetchAllCategories()
             }
             logMessage({
                 severity:
-                    !errorMessage ? statusType.success : statusType.error,
+                    !isError ? statusType.success : statusType.error,
                 msg: msg ?? errorMessage ?? message ?? title ?? "Category Added Successfully"
             })
         })
@@ -172,7 +203,8 @@ function useCategories() {
         AllCategories,
         allCategoriesLoading,
         handleModalClose,
-        category
+        category,
+        editable
 
     }
 

@@ -123,41 +123,50 @@ const usePresentation = () => {
         title: "",
         spacing: 1,
         searchItems: {
-            Daterange: {
-                label: Strings.SEARCH_TITLE_DATERANGE,
-                size: "small",
-                variant: "outlined",
-                col: 4,
-                type: fieldTypes.dateRange.type,
-                minDate: new Date("1900-01-01"),
-                maxDate: new Date().toLocaleDateString(),
-                value: [openSearchData["sFromDate"], openSearchData["sToDate"]],
-                onChange: handleSearchChange,
-            },
-            categories: {
-                label: Strings.SEARCH_TITLE_CATEGORY,
-                type: fieldTypes.select.type,
+            // Daterange: {
+            //     label: Strings.SEARCH_TITLE_DATERANGE,
+            //     size: "small",
+            //     variant: "outlined",
+            //     col: 4,
+            //     type: fieldTypes.dateRange.type,
+            //     minDate: new Date("1900-01-01"),
+            //     maxDate: new Date().toLocaleDateString(),
+            //     value: [openSearchData["sFromDate"], openSearchData["sToDate"]],
+            //     onChange: handleSearchChange,
+            // },
+            // categories: {
+            //     label: Strings.SEARCH_TITLE_CATEGORY,
+            //     type: fieldTypes.select.type,
+            //     size: "small",
+            //     variant: "outlined",
+            //     col: 4,
+            //     value: "",
+            //     menuItems: searchCategoryMenuItems.map(g => ({
+            //         text: g.text,
+            //         val: g.value
+            //     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+            //     onSelectionChange: handleSearchChange
+            // },
+            // products: {
+            //     label: Strings.SEARCH_TITLE_PRODUCTS,
+            //     type: fieldTypes.select.type,
+            //     size: "small",
+            //     variant: "outlined",
+            //     col: 4,
+            //     value: "",
+            //     menuItems: searchProductsMenuItems.map(g => ({
+            //         text: g.text,
+            //         val: g.value
+            //     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+            //     onSelectionChange: handleSearchChange
+            // },
+            search: {
+                label: Strings.SEARCH_TITLE,
+                type: fieldTypes.search.type,
                 size: "small",
                 variant: "outlined",
                 col: 4,
                 value: "",
-                menuItems: searchCategoryMenuItems.map(g => ({
-                    text: g.text,
-                    val: g.value
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-                onSelectionChange: handleSearchChange
-            },
-            products: {
-                label: Strings.SEARCH_TITLE_PRODUCTS,
-                type: fieldTypes.select.type,
-                size: "small",
-                variant: "outlined",
-                col: 4,
-                value: "",
-                menuItems: searchProductsMenuItems.map(g => ({
-                    text: g.text,
-                    val: g.value
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
                 onSelectionChange: handleSearchChange
             },
             doctorList: {
@@ -186,15 +195,7 @@ const usePresentation = () => {
                 })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
                 onSelectionChange: handleSearchChange
             },
-            search: {
-                label: Strings.SEARCH_TITLE,
-                type: fieldTypes.search.type,
-                size: "small",
-                variant: "outlined",
-                col: 4,
-                value: "",
-                onSelectionChange: handleSearchChange
-            },
+
         },
         handleSearch: handleOpenSearch,
     };

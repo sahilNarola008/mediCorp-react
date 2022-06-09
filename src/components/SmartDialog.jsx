@@ -534,7 +534,7 @@ const SmartDialog = ({
                                                                 {...field}
                                                                 size={item.size}
                                                                 options={item.menuItems}
-                                                                disableCloseOnSelect={item.disableCloseOnSelect ?? true}
+                                                                // disableCloseOnSelect={item.disableCloseOnSelect ?? true}
                                                                 disableClearable={item.disableClearable ?? true}
                                                                 getOptionLabel={(option) => option.label}
                                                                 isOptionEqualToValue={item.equalityComparer}
@@ -549,7 +549,7 @@ const SmartDialog = ({
                                                                                 alt=""
                                                                             />
                                                                         }
-                                                                        {option.label}
+                                                                        {option?.label && option.label}
                                                                     </Box>
                                                                 )}
                                                                 renderInput={(params) => (
@@ -569,7 +569,11 @@ const SmartDialog = ({
                                                                     (item.disabled && true) ||
                                                                     (isReadOnly ?? false)
                                                                 }
-                                                                onChange={(e, data) => field.onChange(data)}
+                                                                onChange={(e, data) => {
+                                                                    field.onChange(data)
+                                                                    item.onSelectionChange &&
+                                                                        item.onSelectionChange(data)
+                                                                }}
                                                             />
                                                             {errors[`${key}`] && (
                                                                 <Typography variant="subtitle1" sx={classes.invalid}>
@@ -579,6 +583,7 @@ const SmartDialog = ({
                                                         </>
                                                     )}
                                                 />
+
                                                 <Controller
                                                     case={fieldTypes.autoCompleteMultiple.type}
                                                     name={`${key}`}

@@ -7,10 +7,18 @@ import {
 } from "@mui/icons-material";
 import { Strings, appSettings, uuidv4, moment, PropTypes } from "@medicorp";
 
-export const getDefaultValueArray = (options, data) => {
-  if (!Array.isArray(data)) return [];
-  if (data.length === 0) return [];
-  return data.map((id) => options.find((item) => item.id === id));
+export const getDefaultValueArray = (options, id, optionsId = 'id', optionName) => {
+  // if (!Array.isArray(data)) return [];
+  if (id.length === 0) return [];
+  return options.find((item) => {
+    console.log({ label: item[optionName], id: item[optionsId] });
+    if (item[optionsId] === id) {
+      return ({
+        label: item[optionName],
+        id: item[optionsId]
+      })
+    }
+  });
 };
 
 export const validator = {

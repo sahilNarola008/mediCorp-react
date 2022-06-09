@@ -25,25 +25,25 @@ function useSpecialization() {
     { data: specialization, loading: specializationLoading },
     refetchSpecialization,
   ] = useAxios(endpointConfig.specialization.getAll);
-  const [{}, refetchSpecializationById] = useAxios(
+  const [{ }, refetchSpecializationById] = useAxios(
     endpointConfig.specialization.getSpecializationById,
     { manual: true }
   );
-  const [{}, postSpecialization] = useAxios(
+  const [{ }, postSpecialization] = useAxios(
     {
       url: endpointConfig.specialization.postSpecialization,
       method: "POST",
     },
     { manual: true }
   );
-  const [{}, updateSpecialization] = useAxios(
+  const [{ }, updateSpecialization] = useAxios(
     {
       url: endpointConfig.specialization.updateSpecialization,
       method: "PUT",
     },
     { manual: true }
   );
-  const [{}, deleteSpecialization] = useAxios(
+  const [{ }, deleteSpecialization] = useAxios(
     {
       url: endpointConfig.specialization.deleteSpecializationById,
       method: "DELETE",
@@ -58,60 +58,94 @@ function useSpecialization() {
       isFreeAction: true,
       onClick: (event, rowData) => handleActionClick(event, false, false, {}),
     },
-    {
-      icon: tableIcons.Edit,
-      tooltip: "Edit Application",
-      onClick: (event, rowData) =>
-        new Promise((resolve) => {
-          setModalFormResetKeys([]);
-          refetchSpecializationById({
-            url: format(
-              endpointConfig.specialization.getSpecializationById,
-              rowData.specialityId
-            ),
-          })
-            .then((res) => {
-              if (res.status === 200) {
-                resolve(res.data);
-              }
-            })
-            .catch((err) => err);
-        }).then((data) => handleActionClick(event, true, false, data)),
-    },
-    {
-      icon: tableIcons.Delete,
-      tooltip: "Delete Specialization ",
-      onClick: (event, rowData) =>
-        new Promise((resolve) => {
-          confirm({ description: "Are you sure you want to Delete" }).then(
-            () => {
-              setModalFormResetKeys([]);
-              deleteSpecialization({
-                url: format(
-                  endpointConfig.specialization.deleteSpecializationById,
-                  rowData.specialityId
-                ),
-              })
-                .then((res) => {
-                  const { msg, errorMessage, message, title } = res.data;
-                  if (res.status === 200) {
-                    refetchSpecialization();
-                    resolve();
-                  }
-                  logMessage({
-                    severity:
-                      res.status === 200
-                        ? statusType.success
-                        : statusType.error,
-                    msg: msg ?? errorMessage ?? message ?? title,
-                  });
-                })
-                .catch((err) => err);
-            }
-          );
-        }),
-    },
+    // {
+    //   icon: tableIcons.Edit,
+    //   tooltip: "Edit Application",
+    //   onClick: (event, rowData) =>
+    //     new Promise((resolve) => {
+    //       setModalFormResetKeys([]);
+    //       refetchSpecializationById({
+    //         url: format(
+    //           endpointConfig.specialization.getSpecializationById,
+    //           rowData.specialityId
+    //         ),
+    //       })
+    //         .then((res) => {
+    //           if (res.status === 200) {
+    //             resolve(res.data);
+    //           }
+    //         })
+    //         .catch((err) => err);
+    //     }).then((data) => handleActionClick(event, true, false, data)),
+    // },
+    // {
+    //   icon: tableIcons.Delete,
+    //   tooltip: "Delete Specialization ",
+    //   onClick: (event, rowData) =>
+    //     new Promise((resolve) => {
+    //       confirm({ description: "Are you sure you want to Delete" }).then(
+    //         () => {
+    //           setModalFormResetKeys([]);
+    //           deleteSpecialization({
+    //             url: format(
+    //               endpointConfig.specialization.deleteSpecializationById,
+    //               rowData.specialityId
+    //             ),
+    //           })
+    //             .then((res) => {
+    //               const { msg, errorMessage, message, title } = res.data;
+    //               if (res.status === 200) {
+    //                 refetchSpecialization();
+    //                 resolve();
+    //               }
+    //               logMessage({
+    //                 severity:
+    //                   res.status === 200
+    //                     ? statusType.success
+    //                     : statusType.error,
+    //                 msg: msg ?? errorMessage ?? message ?? title,
+    //               });
+    //             })
+    //             .catch((err) => err);
+    //         }
+    //       );
+    //     }),
+    // },
   ];
+
+  const editable = {
+    onRowUpdate: (newData, oldData) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          handleSubmit(newData, true)
+          resolve();
+        }, 1000)
+      }),
+    onRowDelete: oldData =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          deleteSpecialization({
+            url: format(
+              endpointConfig.specialization.deleteSpecializationById,
+              oldData.specialityId
+            ),
+          }).then((res) => {
+            if (res.status === 200) {
+              refetchSpecialization()
+              resolve(res.data)
+            }
+          })
+            .catch(err => {
+              console.log(err)
+              logMessage({
+                severity:
+                  statusType.error,
+                msg: "Error Deleting Specialization!"
+              })
+            })
+        }, 1000)
+      }),
+  }
 
   const handleActionClick = (
     event,
@@ -167,36 +201,36 @@ function useSpecialization() {
       isView === true
         ? []
         : [
-            {
-              label: isEdit === true ? "Update" : "Save",
-              icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
-              isSubmit: true,
-              action:
-                isEdit === true
-                  ? (data) => handleSubmit(data, true, rowData?.specialityId)
-                  : (data) => handleSubmit(data, false),
-            },
-          ]
+          {
+            label: isEdit === true ? "Update" : "Save",
+            icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
+            isSubmit: true,
+            action:
+              isEdit === true
+                ? (data) => handleSubmit(data, true, rowData?.specialityId)
+                : (data) => handleSubmit(data, false),
+          },
+        ]
     );
     setOpenDialog(true);
   };
-  const handleSubmit = (data, isEdit, id) => {
+  const handleSubmit = (data, isEdit) => {
     setModalTaskRunning(true);
     const response =
       isEdit === true
         ? updateSpecialization({
-            data: {
-              specialityId: Number(id),
-              organizationId: 1,
-              ...data,
-            },
-          })
+          data: {
+            // specialityId: Number(id),
+            organizationId: 1,
+            ...data,
+          },
+        })
         : postSpecialization({
-            data: {
-              organizationId: 1,
-              ...data,
-            },
-          });
+          data: {
+            organizationId: 1,
+            ...data,
+          },
+        });
     response
       .then((res) => {
         const { msg, errorMessage, message, title } = res.data;
@@ -229,6 +263,7 @@ function useSpecialization() {
     modalActions,
     modalFormResetKeys,
     modalTaskRunning,
+    editable
   };
 }
 

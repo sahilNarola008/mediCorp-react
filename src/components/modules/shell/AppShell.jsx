@@ -12,7 +12,8 @@ import {
   useLocalStorage,
   useMainMenuItems,
   getAppMenus,
-  mainMenuItems
+  mainMenuItems,
+  Footer
 } from "@medicorp"
 
 const AppShell = () => {
@@ -33,19 +34,22 @@ const AppShell = () => {
       {
 
         token !== null ?
-          <Box component="div" sx={classes.root}>
-            <Header handleDrawerToggle={handleDrawerToggle} mainClass={open === true ? classes.appBar : classes.appBarShift} />
-            <Flyout menuObj={{ mobileOpen, handleDrawerToggle, open }} />
-            {window.innerWidth <= 600 &&
-              <Box component="div" sx={[classes.mainRoot, classes.smUp]}>
-                <Main mainClassName={classes.content} />
-              </Box>
-            }
-            {window.innerWidth > 600 &&
-              <Box component="div" sx={[classes.mainRoot, classes.smDown]}>
-                <Main mainClassName={open === true ? classes.content : classes.contentShift} />
-              </Box>}
-          </Box>
+          <>
+            <Box component="div" sx={classes.root}>
+              <Header handleDrawerToggle={handleDrawerToggle} mainClass={open === true ? classes.appBar : classes.appBarShift} />
+              <Flyout menuObj={{ mobileOpen, handleDrawerToggle, open }} />
+              {window.innerWidth <= 600 &&
+                <Box component="div" sx={[classes.mainRoot, classes.smUp]}>
+                  <Main mainClassName={classes.content} />
+                </Box>
+              }
+              {window.innerWidth > 600 &&
+                <Box component="div" sx={[classes.mainRoot, classes.smDown]}>
+                  <Main mainClassName={open === true ? classes.content : classes.contentShift} />
+                </Box>}
+            </Box>
+            <Footer mainClass={open === true ? classes.appBar : classes.appBarShift} />
+          </>
 
           : <Navigate to={routeConfig.login} replace />
 

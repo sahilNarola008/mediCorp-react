@@ -10,7 +10,8 @@ const Users = () => {
         modalActions,
         modalFormResetKeys,
         modalTaskRunning,
-        columns
+        columns,
+        editable
     } = useUsers()
 
     const { materialTableStyle: tableStyle } = useStyles()
@@ -21,6 +22,7 @@ const Users = () => {
                 data={user}
                 title={Strings.COLUMN_USERS_TITLE}
                 actions={actions}
+                editable={editable}
                 options={{
                     ...tableStyle,
                     selection: false

@@ -16,28 +16,28 @@ const appSettings = {
     validateStatus: false,
   },
   routeConfig: {
-    login: "/login",
-    loginCallback: "/login/callback",
+    login: "/admin/login",
+    loginCallback: "/admin/login/callback",
     dashboard: {
-      baseURL: "/dashboard",
+      baseURL: "/admin/dashboard",
     },
     categories: {
-      baseURL: "/categories",
+      baseURL: "/admin/categories",
     },
     products: {
-      baseURL: "/products",
+      baseURL: "/admin/products",
     },
     doctors: {
-      baseURL: "/doctors",
+      baseURL: "/admin/doctors",
     },
     specialization: {
-      baseURL: "/specialization",
+      baseURL: "/admin/specialization",
     },
     users: {
-      baseURL: "/users",
+      baseURL: "/admin/users",
     },
     presentation: {
-      baseURL: "/presentation",
+      baseURL: "/admin/presentation",
     },
   },
 
@@ -93,6 +93,7 @@ const appSettings = {
     city: {
       getAll: "/ApiCityMaster/GetCity",
       getCityById: "/ApiCityMaster/GetCityById?id={0}",
+      getCityByStateId: "/ApiCityMaster/GetCityByStateId?id={0}",
       postCity: "/ApiCityMaster/CreateCity",
     },
     country: {
@@ -105,6 +106,7 @@ const appSettings = {
     state: {
       getAll: "/ApiStateMaster/GetState",
       getStateById: "/ApiStateMaster/GetStateById?id={0}",
+      getStateByCountryId: "/ApiStateMaster/GetStateByCountryId?id={0}",
       createState: "/ApiStateMaster/CreateState",
     },
     userRoles: {

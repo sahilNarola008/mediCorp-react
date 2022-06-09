@@ -26,7 +26,7 @@ const Presentation = () => {
                     tableRef={tableRef}
                     data={presentationData}
                     title={Strings.MENU_PRESENTATIONSS_TITLE}
-                    actions={actions}
+                    // actions={actions}
                     detailPanel={detailPanel}
                     options={{
                         ...tableStyle,

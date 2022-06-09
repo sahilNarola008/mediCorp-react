@@ -29,7 +29,7 @@ const useUsers = () => {
             method: "PUT"
         },
         { manual: true })
-    const [{ }, deleteTag] = useAxios(
+    const [{ }, deleteUser] = useAxios(
         {
             url: endpointConfig.users.deleteUsersById,
             method: "DELETE"
@@ -42,44 +42,39 @@ const useUsers = () => {
             tooltip: "Add User",
             isFreeAction: true,
             onClick: (event, rowData) => handleActionClick(event, false, false, {})
-        },
-        {
-            icon: tableIcons.Edit,
-            tooltip: "Edit Application",
-            onClick: (event, rowData) => new Promise((resolve) => {
-                setModalFormResetKeys([])
-                refetchUsersById({ url: format(endpointConfig.users.getUsersById, rowData.id) })
-                    .then(res => {
-                        if (res.status === 200) {
-                            resolve(res.data)
-                        }
-                    }).catch(err => err)
-            }).then(data => handleActionClick(event, true, false, data))
-        },
-        {
-            icon: tableIcons.Delete,
-            tooltip: "Delete Application",
-            onClick: (event, rowData) => new Promise((resolve) => {
-                confirm({ description: "Are you sure you want to Delete" })
-                    .then(() => {
-                        setModalFormResetKeys([])
-                        deleteTag({ url: format(endpointConfig.users.deleteUsersById, rowData.id) })
-                            .then((res) => {
-                                const { msg, errorMessage, message, title } = res.data
-                                if (res.status === 200) {
-                                    refetchUsers()
-                                    resolve()
-                                }
-                                logMessage({
-                                    severity: res.status === 200 ? statusType.success : statusType.error,
-                                    msg: msg ?? errorMessage ?? message ?? title
-                                })
-                            })
-                            .catch(err => err)
-                    })
-            })
         }
     ]
+
+    const editable = {
+        onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    handleSubmit(newData, true)
+                    resolve();
+                }, 1000)
+            }),
+        onRowDelete: oldData =>
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    deleteUser({ url: format(endpointConfig.users.deleteUsersById, oldData.id) })
+                        .then((res) => {
+                            if (res.status === 200) {
+                                refetchUsers()
+                                resolve(res.data)
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            logMessage({
+                                severity:
+                                    statusType.error,
+                                msg: "Error Deleting User!"
+                            })
+                        })
+                }, 1000)
+            }),
+    }
+
 
     const user = [
         { id: "1", firstName: "vishal", lastName: "makavana", gender: "male", email: "vishal@gmail.com", phone: "9033179395" },
@@ -168,7 +163,8 @@ const useUsers = () => {
         setModalTaskRunning(true)
         const response = isEdit === true ? updateUsers({
             data: {
-                id: Number(id),
+                // id: Number(id),
+                organizationId: 1,
                 ...data
             }
         }) : saveUsers({ data })
@@ -204,6 +200,7 @@ const useUsers = () => {
         modalFormResetKeys,
         modalTaskRunning,
         columns,
+        editable
 
     }
 }

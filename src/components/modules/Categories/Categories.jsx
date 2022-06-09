@@ -14,7 +14,7 @@ const Categories = () => {
         AllCategories,
         allCategoriesLoading,
         handleModalClose,
-        category
+        editable
     } = useCategories()
     const { materialTableStyle: tableStyle } = useStyles()
     return (
@@ -24,6 +24,7 @@ const Categories = () => {
                 data={AllCategories?.data}
                 title={Strings.MENU_CATEGORIESS_TITLE}
                 actions={actions}
+                editable={editable}
                 options={{
                     ...tableStyle,
                     selection: false

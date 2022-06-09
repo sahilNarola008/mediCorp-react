@@ -24,7 +24,7 @@ const useLogin = () => {
   const [token, setToken] = useState(getAppItem("token") || null);
   const [statusCode, setstatusCode] = useState();
 
-  const [{}, authData] = useAxios(
+  const [{ }, authData] = useAxios(
     {
       url: endpointConfig.authentication.authentication,
       method: "POST",
@@ -44,8 +44,8 @@ const useLogin = () => {
     })
       .then((res) => {
         setstatusCode(res.status);
-        const useDetails = parseJwt(res.data);
-        console.log(useDetails);
+        // const useDetails = parseJwt(res.data);
+        // console.log(useDetails);
         setAppItem("token", res.data);
         setInterval(() => {
           setFormTaskRunning(false);

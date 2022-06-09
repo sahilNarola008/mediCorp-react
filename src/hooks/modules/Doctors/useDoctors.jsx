@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useReducer } from 'react'
 import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator, doctorsDataColumns, getDefaultValueArray } from "@medicorp"
 
 export default function useDoctors() {
@@ -13,11 +13,44 @@ export default function useDoctors() {
     const [modalActions, setModalActions] = useState([])
     const [modalFormResetKeys, setModalFormResetKeys] = useState([])
     const [modalTaskRunning, setModalTaskRunning] = useState(false)
+    const [stateData, setStateData] = useState([])
+    const [cityData, setCityData] = useState([])
+
+    // const [modelContent, dispatchModelContent] = useReducer(modelContentreducer, {})
 
     const genderOptions = [
         { text: "Male", val: "Male" },
         { text: "Female", val: "Female" }
     ]
+    // const reducer = (state, action) => {
+    //     switch (action.type) {
+    //         case "COUNTRY":
+    //             return state = {
+    //                 ...state,
+    //                 stateId: {
+    //                     ...state["stateId"], menuItems: action && action.map(g => ({
+    //                         label: g.stateName,
+    //                         id: g.stateId
+    //                     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? ""))
+    //                 }
+    //             }
+    //         case "STATE":
+    //             return state = {
+    //                 ...state,
+    //                 cityId: {
+    //                     ...state["cityId"], menuItems: action && action.map(g => ({
+    //                         label: g.cityName,
+    //                         id: g.cityId
+    //                     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? ""))
+    //                 }
+    //             }
+    //         default:
+    //             return state;
+    //     }
+    // };
+
+
+    // const [modalContent, modalContentDispatch] = useReducer(reducer, modalContent2);
 
 
     const doctorsDummyData = [
@@ -46,27 +79,13 @@ export default function useDoctors() {
     ]
 
     const [{ data: doctors, loading: doctorsLoading }, refetchDoctors] = useAxios(endpointConfig.doctors.getAll)
+    const [{ data: countries, loading: countriesLoading }, refetchCountries] = useAxios(endpointConfig.country.getAll)
     const [{ data: cities, loading: citiesLoading }, refetchCities] = useAxios(endpointConfig.city.getAll)
     const [{ data: states, loading: stattesLoading }, refetchStates] = useAxios(endpointConfig.state.getAll)
-    const [{ data: countries, loading: countriesLoading }, refetchCountries] = useAxios(endpointConfig.country.getAll)
 
-    doctors?.data && doctors?.data.map(
-        async (data) => {
-            var cityName = null
-            var stateName = null
-            await cities?.data && cities.data.filter((city) => {
-                if (city.cityId === data.cityId) {
-                    cityName = city.cityName
-                }
-            })
-            await states?.data && states.data.filter((state) => {
-                if (state.stateId === data.stateId) {
-                    stateName = state.stateName
-                }
-            })
-            Object.assign(data, { city: cityName }, { state: stateName })
-            return data
-        })
+    const [{ }, stateByCountryId] = useAxios(format(endpointConfig.state.getStateByCountryId), { manual: true })
+    const [{ }, cityByStateId] = useAxios(endpointConfig.city.getCityByStateId, { manual: true })
+
 
     const [{ }, refetchDoctorsById] = useAxios(endpointConfig.doctors.getDoctorsById, { manual: true })
     const [{ }, saveDoctors] = useAxios(
@@ -87,6 +106,12 @@ export default function useDoctors() {
             method: "DELETE"
         },
         { manual: true })
+
+    doctors?.data && doctors?.data.map(
+        async (data) => {
+            Object.assign(data, { fullName: `${data.firstName} ${data.lastName}` })
+            return data
+        })
 
     const actions = [
         {
@@ -174,7 +199,7 @@ export default function useDoctors() {
                 disabled: isView === true,
                 validator: validator.emailValidator
             },
-            phone: {
+            mobileNumber: {
                 label: "Phone",
                 size: "small",
                 variant: "outlined",
@@ -184,7 +209,7 @@ export default function useDoctors() {
                 disabled: isView === true,
                 validator: validator.phoneValidator
             },
-            address: {
+            addresses: {
                 label: "Address",
                 size: "small",
                 variant: "outlined",
@@ -194,80 +219,149 @@ export default function useDoctors() {
                 disabled: isView === true,
                 validator: validator.textAreaValidator
             },
-            country: {
+            countryId: {
                 label: "Country",
                 type: fieldTypes.autoComplete.type,
                 size: "small",
                 variant: "outlined",
-                col: 12,
+                col: 4,
                 titleProp: "country",
-                value: getDefaultValueArray(countries?.data, rowData?.countryId ?? []),
+                validator: validator.requiredValidator("Country"),
+                value: rowData?.countryId ? getDefaultValueArray(countries?.data, rowData?.countryId ?? [], "countryId", "countryName") : { label: "Select Country", id: null },
                 menuItems: countries?.data && countries?.data.map(g => ({
                     label: g.countryName,
                     id: g.countryId
                 })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-                equalityComparer: (option, value) => option.id === value,
+                equalityComparer: (option, value) => option.countryId === value,
+                onSelectionChange: (id) => { handleSelectionChange(id, "country") }
             },
-            city: {
-                label: "City",
-                type: fieldTypes.autoComplete.type,
-                size: "small",
-                variant: "outlined",
-                col: 6,
-                titleProp: "City",
-                value: getDefaultValueArray(cities?.data, rowData?.cityId ?? []),
-                menuItems: cities?.data && cities?.data.map(g => ({
-                    label: g.cityName,
-                    id: g.cityId
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-                equalityComparer: (option, value) => option.id === value,
-            },
-            State: {
+            stateId: {
                 label: "State",
                 type: fieldTypes.autoComplete.type,
                 size: "small",
                 variant: "outlined",
-                col: 6,
+                col: 4,
                 titleProp: "State",
-                value: getDefaultValueArray(states?.data, rowData?.stateId ?? []),
-                menuItems: states?.data && states?.data.map(g => ({
+                value: rowData?.stateId ? getDefaultValueArray(states?.data, rowData?.stateId ?? [], "stateId", "stateName") : { label: "Select State", id: null },
+                menuItems: stateData && stateData.map(g => ({
                     label: g.stateName,
                     id: g.stateId
                 })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-                equalityComparer: (option, value) => option.id === value,
+                equalityComparer: (option, value) => option.stateId === value,
+                onSelectionChange: (id) => { handleSelectionChange(id, "state") }
             },
-
-
+            cityId: {
+                label: "City",
+                type: fieldTypes.autoComplete.type,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                titleProp: "City",
+                value: rowData.cityId ? getDefaultValueArray(cities?.data, rowData?.cityId ?? [], "cityId", "cityName") : { label: "Select City", id: null },
+                menuItems: cityData && cityData.map(g => ({
+                    label: g.cityName,
+                    id: g.cityId
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+                equalityComparer: (option, value) => option.cityId === value,
+            },
         })
         setModalActions(isView === true ? [] : [
             {
                 label: isEdit === true ? "Update" : "Save",
                 icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
                 isSubmit: true,
-                action: isEdit === true ? (data) => handleSubmit(data, true, rowData?.doctorId) : (data) => handleSubmit(data, false)
+                action: isEdit === true ? (data) => handleSubmit(data, true, rowData?.doctorId, rowData?.organizationName, rowData?.organizationId) :
+                    (data) => {
+                        console.log(rowData);
+                        debugger
+                        handleSubmit(data, false, null, doctors[0]?.organizationName, doctors[0]?.organizationId)
+                    }
             }
         ])
         setOpenDialog(true)
     }
-    const handleSubmit = (data, isEdit, id) => {
-        setModalTaskRunning(true)
+
+
+    const handleSelectionChange = (data, dataType) => {
+        const { id } = data
+        if (dataType === "country") {
+            new Promise((resolve, reject) => {
+                stateByCountryId({ url: format(endpointConfig.state.getStateByCountryId, id) })
+                    .then((res) => {
+                        resolve(res)
+                    }).catch((error) => {
+                        reject(error)
+                        logMessage({
+                            severity: statusType.error,
+                            msg: "Error Getting Data!"
+                        })
+                    })
+            }).then((data) => {
+                // modalContentDispatch("COUNTRY", data?.data?.data)
+                setStateData(data?.data?.data)
+            })
+        } else if (dataType === "state") {
+            new Promise((resolve, reject) => {
+                cityByStateId({ url: format(endpointConfig.city.getCityByStateId, id) })
+                    .then((res) => {
+                        resolve(res)
+                    }).catch((error) => {
+                        reject(error)
+                        logMessage({
+                            severity: statusType.error,
+                            msg: "Error Getting Data!"
+                        })
+                    })
+            }).then((data) => {
+                // modalContentDispatch("STATE", data?.data?.data)
+                setCityData(data?.data?.data)
+            })
+        }
+    }
+
+
+    const handleSubmit = (data, isEdit, id, organizationName, organizationId) => {
+        console.log(data)
         debugger
+        setModalTaskRunning(true)
         const response = isEdit === true ? updateDoctors({
             data: {
+                ...data,
                 doctorId: Number(id),
                 organizationId: 1,
-                ...data
+                isActive: true,
+                state: data.state,
+                city: data.city,
+                country: data.country,
+
             }
-        }) : saveDoctors({ data })
+        }) : saveDoctors({
+            data: {
+                ...data,
+                doctorId: 0,
+                organizationId: 1,
+                specialityId: 1,
+                isActive: true,
+                isDelete: false,
+                stateId: data.stateId.id,
+                cityId: data.cityId.id,
+                countryId: data.countryId.id,
+                stateName: data.stateId.label,
+                cityName: data.cityId.label,
+                countryName: data.countryId.label,
+                organizationName: organizationName,
+                organizationId: organizationId
+            }
+        })
         response.then((res) => {
-            const { msg, errorMessage, message, title } = res.data
+            const { msg, errorMessage, message, title, isError, errorTitle, status } = res.data
             if (res.status === 200) {
                 handleModalClose()
                 refetchDoctors()
             }
             logMessage({
-                severity: res.status === 200 ? statusType.success : statusType.error,
-                msg: msg ?? errorMessage ?? message ?? title
+                severity: !isError && status != 400 ? statusType.success : statusType.error,
+                msg: msg ?? errorMessage ?? errorTitle ?? message ?? title ?? "Data Added Successfully."
             })
         })
             .catch(err => err)
@@ -275,10 +369,38 @@ export default function useDoctors() {
     }
 
     const handleModalClose = () => {
-        setOpenDialog(false)
         setModalFormResetKeys([])
+        setStateData([])
+        setCityData([])
+        setOpenDialog(false)
     }
     const { columns } = doctorsDataColumns()
+
+
+    useEffect(() => {
+        setModalFormResetKeys(["stateId"])
+        setModalContent(prevContent => ({
+            ...prevContent,
+            stateId: {
+                ...prevContent["stateId"], menuItems: stateData && stateData.map(g => ({
+                    label: g.stateName,
+                    id: g.stateId
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? ""))
+            }
+        }))
+    }, [stateData])
+    useEffect(() => {
+        setModalFormResetKeys(["cityId"])
+        setModalContent(prevContent => ({
+            ...prevContent,
+            cityId: {
+                ...prevContent["cityId"], menuItems: cityData && cityData.map(g => ({
+                    label: g.cityName,
+                    id: g.cityId
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? ""))
+            }
+        }))
+    }, [cityData])
 
     return {
         columns,

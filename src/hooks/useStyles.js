@@ -360,6 +360,17 @@ const useStyles = () => {
             color: theme.palette.getContrastText(theme.palette.grey[900]),
             ml: theme.spacing(1)
         },
+        footer: {
+            flexShrink: 0,
+            textAlign: "center",
+            backgroundColor: "tomato",
+            color: "white",
+            position: "fixed",
+            bottom: 0,
+            width: "100%",
+            textDecoration: "none"
+        }
+
     }
 }
 export default useStyles
