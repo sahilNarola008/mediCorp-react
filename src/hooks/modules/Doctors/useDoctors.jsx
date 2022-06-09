@@ -2,10 +2,10 @@ import { useState, useContext, useEffect, useReducer } from 'react'
 import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator, doctorsDataColumns, getDefaultValueArray } from "@medicorp"
 
 export default function useDoctors() {
-    const { logMessage } = useContext(Context)
-    const { endpointConfig, fieldTypes, statusType } = appSettings
-    const { tableIcons } = useTableIcons()
-    const confirm = useConfirm()
+    const { logMessage } = useContext(Context);
+    const { endpointConfig, fieldTypes, statusType } = appSettings;
+    const { tableIcons } = useTableIcons();
+    const confirm = useConfirm();
 
     const [openDialog, setOpenDialog] = useState(false)
     const [modalHeader, setModalHeader] = useState({})
@@ -51,32 +51,25 @@ export default function useDoctors() {
 
 
     // const [modalContent, modalContentDispatch] = useReducer(reducer, modalContent2);
-
-
-    const doctorsDummyData = [
-        {
-            id: 1,
-            firstName: "vikas",
-            lastName: "pandya",
-            gender: "male",
-            email: "viks@gmail.com",
-            phone: "98598569583",
-            address: "89-98th avenue las vegas la",
-            city: "Las Vegas",
-            state: "LA",
-        },
-        {
-            id: 2,
-            firstName: "vikas",
-            lastName: "pandya",
-            gender: "male",
-            email: "viks@gmail.com",
-            phone: "98598569583",
-            address: "89-98th avenue las vegas la",
-            city: "Las Vegas",
-            state: "LA",
-        }
-    ]
+    //   doctors?.data &&
+    //     doctors?.data.map(async (data) => {
+    //       var cityName = null;
+    //       var stateName = null;
+    //       (await cities?.data) &&
+    //         cities.data.filter((city) => {
+    //           if (city.cityId === data.cityId) {
+    //             cityName = city.cityName;
+    //           }
+    //         });
+    //       (await states?.data) &&
+    //         states.data.filter((state) => {
+    //           if (state.stateId === data.stateId) {
+    //             stateName = state.stateName;
+    //           }
+    //         });
+    //       Object.assign(data, { city: cityName }, { state: stateName });
+    //       return data;
+    //     });
 
     const [{ data: doctors, loading: doctorsLoading }, refetchDoctors] = useAxios(endpointConfig.doctors.getAll)
     const [{ data: countries, loading: countriesLoading }, refetchCountries] = useAxios(endpointConfig.country.getAll)
@@ -402,9 +395,13 @@ export default function useDoctors() {
         }))
     }, [cityData])
 
+
+
     return {
         columns,
-        doctors, actions, doctorsLoading,
+        doctors,
+        actions,
+        doctorsLoading,
         openDialog,
         handleModalClose,
         handleActionClick,
@@ -413,7 +410,5 @@ export default function useDoctors() {
         modalActions,
         modalFormResetKeys,
         modalTaskRunning,
-        doctorsDummyData
-
-    }
+    };
 }

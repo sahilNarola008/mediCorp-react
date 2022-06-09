@@ -1,6 +1,12 @@
-import React from 'react'
-import { categoriesDataColumns, SmartDialog, Strings, useCategories, MaterialTable, useStyles } from "@medicorp"
-
+import React from "react";
+import {
+    categoriesDataColumns,
+    SmartDialog,
+    Strings,
+    useCategories,
+    MaterialTable,
+    useStyles,
+} from "@medicorp";
 const Categories = () => {
     const { columns } = categoriesDataColumns()
     const {
@@ -32,7 +38,8 @@ const Categories = () => {
                 isLoading={allCategoriesLoading}
             />
 
-            <SmartDialog open={openDialog}
+            <SmartDialog
+                open={openDialog}
                 handleClose={handleModalClose}
                 modalHeader={modalHeader}
                 modalContent={modalContent}
@@ -41,7 +48,7 @@ const Categories = () => {
                 modalTaskRunning={modalTaskRunning}
             />
         </>
-    )
-}
+    );
+};
 
-export default Categories
+export default Categories;

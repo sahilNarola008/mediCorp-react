@@ -4,8 +4,9 @@ import {
   useAxios,
   useLocalStorage,
   config,
+  Context,
 } from "@medicorp";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const useLogin = () => {
@@ -20,6 +21,7 @@ const useLogin = () => {
   const [formResetKeys, setFormResetKeys] = useState([]);
   const [formTaskRunning, setFormTaskRunning] = useState(false);
   const [freeAction, setFreeAction] = useState(null);
+  const { logMessage } = useContext(Context);
 
   const [token, setToken] = useState(getAppItem("token") || null);
   const [statusCode, setstatusCode] = useState();
@@ -52,7 +54,13 @@ const useLogin = () => {
         }, 2000);
         navigate(`/`);
       })
-      .catch((error) => error)
+      .catch((error) => {
+        const { msg, errorMessage, message } = error;
+        console.log(error);
+        logMessage({
+          msg: msg ?? errorMessage ?? message ?? " Invalid Login Details!",
+        });
+      })
       .finally(() => setFormTaskRunning(false));
   };
 
