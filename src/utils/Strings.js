@@ -47,8 +47,8 @@ const Strings = {
   COLUMN_USERS_DEPARTMENT: "Department",
   COLUMN_USERS_USER_ROLE: "User Role",
   COLUMN_USERS_TITLE: "Users",
-  COLUMN_USERS_IS_ACTIVE: "Is Active",
-  COLUMN_PRODUCT_IS_ACTIVE: "Is Active",
+  COLUMN_USERS_IS_ACTIVE: "Active",
+  COLUMN_PRODUCT_IS_ACTIVE: "Active",
   COLUMN_CALENDAR_NAME: "Calendar Name",
   COLUMN_CALENDAR_YEAR: "Calendar Year",
   COLUMN_CALENDAR_FREQUENCY_TAG: "Frequency Tsg",
@@ -245,8 +245,8 @@ const Strings = {
   SEARCH_TITLE_PRODUCTS: "Products",
   SEARCH_TITLE_DOCTOR: "Doctor",
   SEARCH_TITLE_USER: "User",
-  COLUMN_CATREGORY_IS_ACTIVE: "Is Active",
-  COLUMN_DOCTORS_IS_ACTIVE: "Is Active",
+  COLUMN_CATREGORY_IS_ACTIVE: "Active",
+  COLUMN_DOCTORS_IS_ACTIVE: "Active",
   COLUMN_CATEGORY_NAME: "Category Name",
 };
 export { Strings };

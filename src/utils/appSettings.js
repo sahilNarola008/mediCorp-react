@@ -80,7 +80,7 @@ const appSettings = {
       getAll: "ApiSpecialityMaster/GetSpeciality",
       postSpecialization: "/ApiSpecialityMaster/CreateSpeciality",
       updateSpecialization: "/ApiSpecialityMaster/UpdateSpeciality",
-      getSpecializationById: "/ApiSpecialityMaster/GetSpecialityById?id{0}",
+      getSpecializationById: "/ApiSpecialityMaster/GetSpecialityById?id={0}",
       deleteSpecializationById: "/ApiSpecialityMaster/DeleteSpeciality",
     },
     users: {

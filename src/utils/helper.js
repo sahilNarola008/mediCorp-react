@@ -24,8 +24,7 @@ export const validator = {
   phoneValidator: {
     required: { value: true, message: "Phone Number is required" },
     pattern: {
-      value:
-        /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+      value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
       message: "Phone Number is invalid",
     },
   },
@@ -69,14 +68,13 @@ export const validator = {
     },
   },
   PriceValidator: {
-    required: { value: true, message: "Price is required" },
+    required: { value: true, message: "MRP is required" },
     pattern: {
       value: /^[0-9]*$/,
       message: "Price is invalid",
     },
   },
 };
-
 
 const {
   dashboard,
@@ -149,13 +147,11 @@ const menuItems = [
   },
 ];
 
-
-
 export const mainMenuItems = [
   {
     id: "dashboard",
     isVisible: true,
-    children: null
+    children: null,
   },
   {
     id: "categories",
@@ -187,22 +183,23 @@ export const mainMenuItems = [
     children: null,
     isVisible: true,
   },
-]
+];
 
 export const getAppMenus = (userMenus) => {
-  const getMappedChildMenu = (oc, ac) => oc.map(o => ({
-    ...o,
-    isVisible: ac.find(i => i.id === o.id).isVisible
-  }))
-  return menuItems.map(m => {
-    let api_mi = userMenus && userMenus.find(a => a.id === m.id)
+  const getMappedChildMenu = (oc, ac) =>
+    oc.map((o) => ({
+      ...o,
+      isVisible: ac.find((i) => i.id === o.id).isVisible,
+    }));
+  return menuItems.map((m) => {
+    let api_mi = userMenus && userMenus.find((a) => a.id === m.id);
     return {
       ...m,
       isVisible: api_mi?.isVisible,
-      children: m.children && getMappedChildMenu(m.children, api_mi.children)
-    }
-  })
-}
+      children: m.children && getMappedChildMenu(m.children, api_mi.children),
+    };
+  });
+};
 
 export const groupBy = (xs, key) => {
   return xs.reduce(function (rv, x) {

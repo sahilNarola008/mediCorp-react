@@ -154,7 +154,7 @@ function useSpecialization() {
         },
       },
       isActive: {
-        label: "Is Active",
+        label: "Active",
         size: "small",
         variant: "outlined",
         col: 12,

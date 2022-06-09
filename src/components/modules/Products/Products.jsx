@@ -1,6 +1,6 @@
 import MaterialTable from "@material-table/core";
 import { SmartDialog, Strings, useProducts, useStyles } from "@medicorp";
-import React, { useState } from "react";
+import React from "react";
 
 const Products = () => {
   const {
@@ -28,6 +28,7 @@ const Products = () => {
         options={{
           ...tableStyle,
           selection: false,
+          
         }}
         isLoading={allProductsLoading}
       />
