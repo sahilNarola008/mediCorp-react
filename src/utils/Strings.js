@@ -248,5 +248,6 @@ const Strings = {
   COLUMN_CATREGORY_IS_ACTIVE: "Active",
   COLUMN_DOCTORS_IS_ACTIVE: "Active",
   COLUMN_CATEGORY_NAME: "Category Name",
+  COLUMN_SPECIALITY_TITLE: "Speciality",
 };
 export { Strings };
