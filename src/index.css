@@ -13,3 +13,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.MuiTableSortLabel-root.Mui-active{
+  color: #FFF;
+}
+.MuiButtonBase-root.MuiTableSortLabel-root{
+  color: #FFF;
+}
+

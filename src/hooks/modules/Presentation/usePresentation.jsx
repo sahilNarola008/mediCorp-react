@@ -75,39 +75,39 @@ const usePresentation = () => {
         }
     ]
 
-    const actions = [
-        {
-            icon: tableIcons.Add,
-            tooltip: 'Add Job',
-            isFreeAction: true,
-            onClick: () => { }
-        },
-        {
-            icon: tableIcons.Edit,
-            tooltip: 'Edit Jobs',
-            position: 'row',
-            onClick: (event, rowData) => { }
-        },
-        {
-            icon: tableIcons.Delete,
-            tooltip: 'Delete Job',
-            position: 'row',
-            onClick: (event, rowData) => new Promise((resolve) => {
-                confirm({ description: 'Are you sure you want to delete?' })
-                    .then(() => { })
-            })
-        },
-        rowData => ({
-            icon: tableIcons.Delete,
-            tooltip: 'Delete Selected Job(s)',
-            position: (props) => 'row',
-            onClick: (event, rowData) => new Promise((resolve) => {
-                const deleteIds = rowData.map(item => item.id)
-                confirm({ description: 'Are you sure you want to delete?' })
-                    .then(() => { })
-            })
-        })
-    ]
+    // const actions = [
+    //     {
+    //         icon: tableIcons.Add,
+    //         tooltip: 'Add Job',
+    //         isFreeAction: true,
+    //         onClick: () => { }
+    //     },
+    //     {
+    //         icon: tableIcons.Edit,
+    //         tooltip: 'Edit Jobs',
+    //         position: 'row',
+    //         onClick: (event, rowData) => { }
+    //     },
+    //     {
+    //         icon: tableIcons.Delete,
+    //         tooltip: 'Delete Job',
+    //         position: 'row',
+    //         onClick: (event, rowData) => new Promise((resolve) => {
+    //             confirm({ description: 'Are you sure you want to delete?' })
+    //                 .then(() => { })
+    //         })
+    //     },
+    //     rowData => ({
+    //         icon: tableIcons.Delete,
+    //         tooltip: 'Delete Selected Job(s)',
+    //         position: (props) => 'row',
+    //         onClick: (event, rowData) => new Promise((resolve) => {
+    //             const deleteIds = rowData.map(item => item.id)
+    //             confirm({ description: 'Are you sure you want to delete?' })
+    //                 .then(() => { })
+    //         })
+    //     })
+    // ]
 
     const detailPanel = [
         {
@@ -226,7 +226,6 @@ const usePresentation = () => {
     return {
         tableRef,
         presentationData,
-        actions,
         detailPanel,
         searchOptions,
         // filterReportLabel,
