@@ -10,7 +10,6 @@ import {
   appSettings,
   Context,
   useLocalStorage,
-  useMainMenuItems,
   getAppMenus,
   mainMenuItems,
   Footer
@@ -18,10 +17,10 @@ import {
 
 const AppShell = () => {
   const { getAppItem } = useLocalStorage()
-  const { snak_open, setSnackOpen, snackContent, setMenus } = useContext(Context)
+  const { setMenus } = useContext(Context)
   const { mobileOpen, handleDrawerToggle, open } = useMenuState()
   const classes = useStyles()
-  const { routeConfig, defaultDuration, statusType } = appSettings
+  const { routeConfig } = appSettings
   const [token, setToken] = useState(getAppItem("token") || null)
 
   useEffect(() => {
@@ -54,19 +53,7 @@ const AppShell = () => {
           : <Navigate to={routeConfig.login} replace />
 
       }
-      <Snackbar
-        open={snak_open}
-        autoHideDuration={defaultDuration}
-        onClose={() => setSnackOpen(false)}
-        TransitionComponent={(props) => (
-          <Slide {...props} direction="right" />
-        )}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-      >
-        <Alert severity={snackContent.severity ?? statusType.default} variant="filled">
-          {snackContent.msg}
-        </Alert>
-      </Snackbar>
+
     </>
   )
 }

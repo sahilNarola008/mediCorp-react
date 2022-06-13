@@ -1,19 +1,26 @@
-import React from 'react'
-import { CssBaseline } from '@mui/material'
+import React, { useContext } from 'react'
+import { Alert, CssBaseline, Slide, Snackbar } from '@mui/material'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { Themeify, Startup, ConfirmProvider } from '@medicorp'
+import { Themeify, Startup, ConfirmProvider, Provider, } from '@medicorp'
 
-const App = () => (
-    <div>
-        <ConfirmProvider>
-            <Themeify>
-                <Router>
-                    <Startup />
-                </Router>
-                <CssBaseline />
-            </Themeify>
-        </ConfirmProvider>
-    </div>
-)
+const App = () => {
+
+
+
+    return (
+        <div>
+            <ConfirmProvider>
+                <Themeify>
+                    <Router>
+                        <Provider>
+                            <Startup />
+                        </Provider>
+                    </Router>
+                    <CssBaseline />
+                </Themeify>
+            </ConfirmProvider>
+        </div>
+    )
+}
 
 export default App

@@ -1,17 +1,25 @@
 import React from "react";
 import { IconButton, Tooltip, Typography } from "@mui/material";
 import { ExitToAppRounded } from "@mui/icons-material";
-import { appSettings, Strings, useLocalStorage, useStyles } from "@medicorp";
+import { appSettings, Strings, useLocalStorage, useStyles, useAxios } from "@medicorp";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 export default function NavProfile() {
   const classes = useStyles();
-  const { routeConfig } = appSettings;
+  const { routeConfig, endpointConfig } = appSettings;
   const { removeAppItem } = useLocalStorage();
   const navigate = useNavigate();
+  const [{ }, signOut] = useAxios(
+    {
+      url: endpointConfig.SignOut.SignOut,
+      method: "POST",
+    },
+    { manual: true }
+  );
   const logout = async (e) => {
-    removeAppItem("token");
-    navigate(routeConfig.login);
+    removeAppItem("token")
+    signOut()
+    navigate(routeConfig.login)
   };
   return (
     <>

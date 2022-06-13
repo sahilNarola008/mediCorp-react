@@ -42,6 +42,14 @@ const appSettings = {
   },
 
   endpointConfig: {
+    password: {
+      forgotPassword: "/ApiMemberMaster/ForgotPassword",
+      resetPassword: "/ApiMemberMaster/ResetPassword",
+      changePassword: "/ApiMemberMaster/ChangePassword",
+    },
+    SignOut: {
+      SignOut: "/ApiMemberMaster/SignOut",
+    },
     register: {
       register: "/ApiAccount/Register",
     },

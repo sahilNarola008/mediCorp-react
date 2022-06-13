@@ -26,6 +26,8 @@ const Login = () => {
     freeAction,
     token,
     statusCode,
+    handleForgotPassword,
+    isForgotPassword
   } = useLogin();
   return (
     <>
@@ -84,7 +86,7 @@ const Login = () => {
                 variant="h5"
                 sx={{ fontWeight: "bold" }}
               >
-                Login
+                {!isForgotPassword ? "Login" : "Reset Password"}
               </Typography>
               {/* <Typography
                 variant="p"
@@ -102,6 +104,7 @@ const Login = () => {
                 formTaskRunning={formTaskRunning}
                 freeAction={freeAction}
               />
+              <Link onClick={() => { handleForgotPassword(!isForgotPassword) }}>{!isForgotPassword ? "Forgot Password?" : "Back To Login"}</Link>
             </Box>
           </Grid>
         </Grid>

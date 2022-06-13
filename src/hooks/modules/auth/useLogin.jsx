@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const useLogin = () => {
   const { parseJwt } = config();
-  const { fieldTypes, endpointConfig } = appSettings;
+  const { fieldTypes, endpointConfig, statusType } = appSettings;
   const { setAppItem, getAppItem } = useLocalStorage();
   const { tableIcons } = useTableIcons();
   const navigate = useNavigate();
@@ -21,7 +21,8 @@ const useLogin = () => {
   const [formResetKeys, setFormResetKeys] = useState([]);
   const [formTaskRunning, setFormTaskRunning] = useState(false);
   const [freeAction, setFreeAction] = useState(null);
-  const { logMessage } = useContext(Context);
+  const [isForgotPassword, setIsForgotPassword] = useState(false)
+  const { logMessage, setToken: setContextToken } = useContext(Context);
 
   const [token, setToken] = useState(getAppItem("token") || null);
   const [statusCode, setstatusCode] = useState();
@@ -43,55 +44,76 @@ const useLogin = () => {
         fcmToken: "",
         organizationId: 1,
       },
-    })
-      .then((res) => {
-        setstatusCode(res.status);
-        // const useDetails = parseJwt(res.data);
-        // console.log(useDetails);
-        setAppItem("token", res.data);
+    }).then((res) => {
+      setstatusCode(res.status);
+      if (res.status == 200) {
         setInterval(() => {
+          // const useDetails = parseJwt(res.data);
+          // console.log(useDetails);
           setFormTaskRunning(false);
         }, 2000);
+        setAppItem("token", res.data);
+        setContextToken(res.data)
         navigate(`/`);
-      })
-      .catch((error) => {
-        const { msg, errorMessage, message } = error;
-        console.log(error);
+      } else {
+        const { msg, errorMessage, message } = res;
         logMessage({
-          msg: msg ?? errorMessage ?? message ?? " Invalid Login Details!",
+          severity: statusType.error,
+          msg: msg ?? errorMessage ?? message ?? res.data ?? " Invalid Login Details!",
         });
-      })
-      .finally(() => setFormTaskRunning(false));
+      }
+    }).catch((error) => {
+      const { msg, errorMessage, message } = error;
+      logMessage({
+        severity: statusType.error,
+        msg: msg ?? errorMessage ?? message ?? "Try Again After Some Time!",
+      });
+    }).finally(() => setFormTaskRunning(false));
   };
 
   const setLoginFormContent = () => {
-    setFormContent({
-      email: {
-        label: "Email",
-        type: fieldTypes.text.type,
-        size: "small",
-        variant: "outlined",
-        col: 12,
-        validator: {
-          required: { value: true, message: "Please Enter Email Address" },
+    setFormResetKeys([])
+    setFormContent(!isForgotPassword ?
+      {
+        email: {
+          label: "Email",
+          type: fieldTypes.text.type,
+          size: "small",
+          variant: "outlined",
+          col: 12,
+          validator: {
+            required: { value: true, message: "Please Enter Email Address" },
+          },
         },
-      },
-      password: {
-        label: "Password",
-        size: "small",
-        variant: "outlined",
-        col: 12,
-        type: fieldTypes.password.type,
-        value: "",
-        validator: {
-          required: { value: true, message: "Password is required" },
+        password: {
+          label: "Password",
+          size: "small",
+          variant: "outlined",
+          col: 12,
+          type: fieldTypes.password.type,
+          value: "",
+          validator: {
+            required: { value: true, message: "Password is required" },
+          },
         },
-      },
-    });
+      } :
+      {
+        email: {
+          label: "Email",
+          type: fieldTypes.text.type,
+          size: "small",
+          variant: "outlined",
+          col: 12,
+          validator: {
+            required: { value: true, message: "Please Enter Email Address" },
+          },
+        }
+      }
+    );
     setFormActions([
       {
-        label: "Login",
-        endIcon: tableIcons.Login,
+        label: !isForgotPassword ? "Login" : "Reset Password",
+        endIcon: !isForgotPassword && tableIcons.Login,
         loadingPosition: "end",
         isSubmit: true,
         color: "primary",
@@ -104,10 +126,13 @@ const useLogin = () => {
     ]);
   };
 
+  const handleForgotPassword = (forgot) => {
+    setIsForgotPassword(forgot)
+  }
+
   useEffect(() => {
     setLoginFormContent();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isForgotPassword]);
 
   return {
     formHeader,
@@ -118,6 +143,8 @@ const useLogin = () => {
     freeAction,
     token,
     statusCode,
+    handleForgotPassword,
+    isForgotPassword
   };
 };
 

@@ -56,19 +56,19 @@ const useProducts = () => {
     { data: AllCategories, loading: allCategoriesLoading },
     refetchAllCategories,
   ] = useAxios(endpointConfig.categories.getAll);
-  const [{}, refetchProductsById] = useAxios(
+  const [{ }, refetchProductsById] = useAxios(
     endpointConfig.products.getCategoriesById,
     { manual: true }
   );
 
-  const [{}, postProduct] = useAxios(
+  const [{ }, postProduct] = useAxios(
     {
       url: endpointConfig.products.addProducts,
       method: "POST",
     },
     { manual: true }
   );
-  const [{}, updateProduct] = useAxios(
+  const [{ }, updateProduct] = useAxios(
     {
       url: endpointConfig.products.updateProducts,
       method: "PUT",
@@ -76,7 +76,7 @@ const useProducts = () => {
     { manual: true }
   );
 
-  const [{}, deleteProduct] = useAxios(
+  const [{ }, deleteProduct] = useAxios(
     {
       url: endpointConfig.products.getProductsById,
       method: "DELETE",
@@ -126,7 +126,7 @@ const useProducts = () => {
               }
             })
             .catch((err) => err);
-        }).then((data) => handleActionClick(event, true, false, data.data[0])),
+        }).then((data) => handleActionClick(event, true, false, data.data)),
     },
     {
       icon: tableIcons.Delete,
@@ -166,8 +166,6 @@ const useProducts = () => {
     isView = false,
     rowData = {}
   ) => {
-    console.log(rowData);
-    console.log(rowData?.categoryId);
     setModalHeader({
       isForm: true,
       title: isEdit ? Strings.EDIT_PRODUCTS : Strings.ADD_PRODUCTS,
@@ -262,16 +260,16 @@ const useProducts = () => {
     const response =
       isEdit === true
         ? updateProduct({
-            url: format(
-              endpointConfig.products.updateProducts,
-              rowData.productId
-            ),
-            data: {
-              productId: Number(rowData.productId),
-              organizationId: 1,
-              ...data,
-            },
-          })
+          url: format(
+            endpointConfig.products.updateProducts,
+            rowData.productId
+          ),
+          data: {
+            productId: Number(rowData.productId),
+            organizationId: 1,
+            ...data,
+          },
+        })
         : postProduct({ data: { ...data, organizationId: 1 } });
     response
       .then((res) => {
@@ -288,8 +286,8 @@ const useProducts = () => {
             message ?? errors !== null
               ? "Error Occured While Adding Data"
               : isEdit === true
-              ? "Product Edited Successfully"
-              : "Product Added Successfully",
+                ? "Product Edited Successfully"
+                : "Product Added Successfully",
         });
       })
       .catch((err) => err)

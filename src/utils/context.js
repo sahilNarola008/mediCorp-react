@@ -12,8 +12,7 @@ function ContextProvider(props) {
   const [menus, setMenus] = useState([])
   const { getAppItem } = useLocalStorage();
 
-  const [token, settoken] = useState(getAppItem("token"));
-
+  const [token, setToken] = useState(getAppItem("token"));
   //#region axios interceptors
   // axios.interceptors.request.use(
   //     async (config) => {
@@ -25,8 +24,11 @@ function ContextProvider(props) {
   // )
 
   // response interceptor intercepting 401 responses, refreshing token and retrying the request
-  axios.defaults.baseURL = `${axiosConfig.baseURL}`
-  axios.defaults.headers = { Authorization: `Bearer ${token}` }
+  useEffect(() => {
+    axios.defaults.baseURL = `${axiosConfig.baseURL}`
+    axios.defaults.headers = { Authorization: `Bearer ${token}` }
+  }, [token])
+
   axios.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -52,7 +54,7 @@ function ContextProvider(props) {
       }),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (snak_open === false) setSnackContent(defaultSnackContent);
@@ -76,6 +78,7 @@ function ContextProvider(props) {
         setJobName,
         isManipulation,
         setIsManipulation,
+        setToken
       }}
     >
       {props.children}

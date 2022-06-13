@@ -175,13 +175,13 @@ function useSpecialization() {
           required: { value: true, message: "Specialization required" },
         },
       },
-      specialalityDescription: {
+      specialityDescription: {
         label: "Description",
         size: "small",
         variant: "outlined",
         col: 12,
         type: fieldTypes.text.type,
-        value: rowData?.specialalityDescription ?? "",
+        value: rowData?.specialityDescription ?? "",
         disabled: isView === true,
         validator: {
           required: { value: true, message: "Description required" },
@@ -220,14 +220,15 @@ function useSpecialization() {
       isEdit === true
         ? updateSpecialization({
           data: {
-            // specialityId: Number(id),
             organizationId: 1,
+            isDelete: false,
             ...data,
           },
         })
         : postSpecialization({
           data: {
             organizationId: 1,
+            isDelete: false,
             ...data,
           },
         });
