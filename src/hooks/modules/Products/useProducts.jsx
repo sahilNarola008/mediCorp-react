@@ -244,9 +244,9 @@ const useProducts = () => {
     });
     setModalActions([
       {
-        label: "Run",
-        icon: "Run",
-        isSubmit: true,
+           label: isEdit === true ? "Update" : "Save",
+                icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
+                isSubmit: true,
         action: (data) => handleSubmit(data, isEdit, rowData),
       },
     ]);

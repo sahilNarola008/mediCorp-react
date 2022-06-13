@@ -118,10 +118,6 @@ function useCategories() {
 
 
 
-  const category = [
-    { id: "1", categoryName: "INJECTABLES" },
-    { id: "2", categoryName: "ORALS" }
-  ]
   const handleSubmit = (data, isEdit) => {
     console.log(data);
     setModalTaskRunning(true)
@@ -173,7 +169,7 @@ function useCategories() {
         }
       },
       isActive: {
-        label: "Is Active",
+        label: "Active",
         size: "small",
         variant: "outlined",
         col: 12,
@@ -182,6 +178,15 @@ function useCategories() {
         disabled: isView === true,
       },
     })
+    setModalActions([
+      {
+        label: isEdit === true ? "Update" : "Save",
+        icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
+        isSubmit: true,
+        action: (data) => handleSubmit(data, isEdit, rowData),
+      },
+    ]);
+    setOpenDialog(true)
   }
 
   const handleModalClose = () => {
@@ -201,7 +206,6 @@ function useCategories() {
     AllCategories,
     allCategoriesLoading,
     handleModalClose,
-    category,
     editable
 
   }
