@@ -3,7 +3,7 @@ import { Box, Stack, Typography, Button, styled } from "@mui/material"
 import { grey } from "@mui/material/colors"
 import { ArrowRight } from "@mui/icons-material"
 import { useNavigate } from 'react-router-dom'
-import { useSystemOverview } from '@medicorp'
+import { Strings, useSystemOverview } from '@medicorp'
 
 const InfoButton = styled(Button)(({ theme }) => ({
     borderRadius: "0 0 8px 8px",
@@ -42,7 +42,7 @@ const SystemItem = ({ item }) => {
                             <ArrowRight />
                         }
                             onClick={() => navigate(item.navigate)}
-                        > View Details
+                        > {Strings.VIEW_DETAILS}
                         </InfoButton>
                     </> : <></>
                 }

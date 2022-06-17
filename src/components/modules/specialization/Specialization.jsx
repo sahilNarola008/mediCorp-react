@@ -19,7 +19,7 @@ function Specialization() {
     <>
       <MaterialTable
         columns={columns}
-        data={specialization?.data}
+        data={specialization?.data ? specialization?.data : []}
         title={Strings.MENU_DOCTORS_SPECIALIZATION_TITLE}
         actions={actions}
         editable={editable}

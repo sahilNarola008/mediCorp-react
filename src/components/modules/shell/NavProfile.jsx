@@ -1,43 +1,23 @@
-import React from "react";
-import { IconButton, Tooltip, Typography } from "@mui/material";
-import { ExitToAppRounded } from "@mui/icons-material";
-import { appSettings, Strings, useLocalStorage, useStyles, useAxios } from "@medicorp";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { SmartContent, useNavProfile } from "@medicorp";
 export default function NavProfile() {
-  const classes = useStyles();
-  const { routeConfig, endpointConfig } = appSettings;
-  const { removeAppItem } = useLocalStorage();
-  const navigate = useNavigate();
-  const [{ }, signOut] = useAxios(
-    {
-      url: endpointConfig.SignOut.SignOut,
-      method: "POST",
-    },
-    { manual: true }
-  );
-  const logout = async (e) => {
-    removeAppItem("token")
-    signOut()
-    navigate(routeConfig.login)
-  };
+  const {
+    // formHeader,
+    // formContent,
+    // formActions,
+    // formResetKeys,
+    // formTaskRunning,
+    // freeAction,
+  } = useNavProfile()
   return (
     <>
-      {/* <Link to="/" style={classes.menuLink} edge="start">
-        <Typography
-          variant="h6"
-          gutterBottom
-          component="div"
-          style={{ color: "#94121a", fontWeight: "bold" }}
-        >
-          MEDICORP
-        </Typography>
-      </Link> */}
-      <Tooltip title={Strings.LOGOUT_TITLE}>
-        <IconButton onClick={logout} edge="end" color="secondary">
-          <ExitToAppRounded />
-        </IconButton>
-      </Tooltip>
+      {/* <SmartContent
+        formHeader={formHeader}
+        formContent={formContent}
+        formActions={formActions}
+        formResetKeys={formResetKeys}
+        formTaskRunning={formTaskRunning}
+        freeAction={freeAction}
+      /> */}
     </>
   );
 }

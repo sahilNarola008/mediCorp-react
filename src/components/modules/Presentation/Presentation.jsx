@@ -7,11 +7,14 @@ import {
   useStyles,
 } from "@medicorp";
 import { Card } from "@mui/material";
-
-import React from "react";
-
 const Presentation = () => {
-  const { tableRef, presentationData, actions, detailPanel, searchOptions } =
+  const {
+    tableRef,
+    actions,
+    detailPanel,
+    searchOptions,
+    AllPresentation
+  } =
     usePresentation();
   const { presentationColumns } = presentationDataColumns();
   const { materialTableStyle: tableStyle } = useStyles();
@@ -23,7 +26,7 @@ const Presentation = () => {
         <MaterialTable
           columns={presentationColumns}
           tableRef={tableRef}
-          data={presentationData}
+          data={AllPresentation?.data ? AllPresentation?.data : []}
           title={Strings.MENU_PRESENTATIONSS_TITLE}
           actions={actions}
           detailPanel={detailPanel}

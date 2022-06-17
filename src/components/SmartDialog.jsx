@@ -51,7 +51,8 @@ const SmartDialog = ({
         for (let i = 0; i < imgeObj[0].length; i++) {
             imgArray.push(imgeObj[0][i])
         }
-        setSelectedImage(imgArray)
+        setSelectedImage(prev => [...prev, ...imgArray])
+        return selectedImage
     }
 
     const removeSelectedImage = (imgName) => {
@@ -64,6 +65,7 @@ const SmartDialog = ({
             }
         }
         setSelectedImage(newSelectedValue);
+        return selectedImage
     }
 
     const viewSelectedImage = (imgUrl, imgTitle) => {
@@ -767,14 +769,17 @@ const SmartDialog = ({
                                                     render={({ field }) => (
                                                         <>
 
-                                                            <label htmlFor="contained-button-file" >
+                                                            <label htmlFor="contained-button-file" {...field} >
                                                                 <Input
-                                                                    {...field}
                                                                     accept="image/*"
                                                                     id="contained-button-file"
                                                                     multiple
                                                                     type="file"
-                                                                    onChange={imageChange}
+                                                                    onChange={(e) => {
+                                                                        item?.onChange && item?.onChange(e.target.files)
+                                                                        // e.target.values = e.target.files
+                                                                        imageChange(e)
+                                                                    }}
                                                                     error={!!errors[`${key}`]}
                                                                 />
                                                                 <Button

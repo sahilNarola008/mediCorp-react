@@ -13,7 +13,7 @@ const Dashboard = () => {
                     <Overview />
                 </CardContent>
             </Card>
-            <Grid container>
+            {/* <Grid container>
                 <Grid item xs={12} md={4} sx={{ pr: { md: 2 } }}>
                     <Card raised>
                         <CardHeader title="Recent Jobs" />
@@ -30,7 +30,7 @@ const Dashboard = () => {
                         </CardContent>
                     </Card>
                 </Grid>
-            </Grid>
+            </Grid> */}
             <Card raised>
                 <CardHeader title="System Overview" />
                 <CardContent>

@@ -1,7 +1,7 @@
 import { useState, useContext } from "react"
 import { CheckCircle, Autorenew, Error, AccessAlarm, Pending } from "@mui/icons-material"
 import { teal, red, amber, blue } from "@mui/material/colors"
-import { appSettings, useAxios, moment, Context } from "@medicorp"
+import { appSettings, useAxios, moment, Context, Strings } from "@medicorp"
 
 const useOverview = () => {
     const [value, setValue] = useState(new Date())
@@ -12,31 +12,31 @@ const useOverview = () => {
 
     const items = [
         {
-            title: "Scheduled Works",
+            title: Strings.SCHEDULED_WORKS,
             subtitle: 0,
             icon: AccessAlarm,
             iconBg: teal["A700"]
         },
         {
-            title: "Completed",
+            title: Strings.COMPLETED,
             subtitle: 0,
             icon: CheckCircle,
             iconBg: '#9155FD'
         },
         {
-            title: "Failed",
+            title: Strings.FAILED,
             subtitle: 0,
             icon: Error,
             iconBg: red[400]
         },
         {
-            title: "Overdue",
+            title: Strings.OVERDUE,
             subtitle: 0,
             icon: Autorenew,
             iconBg: amber["A700"]
         },
         {
-            title: "Pending",
+            title: Strings.PENDING,
             subtitle: 0,
             icon: Pending,
             iconBg: blue["A400"]

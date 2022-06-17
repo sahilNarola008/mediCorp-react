@@ -19,7 +19,16 @@ export default function doctorsDataColumns() {
                     color={"info"} />
             )
         },
-        { title: Strings.COLUMN_DOCTORS_ADDRESS, field: 'addresses' },
+        {
+            title: Strings.COLUMN_DOCTORS_ADDRESS, field: 'addresses',
+            width: "45%",
+            cellStyle: {
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100px"
+            },
+        },
         { title: Strings.COLUMN_DOCTORS_COUNTRY, field: 'countryName' },
         { title: Strings.COLUMN_DOCTORS_STATE, field: 'stateName' },
         { title: Strings.COLUMN_DOCTORS_CITY, field: 'cityName' },

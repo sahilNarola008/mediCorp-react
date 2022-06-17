@@ -60,13 +60,13 @@ export default function useDoctors() {
     const actions = [
         {
             icon: tableIcons.Add,
-            tooltip: "Add Doctor",
+            tooltip: Strings.ADD_DOCTOR,
             isFreeAction: true,
             onClick: (event, rowData) => handleActionClick(event, false, false, {})
         },
         {
             icon: tableIcons.Edit,
-            tooltip: "Edit Application",
+            tooltip: Strings.EDIT_APPLICATION,
             onClick: (event, rowData) => new Promise((resolve) => {
                 setModalFormResetKeys([])
                 refetchDoctorsById({ url: format(endpointConfig.doctors.getDoctorsById, rowData.doctorId) }).then(res => {
@@ -78,10 +78,31 @@ export default function useDoctors() {
         },
         {
             icon: tableIcons.Delete,
-            tooltip: "Delete Application",
+            tooltip: Strings.DELETE_APPLICATION,
             onClick: (event, rowData) => new Promise((resolve) => {
-                confirm({ description: "Are You Sure You Want To Delete" })
-                    .then(() => { })
+                confirm({ description: Strings.DELETE_CONFIRM })
+                    .then(() => {
+                        setModalFormResetKeys([])
+                        deleteDoctors({ url: format(endpointConfig.doctors.deleteDoctorsById, rowData.doctorId) })
+                            .then((res) => {
+                                if (res.status === 200) {
+                                    refetchDoctors()
+                                    resolve(res.data)
+                                    logMessage({
+                                        severity:
+                                            statusType.success,
+                                        msg: Strings.DELETED_SUCCESSFULLY
+                                    })
+                                }
+                            })
+                            .catch(err => {
+                                logMessage({
+                                    severity:
+                                        statusType.error,
+                                    msg: Strings.ERROR_DELETING
+                                })
+                            })
+                    })
             })
         }
     ]
@@ -90,13 +111,13 @@ export default function useDoctors() {
         setModalFormResetKeys([])
         setModalHeader({
             isForm: true,
-            title: isEdit === true ? "Edit Doctors" : "Add Doctor",
-            header: isEdit === true ? "Edit in existing Doctors" : "Create a new Doctors",
+            title: isEdit === true ? Strings.EDIT_DOCTORS : Strings.ADD_DOCTOR,
+            header: isEdit === true ? Strings.EDIT_IN_EXISTING_DOCTORS : Strings.CREATE_A_NEW_DOCTORS,
             modalWidth: 'md'
         })
         setModalContent({
             firstName: {
-                label: "First Name",
+                label: Strings.FIRST_NAME,
                 size: "small",
                 variant: "outlined",
                 col: 6,
@@ -106,7 +127,7 @@ export default function useDoctors() {
                 validator: validator.nameValidator
             },
             lastName: {
-                label: "Last Name",
+                label: Strings.LAST_NAME,
                 size: "small",
                 variant: "outlined",
                 col: 6,
@@ -116,7 +137,7 @@ export default function useDoctors() {
                 validator: validator.nameValidator
             },
             gender: {
-                label: "Gender",
+                label: Strings.GENDER,
                 col: 12,
                 type: fieldTypes.radioGroup.type,
                 value: rowData?.gender ?? "Male",
@@ -126,12 +147,10 @@ export default function useDoctors() {
                 isContainer: true,
                 alignItems: 'center',
                 flexDirection: 'column',
-                validator: {
-                    required: { value: true, message: "Doctors gender is required" }
-                }
+                validator: validator.requiredValidator(Strings.DOCTORS_GENDER)
             },
             email: {
-                label: "Email",
+                label: Strings.EMAIL,
                 size: "small",
                 variant: "outlined",
                 col: 4,
@@ -141,7 +160,7 @@ export default function useDoctors() {
                 validator: validator.emailValidator
             },
             mobileNumber: {
-                label: "Phone",
+                label: Strings.PHONE,
                 size: "small",
                 variant: "outlined",
                 col: 4,
@@ -151,22 +170,22 @@ export default function useDoctors() {
                 validator: validator.phoneValidator
             },
             specialityId: {
-                label: "Speciality",
+                label: Strings.COLUMN_SPECIALITY_TITLE,
                 type: fieldTypes.autoComplete.type,
                 size: "small",
                 variant: "outlined",
                 col: 4,
                 titleProp: "country",
-                validator: validator.requiredValidator("Speciality"),
+                validator: validator.requiredValidator(Strings.SPECIALITY),
                 value: rowData?.specialityId && { label: rowData.specialityTitle, id: rowData.specialityId },
-                menuItems: speciality?.data && speciality?.data.map(g => ({
+                menuItems: speciality?.data ? speciality?.data.map(g => ({
                     label: g.title,
                     id: g.specialityId
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
                 equalityComparer: (option, value) => option.countryId === value,
             },
             addresses: {
-                label: "Address",
+                label: Strings.COLUMN_ADDRESS,
                 size: "small",
                 variant: "outlined",
                 col: 12,
@@ -175,57 +194,57 @@ export default function useDoctors() {
                 disabled: isView === true,
                 validator: validator.textAreaValidator
             },
-            // countryId: {
-            //     label: "Country",
-            //     type: fieldTypes.autoComplete.type,
-            //     size: "small",
-            //     variant: "outlined",
-            //     col: 4,
-            //     titleProp: "country",
-            //     validator: validator.requiredValidator("Country"),
-            //     value: rowData?.countryId && { label: rowData.countryName, id: rowData.countryId },
-            //     menuItems: countries?.data && countries?.data.map(g => ({
-            //         label: g.countryName,
-            //         id: g.countryId
-            //     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-            //     equalityComparer: (option, value) => option.countryId === value,
-            //     onSelectionChange: (id) => { handleSelectionChange(id, "country") }
-            // },
-            // stateId: {
-            //     label: "State",
-            //     type: fieldTypes.autoComplete.type,
-            //     size: "small",
-            //     variant: "outlined",
-            //     col: 4,
-            //     titleProp: "State",
-            //     validator: validator.requiredValidator("State"),
-            //     value: rowData?.stateId && { label: rowData.stateName, id: rowData.stateId },
-            //     menuItems: stateData && stateData.map(g => ({
-            //         label: g.stateName,
-            //         id: g.stateId
-            //     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-            //     equalityComparer: (option, value) => option.stateId === value,
-            //     onSelectionChange: (id) => { handleSelectionChange(id, "state") }
-            // },
-            // cityId: {
-            //     label: "City",
-            //     type: fieldTypes.autoComplete.type,
-            //     size: "small",
-            //     variant: "outlined",
-            //     col: 4,
-            //     titleProp: "City",
-            //     validator: validator.requiredValidator("City"),
-            //     value: rowData.cityId && { label: rowData.cityName, id: rowData.cityId },
-            //     menuItems: cityData && cityData.map(g => ({
-            //         label: g.cityName,
-            //         id: g.cityId
-            //     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-            //     equalityComparer: (option, value) => option.cityId === value,
-            // },
+            countryId: {
+                label: Strings.COLUMN_DOCTORS_COUNTRY,
+                type: fieldTypes.autoComplete.type,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                titleProp: "country",
+                validator: validator.requiredValidator("Country"),
+                value: rowData?.countryId && { label: rowData.countryName, id: rowData.countryId },
+                menuItems: countries?.data ? countries?.data.map(g => ({
+                    label: g.countryName,
+                    id: g.countryId
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
+                equalityComparer: (option, value) => option.countryId === value,
+                onSelectionChange: (id) => { handleSelectionChange(id, "country") }
+            },
+            stateId: {
+                label: Strings.COLUMN_STATE,
+                type: fieldTypes.autoComplete.type,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                titleProp: "State",
+                validator: validator.requiredValidator("State"),
+                value: rowData?.stateId && { label: rowData.stateName, id: rowData.stateId },
+                menuItems: stateData ? stateData.map(g => ({
+                    label: g.stateName,
+                    id: g.stateId
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
+                equalityComparer: (option, value) => option.stateId === value,
+                onSelectionChange: (id) => { handleSelectionChange(id, "state") }
+            },
+            cityId: {
+                label: Strings.COLUMN_CITY,
+                type: fieldTypes.autoComplete.type,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                titleProp: "City",
+                validator: validator.requiredValidator("City"),
+                value: rowData.cityId && { label: rowData.cityName, id: rowData.cityId },
+                menuItems: cityData ? cityData.map(g => ({
+                    label: g.cityName,
+                    id: g.cityId
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
+                equalityComparer: (option, value) => option.cityId === value,
+            },
         })
         setModalActions(isView === true ? [] : [
             {
-                label: isEdit === true ? "Update" : "Save",
+                label: isEdit === true ? Strings.UPDATE : Strings.SAVE,
                 icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
                 isSubmit: true,
                 action: isEdit === true ? (data) => handleSubmit(data, true, rowData?.doctorId, rowData?.organizationName, rowData?.organizationId) :
@@ -249,7 +268,7 @@ export default function useDoctors() {
                         reject(error)
                         logMessage({
                             severity: statusType.error,
-                            msg: "Error Getting Data!"
+                            msg: Strings.ERROR_GETTING_DATA
                         })
                     })
             }).then((data) => {
@@ -265,7 +284,7 @@ export default function useDoctors() {
                         reject(error)
                         logMessage({
                             severity: statusType.error,
-                            msg: "Error Getting Data!"
+                            msg: Strings.ERROR_GETTING_DATA
                         })
                     })
             }).then((data) => {
@@ -307,16 +326,16 @@ export default function useDoctors() {
         response.then((res) => {
             const { msg, errorMessage, message, title, isError, errorTitle, status } = res.data
             if (res.status === 200) {
-                handleModalClose()
+                // handleModalClose()
                 refetchDoctors()
             }
             logMessage({
                 severity: !isError && status != 400 ? statusType.success : statusType.error,
-                msg: msg ?? message ?? errorTitle ?? title ?? errorMessage ?? "Data Added Successfully."
+                msg: msg ?? message ?? errorTitle ?? title ?? errorMessage ?? Strings.DATA_ADDED_SUCCESSFULLY
             })
         })
             .catch(err => err)
-            .finally(() => setModalTaskRunning(false))
+            .finally(() => setModalTaskRunning(false), handleModalClose())
     }
 
     const handleModalClose = () => {

@@ -56,6 +56,8 @@ export { default as useStartup } from "hooks/useStartup";
 export { default as useLocalStorage } from "hooks/useLocalStorage";
 export { default as useMenuState } from "hooks/modules/shell/useMenuState";
 export { default as useNavTabs } from "hooks/modules/shell/useNavTabs";
+export { default as useHeader } from "hooks/modules/shell/useHeader";
+export { default as useNavProfile } from "hooks/modules/shell/useNavProfile";
 export { default as useDashboard } from "hooks/modules/Dashboard/useDashboard";
 export { default as useCategories } from "hooks/modules/Categories/useCategories";
 export { default as useProducts } from "hooks/modules/Products/useProducts";

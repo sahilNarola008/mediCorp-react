@@ -5,6 +5,8 @@ import {
   useLocalStorage,
   config,
   Context,
+  Strings,
+  validator,
 } from "@medicorp";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -59,14 +61,14 @@ const useLogin = () => {
         const { msg, errorMessage, message } = res;
         logMessage({
           severity: statusType.error,
-          msg: msg ?? errorMessage ?? message ?? res.data ?? " Invalid Login Details!",
+          msg: msg ?? errorMessage ?? message ?? res.data ?? Strings.INVALID_LOGIN_DETAILS,
         });
       }
     }).catch((error) => {
       const { msg, errorMessage, message } = error;
       logMessage({
         severity: statusType.error,
-        msg: msg ?? errorMessage ?? message ?? "Try Again After Some Time!",
+        msg: msg ?? errorMessage ?? message ?? Strings.TRY_AGAIN_AFTER_SOME_TIME,
       });
     }).finally(() => setFormTaskRunning(false));
   };
@@ -76,43 +78,39 @@ const useLogin = () => {
     setFormContent(!isForgotPassword ?
       {
         email: {
-          label: "Email",
+          label: Strings.EMAIL,
           type: fieldTypes.text.type,
           size: "small",
           variant: "outlined",
           col: 12,
-          validator: {
-            required: { value: true, message: "Please Enter Email Address" },
-          },
+          value: "",
+          validator: validator.requiredValidator(Strings.EMAIL)
         },
         password: {
-          label: "Password",
+          label: Strings.PASSWORD,
           size: "small",
           variant: "outlined",
           col: 12,
           type: fieldTypes.password.type,
           value: "",
-          validator: {
-            required: { value: true, message: "Password is required" },
-          },
+          validator: validator.requiredValidator(Strings.PASSWORD)
         },
       } :
       {
-        email: {
-          label: "Email",
+        forgotEmail: {
+          label: Strings.EMAIL,
           type: fieldTypes.text.type,
           size: "small",
           variant: "outlined",
           col: 12,
-          validator: {
-            required: { value: true, message: "Please Enter Email Address" },
-          },
+          validator: validator.requiredValidator(Strings.EMAIL)
+
         }
       }
     );
     setFormActions([
       {
-        label: !isForgotPassword ? "Login" : "Reset Password",
+        label: !isForgotPassword ? Strings.LOGIN : Strings.RESET_PASSWORD,
         endIcon: !isForgotPassword && tableIcons.Login,
         loadingPosition: "end",
         isSubmit: true,

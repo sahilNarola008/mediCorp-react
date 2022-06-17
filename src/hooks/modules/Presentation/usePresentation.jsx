@@ -5,14 +5,17 @@ import {
     PresentationDetailPanel,
     Strings,
     appSettings,
+    useAxios,
 } from "@medicorp"
 
 const usePresentation = () => {
     const tableRef = useRef()
     const confirm = useConfirm()
     const { tableIcons } = useTableIcons()
-    const { fieldTypes } = appSettings
+    const { fieldTypes, endpointConfig } = appSettings
 
+    const [
+        { data: AllPresentation, loading: allPresentationLoading }, refetchAllPresentation,] = useAxios(endpointConfig.presentation.getAll);
     // const [filterReportLabel, setFilterReportLabel] = useState("")
     const [searchData, setSearchData] = useState({
         sSearchText: [],
@@ -27,21 +30,12 @@ const usePresentation = () => {
         sType: "",
     });
 
+    AllPresentation?.data && AllPresentation?.data.map(
+        async (data) => {
+            Object.assign(data, { fullName: `${data.firstName} ${data.lastName}` })
+            return data
+        })
 
-    const searchCategoryMenuItems = [
-        { val: "category1", text: "Category1" },
-        { val: "category2", text: "Category2" },
-        { val: "category3", text: "Category3" },
-        { val: "category4", text: "Category4" },
-        { val: "category5", text: "Category5" },
-    ]
-    const searchProductsMenuItems = [
-        { val: "Product1", text: "product1" },
-        { val: "Product2", text: "product2" },
-        { val: "Product3", text: "product3" },
-        { val: "Product4", text: "product4" },
-        { val: "Product5", text: "product5" },
-    ]
     const searchDoctorsMenuItems = [
         { val: "Doctor1", text: "Doctor1" },
         { val: "Doctor2", text: "Doctor2" },
@@ -55,24 +49,6 @@ const usePresentation = () => {
         { val: "User3", text: "User3" },
         { val: "User4", text: "User4" },
         { val: "User5", text: "User5" },
-    ]
-
-    const presentationData = [
-        {
-            id: 1,
-            doctorName: "Kapil Yadav",
-            userName: "Krishna Patel"
-        },
-        {
-            id: 2,
-            doctorName: "Vasudev Gohil",
-            userName: "HArry Patel"
-        },
-        {
-            id: 3,
-            doctorName: "Darshan patil",
-            userName: "Krish Patel"
-        }
     ]
 
     // const actions = [
@@ -225,9 +201,9 @@ const usePresentation = () => {
 
     return {
         tableRef,
-        presentationData,
         detailPanel,
         searchOptions,
+        AllPresentation
         // filterReportLabel,
         // CTAButtons
 

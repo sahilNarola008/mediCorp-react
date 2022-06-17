@@ -5,6 +5,8 @@ import {
   useAxios,
   useConfirm,
   format,
+  Strings,
+  validator,
 } from "@medicorp";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -48,7 +50,7 @@ function useCategories() {
   const actions = [
     {
       icon: tableIcons.Add,
-      tooltip: 'Add Category',
+      tooltip: Strings.ADD_CATEGORY,
       isFreeAction: true,
       onClick: (event, rowData) => handleActionClick(event, false, false, {})
     },
@@ -108,7 +110,7 @@ function useCategories() {
               logMessage({
                 severity:
                   statusType.error,
-                msg: "Error Deleting Categories!"
+                msg: Strings.ERROR_DELETING_CATEGORIES
               })
             })
         }, 1000)
@@ -138,7 +140,7 @@ function useCategories() {
       logMessage({
         severity:
           !isError ? statusType.success : statusType.error,
-        msg: msg ?? errorMessage ?? message ?? title ?? "Category Added Successfully"
+        msg: msg ?? errorMessage ?? message ?? title ?? Strings.CATEGORY_ADDED_SUCCESSFULLY
       })
     })
       .catch(err => err)
@@ -151,25 +153,23 @@ function useCategories() {
     console.log(rowData);
     setModalHeader({
       isForm: true,
-      title: isEdit === true ? "Edit Category" : "Add Category",
-      header: isEdit === true ? "Edit this existing Category" : "Create a new Category",
+      title: isEdit === true ? Strings.EDIT_CATEGORY : Strings.ADD_CATEGORY,
+      header: isEdit === true ? Strings.EDIT_THIS_EXISTING_CATEGORY : Strings.CREATE_A_NEW_CATEGORY,
       modalWidth: 'md'
     })
     setModalContent({
       categoryName: {
-        label: "Category Name",
+        label: Strings.COLUMN_CATEGORY_NAME,
         size: "small",
         variant: "outlined",
         col: 12,
         type: fieldTypes.text.type,
         value: rowData?.categoryName ?? "",
         disabled: isView === true,
-        validator: {
-          required: { value: true, message: "Category name is required" }
-        }
+        validator: validator.requiredValidator(Strings.CATEGORY_NAME_IS_REQUIRED)
       },
       isActive: {
-        label: "Active",
+        label: Strings.COLUMN_USERS_IS_ACTIVE,
         size: "small",
         variant: "outlined",
         col: 12,
@@ -180,7 +180,7 @@ function useCategories() {
     })
     setModalActions([
       {
-        label: isEdit === true ? "Update" : "Save",
+        label: isEdit === true ? Strings.UPDATE : Strings.SAVE,
         icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
         isSubmit: true,
         action: (data) => handleSubmit(data, isEdit, rowData),

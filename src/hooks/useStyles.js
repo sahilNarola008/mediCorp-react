@@ -210,7 +210,7 @@ const useStyles = () => {
       selection: true,
       grouping: true,
       columnsButton: true,
-      pageSize: 5,
+      pageSize: 10,
       pageSizeOptions: [5, 10, 20],
       padding: "normal",
       headerStyle: {

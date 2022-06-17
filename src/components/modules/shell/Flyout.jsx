@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
 import {
-    Drawer, Toolbar, SwipeableDrawer, Paper, Grid, Box, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography, IconButton, Divider
+    Drawer, Toolbar, SwipeableDrawer, Paper, Grid, Box, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography, IconButton, Divider,
 } from "@mui/material"
 import { ChevronRight, Menu as MenuIcon } from '@mui/icons-material'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useStyles, PropTypes, appSettings, Context } from '@medicorp'
 
 const FlyoutMenuItem = ({ item, classes, nav }) => {
@@ -19,10 +19,17 @@ const SingleLevel = ({ item, classes, nav }) => {
 
         <>
             {hasDivider && <Divider sx={classes.lightDivider} />}
-            <ListItemButton onClick={() => navigate(to, { replace: true })} sx={classes.menuList} selected={selected}>
+            {hasDivider && <Divider sx={classes.lightDivider} />}
+            <MenuItem
+                onClick={() => navigate(to, { replace: true })}
+                component={Link}
+                to={to}
+                selected={selected}
+                sx={[classes.menuList, { padding: "16px 20px" }]}
+            >
                 {ItemIcon && <ListItemIcon><ItemIcon /></ListItemIcon>}
                 <ListItemText primary={title} />
-            </ListItemButton>
+            </MenuItem>
         </>
     )
 }
@@ -36,7 +43,6 @@ const MultiLevel = ({ item, classes, nav }) => {
     const [selectedListItem, setSelectedListItem] = useState(false)
     const selectedMenuIndex = children.length > 0 ?
         children.findIndex(cItem => cItem.to.split('/').join('') === nav.location.split('/').join('')) : -1
-
     useEffect(() => {
         setSelectedListItem(nav.base === itemId)
     }, [nav])
@@ -73,6 +79,7 @@ const MultiLevel = ({ item, classes, nav }) => {
                     vertical: 'top',
                     horizontal: 'right',
                 }}
+                component={Link}
                 transformOrigin={{
                     vertical: 'top',
                     horizontal: 'left',
@@ -88,7 +95,7 @@ const MultiLevel = ({ item, classes, nav }) => {
                 {children.map((child, index) => child.isVisible && (
                     <MenuItem
                         key={child.id}
-                        onClick={() => handleMenuClick(child.to)}
+                        onClick={() => setAnchorEl(null)}
                         selected={index === selectedMenuIndex}
                     >
                         {child.title}
@@ -108,7 +115,7 @@ const Flyout = (props) => {
     const url = useLocation()
 
     const location = url.pathname.toLowerCase()
-    const base = location.split('/')[1]
+    const base = location.split('/')[2]
 
     const container = window !== undefined ? () => window().document.body : undefined
 

@@ -1,4 +1,4 @@
-import { useLogin, SmartContent } from "@medicorp";
+import { useLogin, SmartContent, Strings } from "@medicorp";
 import {
   Avatar,
   Box,
@@ -76,6 +76,7 @@ const Login = () => {
                 justifyContent: "center",
                 margin: "auto",
                 padding: "25px",
+                width: "65%"
               }}
             >
               <Avatar sx={{ m: 1, bgcolor: blue[500] }}>
@@ -104,7 +105,7 @@ const Login = () => {
                 formTaskRunning={formTaskRunning}
                 freeAction={freeAction}
               />
-              <Link onClick={() => { handleForgotPassword(!isForgotPassword) }}>{!isForgotPassword ? "Forgot Password?" : "Back To Login"}</Link>
+              <Link onClick={() => { handleForgotPassword(!isForgotPassword) }}>{!isForgotPassword ? Strings.FORGOT_PASSWORD : Strings.BACK_TO_LOGIN}</Link>
             </Box>
           </Grid>
         </Grid>
