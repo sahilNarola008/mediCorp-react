@@ -24,10 +24,8 @@ function ContextProvider(props) {
   // )
 
   // response interceptor intercepting 401 responses, refreshing token and retrying the request
-  useEffect(() => {
-    axios.defaults.baseURL = `${axiosConfig.baseURL}`
-    axios.defaults.headers = { Authorization: `Bearer ${token}` }
-  }, [token])
+  axios.defaults.baseURL = `${axiosConfig.baseURL}`
+  axios.defaults.headers = { Authorization: `Bearer ${token}` }
 
   axios.interceptors.response.use(
     (response) => response,

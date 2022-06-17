@@ -31,7 +31,7 @@ const Strings = {
   COLUMN_JOB_RISKCORE_IMPORT: "Riskcore Import Template",
   COLUMN_JOB_SCHEDULING_TITLE: "Jobs",
   COLUMN_APPLICATION_NAME: "Name",
-  COLUMN_APPLICATION_DESCRIPTION: "Description",
+  COLUMN_DESCRIPTION: "Description",
   COLUMN_APPLICATION_TITLE: "Application",
   COLUMN_TAG_TYPE: "Tag Name",
   COLUMN_TAG_TITLE: "Tags",
@@ -41,8 +41,8 @@ const Strings = {
   COLUMN_ROLES_PERMISSION: "Permissions",
   COLUMN_ROLES_TITLE: "Roles",
   COLUMN_USERS_USER_NAME: "User Name",
-  COLUMN_USERS_FIRST_NAME: "First Name",
-  COLUMN_USERS_LAST_NAME: "Last Name",
+  COLUMN_FIRST_NAME: "First Name",
+  COLUMN_LAST_NAME: "Last Name",
   COLUMN_USERS_EMAIL: "Email",
   COLUMN_USERS_DEPARTMENT: "Department",
   COLUMN_USERS_USER_ROLE: "User Role",
@@ -93,8 +93,6 @@ const Strings = {
   COLUMN_FIELD_NAME: "Field Name",
   IMPORT: "IMPORT",
   EXPORT: "EXPORT",
-  HELP_ABOUT:
-    "The PPM (Pre-Processing Module) is a Data Retrieval & Data ETL (Extract, Transform, Load) platform, the main goal of the platform is to retrieve files from different SDP's(data providers), transform those files in-flight as per the business requirement and then pushes the data from those files downstream to Risk and Reporting applications.",
   HELP_RELEASE_NOTES: "Release Notes",
   HELP_TITLE: "Help",
   HELP_RESOURCES: "Resources",
@@ -109,32 +107,6 @@ const Strings = {
   COLUMN_JOBROLE_READ_FROM_NEXT_COLCELL: "Read From Next ColCell",
   COLUMN_JOBROLE_SHEET_NAME: "Sheet Name",
   JOBS_FILE_EXPECTED_RECEIVE_DATE: "File Expected Receive Date",
-  JOBS_FOR_INSTANCE_INFO: (
-    <>
-      <u>
-        <b>For Instance:</b>
-      </u>
-      <p>
-        If <b>File Expected Effective (Report) Date</b> is <b>22/04/2017</b>{" "}
-        <br /> and <b>AsAt(delta)</b> is <b>+3</b>,<br /> then{" "}
-        <b>Expected Receive Date</b> will be <b>25/04/2018</b>.<br />
-      </p>
-    </>
-  ),
-  JOBS_FOR_EFFECTIVE_INFO: (
-    <>
-      <u>
-        <b>For Instance:</b>
-      </u>
-      <p>
-        If <b>Effective Date</b> is <b>20/04/2018</b>, <b>FromTo(delta)</b> is{" "}
-        <b>+3</b> and <b>Range(delta)</b> is <b>14</b>, then{" "}
-        <b>Expected Effective (Report) Dates</b> = From: <b>02/04/2017</b>(14
-        Business days prior), To: <b>20/04/2017</b> and{" "}
-        <b>Expected Receive date = 23/04/2017</b>.
-      </p>
-    </>
-  ),
   JOBS_STEPS_TITLE: "Job Name: ",
   COMPLETE: "Complete",
   COLUMN_BASED_ON: "Based On",
@@ -220,34 +192,91 @@ const Strings = {
   MENU_DOCTORS_TITLE: "Doctors",
   MENU_DOCTORS_SPECIALIZATION_TITLE: "Specialization",
   COLUMN_PRODUCTS_NAME: "Product Name",
-  COLUMN_PRODUCTS_DESCRIPTION: "Description",
-  COLUMN_PRODUCTS_MRP: "MRP",
+  COLUMN_DESCRIPTION: "Description",
+  COLUMN_MRP: "MRP",
   COLUMN_PRODUCTS_IMAGE: "Image",
   COLUMN_DOCTORS_FIRST_NAME: "First Name",
   COLUMN_DOCTORS_LAST_NAME: "Last Name",
-  COLUMN_DOCTORS_GENDER: "Gender",
-  COLUMN_DOCTORS_SPECIALIZATION: "Specialization",
+  COLUMN_SPECIALIZATION: "Specialization",
   COLUMN_DOCTORS_EMAIL: "Email",
-  COLUMN_DOCTORS_PHONE: "Phone",
+  COLUMN_PHONE: "Phone",
   COLUMN_DOCTORS_ADDRESS: "Address",
-  COLUMN_DOCTORS_CITY: "City",
+  COLUMN_CITY: "City",
   COLUMN_DOCTORS_COUNTRY: "Country",
-  COLUMN_DOCTORS_STATE: "State",
+  COLUMN_STATE: "State",
   COLUMN_USERS_NAME: "Name",
-  COLUMN_USERS_GENDER: "Gender",
+  COLUMN_GENDER: "Gender",
   COLUMN_USERS_PHONE: "Phone",
   COLUMN_DOCTORS_TITLE: "Doctors",
   COLUMNS_DOCTORNAME_TILTLE: "Doctor Name",
   COLUMNS_USERNAME_TILTLE: "User Name",
   SEARCH_TITLE: "Search",
   SEARCH_TITLE_DATERANGE: "Daterange",
-  SEARCH_TITLE_CATEGORY: "Category",
+  TITLE_CATEGORY: "Category",
   SEARCH_TITLE_PRODUCTS: "Products",
   SEARCH_TITLE_DOCTOR: "Doctor",
   SEARCH_TITLE_USER: "User",
-  COLUMN_CATREGORY_IS_ACTIVE: "Active",
+  COLUMN_ACTIVE: "Active",
   COLUMN_DOCTORS_IS_ACTIVE: "Active",
   COLUMN_CATEGORY_NAME: "Category Name",
   COLUMN_SPECIALITY_TITLE: "Speciality",
+  FORGOT_PASSWORD: "Forgot Password?",
+  BACK_TO_LOGIN: "Back To Login",
+  INVALID_LOGIN_DETAILS: " Invalid Login Details!",
+  TRY_AGAIN_AFTER_SOME_TIME: "Try Again After Some Time!",
+  EMAIL: "Email",
+  PASSWORD: "Password",
+  LOGIN: "Login",
+  RESET_PASSWORD: "Reset Password",
+  ADD_CATEGORY: "Add Category",
+  ERROR_DELETING_CATEGORIES: "Error Deleting Categories!",
+  CATEGORY_ADDED_SUCCESSFULLY: "Category Added Successfully",
+  EDIT_CATEGORY: "Edit Category",
+  ADD_CATEGORY: "Add Category",
+  EDIT_THIS_EXISTING_CATEGORY: "Edit this existing Category",
+  CREATE_A_NEW_CATEGORY: "Create a new Category",
+  CATEGORY_NAME_IS_REQUIRED: "Category name is required",
+  SCHEDULED_WORKS: "Scheduled Works",
+  COMPLETED: "Completed",
+  FAILED: "Failed",
+  OVERDUE: "Overdue",
+  PENDING: "Pending",
+  VIEW_DETAILS: "View Details",
+  COPYRIGHT: "Copyright @2022 All Rights Reserved by Pragalbh Software",
+  UPDATE: "Update",
+  SAVE: "Save",
+  IN_PROGRESS: "In Progress",
+  ADD_DOCTOR: "Add Doctor",
+  EDIT_APPLICATION: "Edit Application",
+  DELETE_APPLICATION: "Delete Application",
+  DELETE_CONFIRM: "Are You Sure You Want To Delete ?",
+  DELETED_SUCCESSFULLY: "Data Deleted Successfully.",
+  ERROR_DELETING: "Error Deleting Data!",
+  EDIT_DOCTORS: "Edit Doctors",
+  EDIT_IN_EXISTING_DOCTORS: "Edit in existing Doctors",
+  CREATE_A_NEW_DOCTORS: "Create a new Doctors",
+  FIRST_NAME: "First Name",
+  LAST_NAME: "Last Name",
+  GENDER: "Gender",
+  DOCTORS_GENDER: "Doctors gender",
+  SPECIALITY: "Speciality",
+  EDIT_PROFILE: "Edit Profile",
+  EDIT_THIS_PROFILE: "Edit this Profile",
+  EDIT_SPECIALIZATION: "Edit Specialization",
+  EDIT_IN_EXISTING_SPECIALIZATION: "Edit in existing Specialization",
+  EDIT_IN_EXISTING_USERS: "Edit in existing Users",
+  CREATE_A_NEW_SPECIALIZATION: "Create a new Specialization",
+  CREATE_A_NEW_USERS: "Create a new Users",
+  ADD_SPECIALIZATION: "Add Specialization",
+  PHONE: "Phone",
+  NAME: "Name",
+  USERS_GENDER: "Users gender",
+  ERROR_GETTING_DATA: "Error Getting Data!",
+  DATA_ADDED_SUCCESSFULLY: "Data Added Successfully.",
+  PRODUCT_EDITED_SUCCESSFULLY: "Edited Successfully",
+  ERROR_OCCURED_WHILE_ADDING_DATA: "Error Occured While Adding Data!",
+  ERROR_DELETING_DATA: "Error Deleting Data!",
+  EDIT_USERS: "Edit Users",
+  ADD_USERS: "Add Users",
 };
 export { Strings };

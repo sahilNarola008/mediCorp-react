@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator, usersDataColumn } from "@medicorp"
+import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator, usersDataColumn, Strings } from "@medicorp"
 const useUsers = () => {
     const { logMessage } = useContext(Context)
     const { endpointConfig, fieldTypes, statusType } = appSettings
@@ -36,44 +36,106 @@ const useUsers = () => {
         },
         { manual: true })
 
+
+    users?.data && users?.data.map(
+        async (data) => {
+            Object.assign(data, { fullName: `${data.firstName} ${data.lastName}` })
+            return data
+        })
+
+
     const actions = [
+        // {
+        //     icon: tableIcons.Add,
+        //     tooltip: "Add User",
+        //     isFreeAction: true,
+        //     onClick: (event, rowData) => handleActionClick(event, false, false, {})
+        // },
+        // {
+        //     icon: tableIcons.Edit,
+        //     tooltip: "Edit Product",
+        //     onClick: (event, rowData) =>
+        //         new Promise((resolve) => {
+        //             console.log(rowData);
+        //             setModalFormResetKeys([]);
+        //             refetchUsersById({
+        //                 url: format(
+        //                     endpointConfig.users.getUsersById,
+        //                     rowData.id
+        //                 ),
+        //             }).then((res) => {
+        //                 if (res.status === 200) {
+        //                     resolve(res.data);
+        //                 }
+        //             }).catch((err) => err);
+        //         }).then((data) => handleActionClick(event, true, false, data.data)),
+        // },
         {
-            icon: tableIcons.Add,
-            tooltip: "Add User",
-            isFreeAction: true,
-            onClick: (event, rowData) => handleActionClick(event, false, false, {})
-        }
+            icon: tableIcons.Delete,
+            tooltip: "Delete Product",
+            onClick: (event, rowData) =>
+                new Promise((resolve) => {
+                    confirm({ description: Strings.DELETE_CONFIRM }).then(
+                        () => {
+                            setModalFormResetKeys([]);
+                            deleteUser({
+                                url: format(
+                                    endpointConfig.users.deleteUsersById,
+                                    rowData.id
+                                ),
+                            }).then((res) => {
+                                if (res.status === 200) {
+                                    refetchUsers();
+                                    logMessage({
+                                        severity:
+                                            statusType.success,
+                                        msg: Strings.DELETED_SUCCESSFULLY
+                                    })
+                                    resolve(res.data);
+                                }
+                            }).catch((err) => {
+                                logMessage({
+                                    severity:
+                                        statusType.error,
+                                    msg: Strings.ERROR_DELETING
+                                })
+                            });
+                        }
+                    );
+                }),
+        },
+
     ]
 
-    const editable = {
-        onRowUpdate: (newData, oldData) =>
-            new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    handleSubmit(newData, true)
-                    resolve();
-                }, 1000)
-            }),
-        onRowDelete: oldData =>
-            new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    deleteUser({ url: format(endpointConfig.users.deleteUsersById, oldData.id) })
-                        .then((res) => {
-                            if (res.status === 200) {
-                                refetchUsers()
-                                resolve(res.data)
-                            }
-                        })
-                        .catch(err => {
-                            console.log(err)
-                            logMessage({
-                                severity:
-                                    statusType.error,
-                                msg: "Error Deleting User!"
-                            })
-                        })
-                }, 1000)
-            }),
-    }
+    // const editable = {
+    //     onRowUpdate: (newData, oldData) =>
+    //         new Promise((resolve, reject) => {
+    //             setTimeout(() => {
+    //                 handleSubmit(newData, true)
+    //                 resolve();
+    //             }, 1000)
+    //         }),
+    //     onRowDelete: oldData =>
+    //         new Promise((resolve, reject) => {
+    //             setTimeout(() => {
+    //                 deleteUser({ url: format(endpointConfig.users.deleteUsersById, oldData.id) })
+    //                     .then((res) => {
+    //                         if (res.status === 200) {
+    //                             refetchUsers()
+    //                             resolve(res.data)
+    //                         }
+    //                     })
+    //                     .catch(err => {
+    //                         console.log(err)
+    //                         logMessage({
+    //                             severity:
+    //                                 statusType.error,
+    //                             msg: "Error Deleting User!"
+    //                         })
+    //                     })
+    //             }, 1000)
+    //         }),
+    // }
 
 
     const user = [
@@ -84,13 +146,13 @@ const useUsers = () => {
     const handleActionClick = (event, isEdit = false, isView = false, rowData = {}) => {
         setModalHeader({
             isForm: true,
-            title: isEdit === true ? "Edit Users" : "Add Users",
-            header: isEdit === true ? "Edit in existing Users" : "Create a new Users",
+            title: isEdit === true ? Strings.EDIT_USERS : Strings.ADD_USERS,
+            header: isEdit === true ? Strings.EDIT_IN_EXISTING_USERS : Strings.CREATE_A_NEW_USERS,
             modalWidth: 'md'
         })
         setModalContent({
             firstName: {
-                label: "First Name",
+                label: Strings.COLUMN_FIRST_NAME,
                 size: "small",
                 variant: "outlined",
                 col: 6,
@@ -100,7 +162,7 @@ const useUsers = () => {
                 validator: validator.nameValidator
             },
             lastName: {
-                label: "Last Name",
+                label: Strings.COLUMN_LAST_NAME,
                 size: "small",
                 variant: "outlined",
                 col: 6,
@@ -110,7 +172,7 @@ const useUsers = () => {
                 validator: validator.nameValidator
             },
             gender: {
-                label: "Gender",
+                label: Strings.COLUMN_GENDER,
                 size: "small",
                 variant: "outlined",
                 col: 12,
@@ -124,12 +186,10 @@ const useUsers = () => {
                 flexDirection: 'column',
                 row: true,
                 disabled: isView === true,
-                validator: {
-                    required: { value: true, message: "Users gender is required" }
-                }
+                validator: validator.requiredValidator(Strings.USERS_GENDER)
             },
             email: {
-                label: "Email",
+                label: Strings.COLUMN_EMAIL,
                 size: "small",
                 variant: "outlined",
                 col: 6,
@@ -139,7 +199,7 @@ const useUsers = () => {
                 validator: validator.emailValidator
             },
             phone: {
-                label: "Phone",
+                label: Strings.COLUMN_PHONE,
                 size: "small",
                 variant: "outlined",
                 col: 6,
@@ -151,7 +211,7 @@ const useUsers = () => {
         })
         setModalActions(isView === true ? [] : [
             {
-                label: isEdit === true ? "Update" : "Save",
+                label: isEdit === true ? Strings.UPDATE : Strings.SAVE,
                 icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
                 isSubmit: true,
                 action: isEdit === true ? (data) => handleSubmit(data, true, rowData?.id) : (data) => handleSubmit(data, false)
@@ -200,7 +260,6 @@ const useUsers = () => {
         modalFormResetKeys,
         modalTaskRunning,
         columns,
-        editable
 
     }
 }

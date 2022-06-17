@@ -24,6 +24,7 @@ const useProducts = () => {
   const [modalActions, setModalActions] = useState([]);
   const [modalFormResetKeys, setModalFormResetKeys] = useState([]);
   const [modalTaskRunning, setModalTaskRunning] = useState(false);
+  const [productImages, setproductImages] = useState()
 
   const [producstsData, setProducstsData] = useState([
     {
@@ -133,7 +134,7 @@ const useProducts = () => {
       tooltip: "Delete Product",
       onClick: (event, rowData) =>
         new Promise((resolve) => {
-          confirm({ description: "Are you sure you want to delete?" }).then(
+          confirm({ description: Strings.DELETE_CONFIRM }).then(
             () => {
               setModalFormResetKeys([]);
               deleteProduct({
@@ -174,7 +175,7 @@ const useProducts = () => {
     });
     setModalContent({
       categoryId: {
-        label: "Category",
+        label: Strings.TITLE_CATEGORY,
         type: fieldTypes.select.type,
         size: "small",
         variant: "outlined",
@@ -186,36 +187,30 @@ const useProducts = () => {
             text: g.categoryName,
             val: Number(g.categoryId),
           })),
-        validator: {
-          required: { value: true, message: "Please Select category" },
-        },
+        validator: validator.requiredValidator(Strings.TITLE_CATEGORY)
       },
       productName: {
-        label: "Product Name",
+        label: Strings.COLUMN_PRODUCTS_NAME,
         size: "small",
         variant: "outlined",
         col: 12,
         type: fieldTypes.text.type,
         value: rowData?.productName ?? "",
         disabled: isView === true,
-        validator: {
-          required: { value: true, message: "name is required" },
-        },
+        validator: validator.requiredValidator(Strings.NAME),
       },
       productDescription: {
-        label: "Description",
+        label: Strings.COLUMN_DESCRIPTION,
         size: "small",
         variant: "outlined",
         col: 12,
         type: fieldTypes.textArea.type,
         value: rowData?.productDescription ?? "",
         disabled: isView === true,
-        validator: {
-          required: { value: true, message: "description is required" },
-        },
+        validator: validator.requiredValidator(Strings.COLUMN_DESCRIPTION)
       },
       mrp: {
-        label: "MRP",
+        label: Strings.COLUMN_MRP,
         size: "small",
         variant: "outlined",
         col: 12,
@@ -225,7 +220,7 @@ const useProducts = () => {
         validator: validator.PriceValidator,
       },
       isActive: {
-        label: "Active",
+        label: Strings.COLUMN_ACTIVE,
         size: "small",
         variant: "outlined",
         col: 12,
@@ -238,15 +233,20 @@ const useProducts = () => {
         variant: "outlined",
         col: 12,
         type: fieldTypes.image.type,
-        value: rowData?.model?.connectionName ?? "",
+        value: rowData?.images ?? "",
         disabled: isView === true,
+        validator: validator.imageValidator,
+        onChange: (e) => {
+          console.log(e)
+          setproductImages(...e)
+        }
       },
     });
     setModalActions([
       {
-           label: isEdit === true ? "Update" : "Save",
-                icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
-                isSubmit: true,
+        label: isEdit === true ? Strings.UPDATE : Strings.SAVE,
+        icon: isEdit === true ? tableIcons.Edit : tableIcons.Save,
+        isSubmit: true,
         action: (data) => handleSubmit(data, isEdit, rowData),
       },
     ]);
@@ -255,6 +255,8 @@ const useProducts = () => {
 
   const handleSubmit = (data, isEdit, rowData) => {
     console.log(data);
+    console.log(productImages);
+    debugger
     setModalTaskRunning(true);
     setModalFormResetKeys([]);
     const response =
@@ -284,10 +286,10 @@ const useProducts = () => {
           severity: errors === null ? statusType.success : statusType.error,
           msg:
             message ?? errors !== null
-              ? "Error Occured While Adding Data"
+              ? Strings.ERROR_OCCURED_WHILE_ADDING_DATA
               : isEdit === true
-                ? "Product Edited Successfully"
-                : "Product Added Successfully",
+                ? Strings.PRODUCT_EDITED_SUCCESSFULLY
+                : Strings.DATA_ADDED_SUCCESSFULLY,
         });
       })
       .catch((err) => err)
