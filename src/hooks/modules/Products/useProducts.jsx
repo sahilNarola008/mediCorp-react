@@ -229,18 +229,29 @@ const useProducts = () => {
         disabled: isView === true,
       },
       image: {
+        // label: Strings.ADD_PRODUCT_IMAGES,
         size: "small",
-        variant: "outlined",
         col: 12,
-        type: fieldTypes.image.type,
-        value: rowData?.images ?? "",
-        disabled: isView === true,
+        type: fieldTypes.imageDropzone.type,
+        value: rowData?.images ?? [],
+        handleSave: (data) => { console.log(data) },
         validator: validator.imageValidator,
-        onChange: (e) => {
-          console.log(e)
-          setproductImages(...e)
-        }
+        filesLimit: 2,
+        maxFileSize: 10000000,
       },
+      // image: {
+      //   size: "small",
+      //   variant: "outlined",
+      //   col: 12,
+      //   type: fieldTypes.image.type,
+      //   value: rowData?.images ?? "",
+      //   disabled: isView === true,
+      //   validator: validator.imageValidator,
+      //   onChange: (e) => {
+      //     console.log(e)
+      //     setproductImages(...e)
+      //   }
+      // },
     });
     setModalActions([
       {

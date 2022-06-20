@@ -13,9 +13,10 @@ const Presentation = () => {
     actions,
     detailPanel,
     searchOptions,
-    AllPresentation
-  } =
-    usePresentation();
+    AllPresentation,
+    presentationData,
+    allPresentationLoading
+  } = usePresentation();
   const { presentationColumns } = presentationDataColumns();
   const { materialTableStyle: tableStyle } = useStyles();
   return (
@@ -26,10 +27,11 @@ const Presentation = () => {
         <MaterialTable
           columns={presentationColumns}
           tableRef={tableRef}
-          data={AllPresentation?.data ? AllPresentation?.data : []}
+          data={presentationData !== undefined ? presentationData : AllPresentation?.data ? AllPresentation?.data : []}
           title={Strings.MENU_PRESENTATIONSS_TITLE}
           actions={actions}
           detailPanel={detailPanel}
+          isLoading={allPresentationLoading}
           options={{
             ...tableStyle,
             selection: true,

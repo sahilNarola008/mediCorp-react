@@ -6,6 +6,7 @@ import {
     Strings,
     appSettings,
     useAxios,
+    format,
 } from "@medicorp"
 
 const usePresentation = () => {
@@ -14,8 +15,14 @@ const usePresentation = () => {
     const { tableIcons } = useTableIcons()
     const { fieldTypes, endpointConfig } = appSettings
 
-    const [
-        { data: AllPresentation, loading: allPresentationLoading }, refetchAllPresentation,] = useAxios(endpointConfig.presentation.getAll);
+
+    const [presentationData, setPresentationData] = useState()
+
+    const [{ data: AllPresentation, loading: allPresentationLoading }, refetchAllPresentation,] = useAxios(endpointConfig.presentation.getAll);
+    const [{ data: searchDoctorsMenuItems, loading: searchDoctorsMenuItemsLoading }, refetchSearchDoctorsMenuItems,] = useAxios(endpointConfig.doctors.getAll);
+    const [{ data: searchUserMenuItems, loading: searchUserMenuItemsLoading }, refetchSearchUserMenuItems,] = useAxios(endpointConfig.users.getAll);
+    const [{ }, getPresentationByDoctorId] = useAxios(endpointConfig.presentation.getPresentationByDoctorId, { manual: true });
+    const [{ }, getPresentationByUserId] = useAxios(endpointConfig.presentation.getPresentationByUserId, { manual: true });
     // const [filterReportLabel, setFilterReportLabel] = useState("")
     const [searchData, setSearchData] = useState({
         sSearchText: [],
@@ -30,26 +37,26 @@ const usePresentation = () => {
         sType: "",
     });
 
-    AllPresentation?.data && AllPresentation?.data.map(
-        async (data) => {
-            Object.assign(data, { fullName: `${data.firstName} ${data.lastName}` })
-            return data
-        })
+    // AllPresentation?.data && AllPresentation?.data.map(
+    //     async (data) => {
+    //         Object.assign(data, { fullName: `${data.firstName} ${data.lastName}` })
+    //         return data
+    //     })
 
-    const searchDoctorsMenuItems = [
-        { val: "Doctor1", text: "Doctor1" },
-        { val: "Doctor2", text: "Doctor2" },
-        { val: "Doctor3", text: "Doctor3" },
-        { val: "Doctor4", text: "Doctor4" },
-        { val: "Doctor5", text: "Doctor5" },
-    ]
-    const searchUserMenuItems = [
-        { val: "User1", text: "User1" },
-        { val: "User2", text: "User2" },
-        { val: "User3", text: "User3" },
-        { val: "User4", text: "User4" },
-        { val: "User5", text: "User5" },
-    ]
+    // const searchDoctorsMenuItems = [
+    //     { val: "Doctor1", text: "Doctor1" },
+    //     { val: "Doctor2", text: "Doctor2" },
+    //     { val: "Doctor3", text: "Doctor3" },
+    //     { val: "Doctor4", text: "Doctor4" },
+    //     { val: "Doctor5", text: "Doctor5" },
+    // ]
+    // const searchUserMenuItems = [
+    //     { val: "User1", text: "User1" },
+    //     { val: "User2", text: "User2" },
+    //     { val: "User3", text: "User3" },
+    //     { val: "User4", text: "User4" },
+    //     { val: "User5", text: "User5" },
+    // ]
 
     // const actions = [
     //     {
@@ -88,7 +95,7 @@ const usePresentation = () => {
     const detailPanel = [
         {
             tooltip: 'View details',
-            render: ({ rowData }) => <PresentationDetailPanel jobId={rowData.id} />,
+            render: ({ rowData }) => <PresentationDetailPanel presentationId={rowData.presentationId} />,
         }
     ]
 
@@ -142,7 +149,6 @@ const usePresentation = () => {
                 size: "small",
                 variant: "outlined",
                 col: 4,
-                value: "",
                 onSelectionChange: handleSearchChange
             },
             doctorList: {
@@ -151,12 +157,21 @@ const usePresentation = () => {
                 size: "small",
                 variant: "outlined",
                 col: 4,
-                value: "",
-                menuItems: searchDoctorsMenuItems.map(g => ({
-                    text: g.text,
-                    val: g.value
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-                onSelectionChange: handleSearchChange
+                menuItems: searchDoctorsMenuItems?.data ? searchDoctorsMenuItems?.data.map(g => ({
+                    text: g.firstName,
+                    val: g.doctorId
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
+                onSelectionChange: (e) => {
+                    getPresentationByDoctorId({
+                        url: format(
+                            endpointConfig.presentation.getPresentationByDoctorId,
+                            e.target.value)
+                    }).then((res) => {
+                        setPresentationData(res.data.data)
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }
             },
             userList: {
                 label: Strings.SEARCH_TITLE_USER,
@@ -164,12 +179,21 @@ const usePresentation = () => {
                 size: "small",
                 variant: "outlined",
                 col: 4,
-                value: "",
-                menuItems: searchUserMenuItems.map(g => ({
-                    text: g.text,
-                    val: g.value
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-                onSelectionChange: handleSearchChange
+                menuItems: searchUserMenuItems?.data ? searchUserMenuItems?.data.map(g => ({
+                    text: g.userName,
+                    val: g.id
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
+                onSelectionChange: (e) => {
+                    getPresentationByDoctorId({
+                        url: format(
+                            endpointConfig.presentation.getPresentationByUserId,
+                            e.target.value)
+                    }).then((res) => {
+                        setPresentationData(res.data.data)
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }
             },
 
         },
@@ -203,7 +227,9 @@ const usePresentation = () => {
         tableRef,
         detailPanel,
         searchOptions,
-        AllPresentation
+        AllPresentation,
+        presentationData,
+        allPresentationLoading
         // filterReportLabel,
         // CTAButtons
 

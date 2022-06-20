@@ -17,7 +17,7 @@ export default function productsDataColumns() {
         { title: Strings.COLUMN_MRP, field: 'mrp' },
         { title: Strings.COLUMN_PRODUCT_IS_ACTIVE, field: 'isActive', type: 'boolean' },
         {
-            title: Strings.COLUMN_UPLOAD_IMAGES, field: 'uploadImage', render: rowData => (
+            title: Strings.COLUMN_PRODUCT_IMAGES, field: 'uploadImage', render: rowData => (
                 <Avatar alt={rowData.name} src={rowData.uploadImage} sx={{ width: 56, height: 56 }} />
             )
         },

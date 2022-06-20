@@ -13,8 +13,8 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
         productsColumn,
         doctorsCoumns,
         producstsData,
-        doctorsData
-    } = usePresentationDetailPanel()
+        doctorsData,
+    } = usePresentationDetailPanel(presentationId)
 
     const { materialTableStyle: tableStyle } = useStyles()
     const navigate = useNavigate()

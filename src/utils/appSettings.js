@@ -55,6 +55,8 @@ const appSettings = {
     },
     authentication: {
       authentication: "/ApiAccount/Authenticate",
+      getLogedInUserDetail: "/ApiAccount/GetLogedInUserDetail",
+      updateUser: "/ApiAccount/UpdateUser",
     },
     sources: {
       getAll: "/Source",

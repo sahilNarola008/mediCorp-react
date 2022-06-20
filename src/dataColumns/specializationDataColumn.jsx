@@ -3,7 +3,7 @@ function specializationDataColumn() {
     const columns = [
 
         { title: Strings.COLUMN_ID, field: 'specialityId', editable: 'never' },
-        { title: Strings.COLUMN_DOCTORS_SPECIALIZATION, field: "title" },
+        { title: Strings.COLUMN_SPECIALIZATION, field: "title" },
         {
             title: Strings.COLUMN_FIELD_DESCRIPTION,
             field: "specialityDescription",
