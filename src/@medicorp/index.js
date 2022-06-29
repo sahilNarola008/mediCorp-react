@@ -16,7 +16,8 @@ export {
   getRefactoredDates,
   getActualDates,
   enumerateDaysBetweenDates,
-  mainMenuItems
+  mainMenuItems,
+  getBase64
 } from "utils/helper";
 //#endregion
 
@@ -46,7 +47,7 @@ export { default as Counter } from "react-mui-counter";
 export { default as moment } from "moment";
 export { v4 as uuidv4 } from "uuid";
 export { default as LRU } from "lru-cache";
-export { default as MaskedInput } from "react-text-mask";
+// export { default as MaskedInput } from "react-text-mask";
 
 //#endregion
 
@@ -78,6 +79,7 @@ export { default as usePresentationDetailPanel } from "hooks/modules/Presentatio
 //#endregion
 
 //#region Components
+export { default as ErrorFallback } from "components/ErrorFallBack/ErrorFallback";
 export { default as Switch } from "components/Switch";
 export { default as Themeify } from "components/Themeify";
 export { StyledTreeItem } from "components/StyledTreeItem";

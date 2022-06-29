@@ -361,11 +361,37 @@ const useStyles = () => {
           fontWeight: 500,
         },
       },
+
     },
+
     menuIcon: {
       color: theme.palette.getContrastText(theme.palette.grey[900]),
       ml: theme.spacing(1),
     },
+    spinnerContainer: {
+      position: 'fixed',
+      top: "0",
+      left: "0",
+      width: '100%',
+      height: '100%',
+      zIndex: 1200,
+      opacity: 0.6,
+      background: '#424242',
+      overflow: 'hidden',
+    },
+    spinnerMain: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      width: '45px',
+      height: '45px',
+      borderColor: '#2196f3 transparent',
+      borderWidth: '3px',
+    },
+    menuItem: {
+      padding: '10px 16px'
+    },
+
 
   };
 };

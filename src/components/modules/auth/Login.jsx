@@ -27,7 +27,8 @@ const Login = () => {
     token,
     statusCode,
     handleForgotPassword,
-    isForgotPassword
+    isForgotPassword,
+    resetPassword
   } = useLogin();
   return (
     <>
@@ -105,7 +106,10 @@ const Login = () => {
                 formTaskRunning={formTaskRunning}
                 freeAction={freeAction}
               />
-              <Link onClick={() => { handleForgotPassword(!isForgotPassword) }}>{!isForgotPassword ? Strings.FORGOT_PASSWORD : Strings.BACK_TO_LOGIN}</Link>
+              <Link onClick={() => {
+                !isForgotPassword && handleForgotPassword(!isForgotPassword)
+                resetPassword && handleForgotPassword(!resetPassword)
+              }}>{(isForgotPassword || resetPassword) ? Strings.BACK_TO_LOGIN : Strings.FORGOT_PASSWORD}</Link>
             </Box>
           </Grid>
         </Grid>

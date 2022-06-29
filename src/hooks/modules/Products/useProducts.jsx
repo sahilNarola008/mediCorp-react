@@ -7,6 +7,7 @@ import {
   useAxios,
   format,
   Context,
+  getBase64,
 } from "@medicorp";
 import React, { useContext, useEffect, useState } from "react";
 import { useConfirm } from "material-ui-confirm";
@@ -16,7 +17,7 @@ const useProducts = () => {
   const { tableIcons } = useTableIcons();
   const confirm = useConfirm();
   const { endpointConfig, fieldTypes, statusType } = appSettings;
-  const { logMessage } = useContext(Context);
+  const { logMessage, setIsLoading } = useContext(Context);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [modalHeader, setModalHeader] = useState({});
@@ -24,31 +25,7 @@ const useProducts = () => {
   const [modalActions, setModalActions] = useState([]);
   const [modalFormResetKeys, setModalFormResetKeys] = useState([]);
   const [modalTaskRunning, setModalTaskRunning] = useState(false);
-  const [productImages, setproductImages] = useState()
-
-  const [producstsData, setProducstsData] = useState([
-    {
-      id: 1,
-      name: "product1",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown ",
-      mrp: 500,
-      isActive: true,
-      uploadImage:
-        "https://cdn.pixabay.com/photo/2016/06/15/16/16/man-1459246_960_720.png",
-    },
-    {
-      id: 1,
-      name: "product1",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown ",
-      mrp: 500,
-      isActive: true,
-      uploadImage:
-        "https://cdn.pixabay.com/photo/2016/06/15/16/16/man-1459246_960_720.png",
-    },
-  ]);
-
+  let productImages = ""
   const [
     { data: AllProducts, loading: allProductsLoading },
     refetchAllProducts,
@@ -114,6 +91,7 @@ const useProducts = () => {
       onClick: (event, rowData) =>
         new Promise((resolve) => {
           console.log(rowData);
+          setIsLoading(true)
           setModalFormResetKeys([]);
           refetchProductsById({
             url: format(
@@ -126,7 +104,10 @@ const useProducts = () => {
                 resolve(res.data);
               }
             })
-            .catch((err) => err);
+            .catch((err) => {
+              setIsLoading(false)
+              console.log(err)
+            });
         }).then((data) => handleActionClick(event, true, false, data.data)),
     },
     {
@@ -167,6 +148,7 @@ const useProducts = () => {
     isView = false,
     rowData = {}
   ) => {
+    setIsLoading(false)
     setModalHeader({
       isForm: true,
       title: isEdit ? Strings.EDIT_PRODUCTS : Strings.ADD_PRODUCTS,
@@ -228,30 +210,27 @@ const useProducts = () => {
         value: rowData?.isActive ?? false,
         disabled: isView === true,
       },
-      image: {
-        // label: Strings.ADD_PRODUCT_IMAGES,
+      imageMasterViewModel: {
         size: "small",
         col: 12,
         type: fieldTypes.imageDropzone.type,
         value: rowData?.images ?? [],
-        handleSave: (data) => { console.log(data) },
+        handleSave: (e, data) => {
+          debugger
+          getBase64(e[0])
+            .then(result => {
+              productImages = result
+            })
+            .catch(err => {
+              console.log(err);
+            });
+
+          console.log(data)
+        },
         validator: validator.imageValidator,
-        filesLimit: 2,
+        filesLimit: 1,
         maxFileSize: 10000000,
       },
-      // image: {
-      //   size: "small",
-      //   variant: "outlined",
-      //   col: 12,
-      //   type: fieldTypes.image.type,
-      //   value: rowData?.images ?? "",
-      //   disabled: isView === true,
-      //   validator: validator.imageValidator,
-      //   onChange: (e) => {
-      //     console.log(e)
-      //     setproductImages(...e)
-      //   }
-      // },
     });
     setModalActions([
       {
@@ -283,7 +262,21 @@ const useProducts = () => {
             ...data,
           },
         })
-        : postProduct({ data: { ...data, organizationId: 1 } });
+        : postProduct({
+          data: {
+            ...data,
+            isDelete: false,
+            organizationId: 1,
+            imageMasterViewModel: [
+              {
+                organizationId: 1,
+                imageUrl: productImages,
+                isActive: true,
+                isDelete: false
+              }
+            ]
+          }
+        });
     response
       .then((res) => {
         const { msg, errorMessage, message, title, isError, status, errors } =
@@ -309,7 +302,6 @@ const useProducts = () => {
 
   return {
     productsColumn,
-    producstsData,
     actions,
     modalHeader,
     modalContent,

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const useHeader = () => {
-    const { logMessage } = useContext(Context)
+    const { logMessage, setIsLoading, isLoading } = useContext(Context)
     const [anchorEl, setAnchorEl] = useState(null);
 
     const [openDialog, setOpenDialog] = useState(false)
@@ -34,9 +34,6 @@ const useHeader = () => {
     const navigate = useNavigate();
 
     const [{ data: countries, loading: countriesLoading }, refetchCountries] = useAxios(endpointConfig.country.getAll)
-    const [{ data: cities, loading: citiesLoading }, refetchCities] = useAxios(endpointConfig.city.getAll)
-    const [{ data: states, loading: stattesLoading }, refetchStates] = useAxios(endpointConfig.state.getAll)
-
     const [{ }, stateByCountryId] = useAxios(format(endpointConfig.state.getStateByCountryId), { manual: true })
     const [{ }, cityByStateId] = useAxios(endpointConfig.city.getCityByStateId, { manual: true })
 
@@ -47,11 +44,16 @@ const useHeader = () => {
         },
         { manual: true }
     )
+    const [{ }, changePassword] = useAxios(
+        {
+            url: endpointConfig.password.changePassword,
+            method: "POST",
+        },
+        { manual: true })
 
     const [
-        { },
-        UserDetails,
-    ] = useAxios(endpointConfig.authentication.getLogedInUserDetail, { manual: true })
+        { data: userDetails, loading: userDetailsLoading }, refetchUserDetails,
+    ] = useAxios(endpointConfig.authentication.getLogedInUserDetail)
 
     const logout = async (e) => {
         removeAppItem("token")
@@ -68,17 +70,15 @@ const useHeader = () => {
 
 
     const handleActionClick = () => {
-        UserDetails().then((res) => {
-            console.log(res.data)
-            setModalData({}, false, res.data)
-        }).catch((err) => {
-            console.log(err)
-        })
+        setIsLoading(true)
+        setTimeout(() => {
+            setModalData({}, false, userDetails?.data)
+        }, 1000);
     }
 
 
     const setModalData = (event, isView = false, rowData = {}) => {
-        console.log(rowData);
+        setIsLoading(false)
         setModalHeader({
             isForm: true,
             title: Strings.EDIT_PROFILE,
@@ -133,7 +133,7 @@ const useHeader = () => {
                 disabled: isView === true,
                 validator: validator.emailValidator
             },
-            phone: {
+            MobileNo: {
                 label: Strings.COLUMN_PHONE,
                 size: "small",
                 variant: "outlined",
@@ -143,7 +143,7 @@ const useHeader = () => {
                 disabled: isView === true,
                 validator: validator.phoneValidator
             },
-            addresses: {
+            Address: {
                 label: Strings.COLUMN_ADDRESS,
                 size: "small",
                 variant: "outlined",
@@ -200,22 +200,22 @@ const useHeader = () => {
                 })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
                 equalityComparer: (option, value) => option.cityId === value,
             },
-            isWebAccesses: {
-                label: Strings.WEB_ACCESSES,
-                size: "small",
-                variant: "outlined",
-                col: 4,
-                type: fieldTypes.checkbox.type,
-                value: rowData?.isWebAccesses ?? false,
-                disabled: isView === true,
-            },
+            // isWebAccesses: {
+            //     label: Strings.WEB_ACCESSES,
+            //     size: "small",
+            //     variant: "outlined",
+            //     col: 4,
+            //     type: fieldTypes.checkbox.type,
+            //     value: rowData?.isWebAccesses ?? false,
+            //     disabled: isView === true,
+            // },
         })
         setModalActions(isView === true ? [] : [
             {
                 label: Strings.UPDATE,
                 icon: tableIcons.Edit,
                 isSubmit: true,
-                action: (data) => handleSubmit(data, rowData?.id)
+                action: (data) => handleSubmit(data)
             }
         ])
         setOpenDialog(true)
@@ -258,13 +258,88 @@ const useHeader = () => {
         }
     }
 
-    const handleSubmit = (data, id) => {
+    const setChangePasswordModalData = (event, isView = false, rowData = {}) => {
+        setIsLoading(true)
+        console.log(rowData);
+        setModalHeader({
+            isForm: true,
+            title: Strings.EDIT_PROFILE,
+            header: Strings.EDIT_THIS_PROFILE,
+            modalWidth: 'md'
+        })
+        setModalContent({
+            email: {
+                label: Strings.COLUMN_EMAIL,
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.text.type,
+                value: userDetails?.data?.userName,
+                disabled: true,
+                validator: validator.emailValidator,
+            },
+            oldPassword: {
+                label: Strings.OLD_PASSWORD,
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.password.type,
+                value: "",
+                validator: validator.requiredValidator(Strings.OLD_PASSWORD),
+            },
+            newPassword: {
+                label: Strings.NEW_PASSWORD,
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.password.type,
+                value: "",
+                validator: validator.passwordValidator,
+            },
+        })
+        setModalActions(isView === true ? [] : [
+            {
+                label: Strings.UPDATE,
+                icon: tableIcons.Edit,
+                isSubmit: true,
+                action: (data) => handleChangePasswordSubmit(data)
+            }
+        ])
+        setIsLoading(false)
+        setOpenDialog(true)
+    }
+
+    const handleChangePasswordSubmit = (data) => {
+        setModalTaskRunning(true)
+        changePassword({ data }).then((res) => {
+            const { msg, isError, errorMessage, message, title } = res.data
+            if (res.status === 200) {
+                handleModalClose()
+            }
+            logMessage({
+                severity: !isError ? statusType.success : statusType.error,
+                msg: msg ?? errorMessage ?? message ?? title ?? Strings.DATA_UPDATED_SUCCESSFULLY
+            })
+        }).catch(err => {
+            const { msg, errorMessage, message } = err;
+            logMessage({
+                severity: statusType.error,
+                msg: msg ?? errorMessage ?? message ?? Strings.SOMETHING_WENT_WRONG,
+            })
+        })
+            .finally(() => setModalTaskRunning(false))
+    }
+    const handleSubmit = (data) => {
         setModalTaskRunning(true)
         const response = updateUsers({
             data: {
-                // id: Number(id),
+                ...data,
                 organizationId: 1,
-                ...data
+                cityId: data.cityId.id,
+                countryId: data.countryId.id,
+                stateId: data.stateId.id,
+                isWebAccesses: true,
+                isActive: true
             }
         })
         response.then((res) => {
@@ -274,11 +349,19 @@ const useHeader = () => {
             }
             logMessage({
                 severity: res.status === 200 ? statusType.success : statusType.error,
-                msg: msg ?? errorMessage ?? message ?? title
+                msg: msg ?? errorMessage ?? message ?? title ?? Strings.DATA_UPDATED_SUCCESSFULLY
+            })
+        }).catch(err => {
+            const { msg, errorMessage, message } = err;
+            logMessage({
+                severity: statusType.error,
+                msg: msg ?? errorMessage ?? message ?? Strings.SOMETHING_WENT_WRONG,
             })
         })
-            .catch(err => err)
-            .finally(() => setModalTaskRunning(false))
+            .finally(() => {
+                setModalTaskRunning(false)
+                refetchUserDetails()
+            })
     }
     const handleModalClose = () => {
         setOpenDialog(false)
@@ -329,6 +412,8 @@ const useHeader = () => {
         modalFormResetKeys,
         modalTaskRunning,
         handleActionClick,
+        userDetails,
+        setChangePasswordModalData
 
     }
 }

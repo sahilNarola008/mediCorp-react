@@ -1,16 +1,35 @@
 import React, { useRef, Fragment, useEffect } from "react"
 import {
-    Box, Grid, IconButton, Button, MenuItem, TextField, Chip, Checkbox,
-    Radio, RadioGroup, ListItemText, InputAdornment, FormControlLabel, FormControl,
-    FormLabel, Switch as MUSwitch, Icon, Autocomplete, Typography,
+    Box,
+    Grid,
+    Button,
+    MenuItem,
+    TextField,
+    Chip,
+    Checkbox,
+    Radio,
+    RadioGroup,
+    ListItemText,
+    FormControlLabel,
+    FormControl,
+    FormLabel,
+    Switch as MUSwitch,
+    Autocomplete,
+    Typography,
 } from "@mui/material"
 import { useForm, Controller } from "react-hook-form"
 import { CheckBoxOutlineBlank, CheckBox } from "@mui/icons-material"
-import AceEditor from "react-ace"
 import "ace-builds/src-noconflict/mode-csharp"
 import "ace-builds/src-noconflict/theme-textmate"
-import { Switch, useStyles, LoadingButton, appSettings, groupBy, Counter, useTableIcons, MaterialTable, MaskedInput } from "@medicorp"
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import {
+    Switch,
+    useStyles,
+    LoadingButton,
+    appSettings,
+    groupBy,
+    useTableIcons,
+} from "@medicorp"
+import AdapterDateFns from "@mui/lab/AdapterDateFns"
 import { DatePicker, DateRangePicker, LocalizationProvider } from "@mui/lab"
 
 const SearchBox2 = ({
@@ -21,7 +40,7 @@ const SearchBox2 = ({
     formTaskRunning,
     formTemplate,
     freeAction,
-    enableFreeFormAction
+    enableFreeFormAction,
 }) => {
     const { isReadOnly, alignActions } = formHeader ?? {}
     const {
@@ -95,28 +114,6 @@ const SearchBox2 = ({
         clearData()
     }
 
-    // const CardMaskInput = (props) => {
-    //     const { inputRef, ...other } = props;
-
-    //     return (
-    //         <MaskedInput
-    //             {...other}
-    //             ref={(ref) => {
-    //                 inputRef(ref ? ref.inputElement : null);
-    //             }}
-    //             mask={[/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-    //             keepCharPositions
-    //             guide
-    //             placeholderChar='X'
-    //             placeholder="XXXX-XXXX-XXXX-XXXX"
-    //         />
-    //     )
-    // }
-
-    // CardMaskInput.propTypes = {
-    //     inputRef: propTypes.func.isRequired,
-    // }
-
     const formBody = (key, item) => (
         <Grid
             key={key}
@@ -128,7 +125,13 @@ const SearchBox2 = ({
         >
             {
                 <Switch on={item.type ?? fieldTypes.text.type}>
-                    <Typography case={fieldTypes.label.type} variant={item.variant} sx={item.sx}>{item.value}</Typography>
+                    <Typography
+                        case={fieldTypes.label.type}
+                        variant={item.variant}
+                        sx={item.sx}
+                    >
+                        {item.value}
+                    </Typography>
                     <Controller
                         case={fieldTypes.select.type}
                         control={control}
@@ -145,22 +148,15 @@ const SearchBox2 = ({
                                     label={item.label}
                                     select
                                     SelectProps={item.selectProps}
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    }
-                                    onChange={(e) => {
-                                        field.onChange(e)
-                                        item.onSelectionChange &&
-                                            item.onSelectionChange(e)
+                                    disabled={(item.disabled && true) || (isReadOnly ?? false)}
+                                    onChange={(e, data) => {
+                                        field.onChange(e, data)
+                                        item.onSelectionChange && item.onSelectionChange(e, data?.props)
                                     }}
                                     error={!!errors[`${key}`]}
                                 >
                                     {item.menuItems.map((item) => (
-                                        <MenuItem
-                                            key={`${item.val}_${item.text}`}
-                                            value={item.val}
-                                        >
+                                        <MenuItem key={`${item.val}_${item.text}`} value={item.val}>
                                             {item.text}
                                         </MenuItem>
                                     ))}
@@ -191,7 +187,8 @@ const SearchBox2 = ({
                                     SelectProps={{
                                         multiple: true,
                                         renderValue: (selected) => (
-                                            <Box component="div"
+                                            <Box
+                                                component="div"
                                                 sx={{
                                                     display: "flex",
                                                     flexWrap: "wrap",
@@ -203,23 +200,18 @@ const SearchBox2 = ({
                                                         variant="outlined"
                                                         key={value}
                                                         label={
-                                                            item.menuItems.find(
-                                                                (item) => item.id === value
-                                                            )?.name
+                                                            item.menuItems.find((item) => item.id === value)
+                                                                ?.name
                                                         }
                                                     />
                                                 ))}
                                             </Box>
                                         ),
                                     }}
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    }
+                                    disabled={(item.disabled && true) || (isReadOnly ?? false)}
                                     onChange={(e) => {
                                         field.onChange(e)
-                                        item.onSelectionChange &&
-                                            item.onSelectionChange(e)
+                                        item.onSelectionChange && item.onSelectionChange(e)
                                     }}
                                     error={!!errors[`${key}`]}
                                 >
@@ -227,9 +219,7 @@ const SearchBox2 = ({
                                         <MenuItem key={mitem.id} value={mitem.id}>
                                             <Checkbox
                                                 color="primary"
-                                                checked={
-                                                    field.value.indexOf(mitem.id) > -1
-                                                }
+                                                checked={field.value.indexOf(mitem.id) > -1}
                                             />
                                             <ListItemText primary={mitem.name} />
                                         </MenuItem>
@@ -257,8 +247,7 @@ const SearchBox2 = ({
                                         color="primary"
                                         onChange={(e) => {
                                             field.onChange(e)
-                                            item.onSwitchChange &&
-                                                item.onSwitchChange(e)
+                                            item.onSwitchChange && item.onSwitchChange(e)
                                         }}
                                     // sx={item.display ?? classes.shown}
                                     />
@@ -269,6 +258,7 @@ const SearchBox2 = ({
                             />
                         )}
                     />
+
                     <Controller
                         case={fieldTypes.search.type}
                         name={`${key}`}
@@ -283,13 +273,16 @@ const SearchBox2 = ({
                                     size={item.size}
                                     variant={item.variant}
                                     label={item.label}
-                                    InputProps={item.inputProps}
-                                    type={item.kind ? item.kind : "text"}
+                                    type={item.type ? item.type : "text"}
                                     disabled={
                                         (item.disabled && true) ||
                                         (isReadOnly ?? false)
                                     }
                                     error={!!errors[`${key}`]}
+                                    onChange={(e) => {
+                                        field.onChange(e)
+                                        item.handleSearchChange(e)
+                                    }}
                                 />
                                 {errors[`${key}`] && (
                                     <Typography variant="subtitle1" sx={classes.invalid}>
@@ -312,10 +305,7 @@ const SearchBox2 = ({
                                         {...field}
                                         checked={field.value}
                                         color="primary"
-                                        disabled={
-                                            (item.disabled && true) ||
-                                            (isReadOnly ?? false)
-                                        }
+                                        disabled={(item.disabled && true) || (isReadOnly ?? false)}
                                     // sx={item.display ?? classes.shown}
                                     />
                                 }
@@ -343,16 +333,12 @@ const SearchBox2 = ({
                                     label={item.label}
                                     clearable
                                     format={item.format || "MM/dd/yyyy"}
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    }
+                                    disabled={(item.disabled && true) || (isReadOnly ?? false)}
                                     minDate={item.minDate}
                                     maxDate={item.maxDate}
                                     onChange={(e) => {
                                         field.onChange(e)
-                                        item.onSelectionChange &&
-                                            item.handleDateChange(e)
+                                        item.onSelectionChange && item.handleDateChange(e)
                                     }}
                                     renderInput={(startProps, endProps) => (
                                         <>
@@ -363,7 +349,6 @@ const SearchBox2 = ({
                                     )}
                                 />
                             </LocalizationProvider>
-
                         )}
                     />
                     <Controller
@@ -382,15 +367,11 @@ const SearchBox2 = ({
                                     label={item.label}
                                     clearable
                                     format={item.format || "MM/dd/yyyy"}
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    }
+                                    disabled={(item.disabled && true) || (isReadOnly ?? false)}
                                     minDate={item.minDate}
                                     onChange={(e) => {
                                         field.onChange(e)
-                                        item.onSelectionChange &&
-                                            item.onDateChange(e)
+                                        item.onSelectionChange && item.onDateChange(e)
                                     }}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
@@ -410,13 +391,11 @@ const SearchBox2 = ({
                                         {...field}
                                         checked={field.value === item.selectedValue}
                                         color="primary"
-                                        disabled={
-                                            (item.disabled && true) ||
-                                            (isReadOnly ?? false)
-                                        }
+                                        disabled={(item.disabled && true) || (isReadOnly ?? false)}
                                         onChange={(e) => {
                                             field.onChange(e)
-                                            item.onCheckedChange && item.onCheckedChange(e.target.value)
+                                            item.onCheckedChange &&
+                                                item.onCheckedChange(e.target.value)
                                         }}
                                     // sx={item.display ?? classes.shown}
                                     />
@@ -444,11 +423,14 @@ const SearchBox2 = ({
                                         item.onChange && item.onChange(e)
                                     }}
                                 >
-                                    {
-                                        item.options.map(o => (
-                                            <FormControlLabel key={o.val} value={o.val} control={<Radio />} label={o.text} />
-                                        ))
-                                    }
+                                    {item.options.map((o) => (
+                                        <FormControlLabel
+                                            key={o.val}
+                                            value={o.val}
+                                            control={<Radio />}
+                                            label={o.text}
+                                        />
+                                    ))}
                                 </RadioGroup>
                             </FormControl>
                         )}
@@ -476,17 +458,14 @@ const SearchBox2 = ({
                                             fullWidth
                                             inputProps={{
                                                 ...params.inputProps,
-                                                autoComplete: "disabled"
+                                                autoComplete: "disabled",
                                             }}
-
                                             variant={item.variant}
                                             label={item.label}
-                                            error={!!errors[`${key}`]} />
+                                            error={!!errors[`${key}`]}
+                                        />
                                     )}
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    }
+                                    disabled={(item.disabled && true) || (isReadOnly ?? false)}
                                     onChange={(e, data) => field.onChange(data)}
                                 />
                                 {errors[`${key}`] && (
@@ -509,7 +488,9 @@ const SearchBox2 = ({
                                 <Autocomplete
                                     {...field}
                                     multiple
-                                    limitTags={isReadOnly || item.disabled ? -1 : (item.limitTags ?? 5)}
+                                    limitTags={
+                                        isReadOnly || item.disabled ? -1 : item.limitTags ?? 5
+                                    }
                                     fullWidth
                                     size={item.size}
                                     options={item.menuItems}
@@ -534,17 +515,14 @@ const SearchBox2 = ({
                                             fullWidth
                                             inputProps={{
                                                 ...params.inputProps,
-                                                autoComplete: "disabled"
+                                                autoComplete: "disabled",
                                             }}
-
                                             variant={item.variant}
                                             label={item.label}
-                                            error={!!errors[`${key}`]} />
+                                            error={!!errors[`${key}`]}
+                                        />
                                     )}
-                                    disabled={
-                                        (item.disabled && true) ||
-                                        (isReadOnly ?? false)
-                                    }
+                                    disabled={(item.disabled && true) || (isReadOnly ?? false)}
                                     onChange={(e, data) => field.onChange(data)}
                                 />
                                 {errors[`${key}`] && (
@@ -561,14 +539,15 @@ const SearchBox2 = ({
     )
 
     const getTemplatedForm = () => {
-        let items = groupBy(Object.entries(formContent).map(([key, item]) => ({ key, ...item })), 'section')
+        let items = groupBy(
+            Object.entries(formContent).map(([key, item]) => ({ key, ...item })),
+            "section"
+        )
         return Object.entries(items).map(([key, item], index) => {
             const { component: Comp, heading } = formTemplate[key]
             return (
                 <Comp key={key} hasDivider={index === 0 && true} heading={heading}>
-                    {
-                        item.map(inItem => formBody(inItem.key, inItem))
-                    }
+                    {item.map((inItem) => formBody(inItem.key, inItem))}
                 </Comp>
             )
         })
@@ -576,32 +555,34 @@ const SearchBox2 = ({
 
     return (
         <>
-            {
-                (formTemplate && formContent) ? getTemplatedForm() :
-                    formContent &&
+            {formTemplate && formContent
+                ? getTemplatedForm()
+                : formContent && (
                     <Grid container spacing={2}>
-                        {
-                            Object.entries(formContent).map(([key, item]) => (
-                                <Fragment key={key}>
-                                    {
-                                        item.isContainer === true ?
-                                            <Grid container alignItems={item.alignItems} flexDirection={item.flexDirection ?? 'row'}>
-                                                {formBody(key, item)}
-                                            </Grid> :
-                                            formBody(key, item)
-                                    }
-                                </Fragment>
-                            ))
-                        }
+                        {Object.entries(formContent).map(([key, item]) => (
+                            <Fragment key={key}>
+                                {item.isContainer === true ? (
+                                    <Grid
+                                        container
+                                        alignItems={item.alignItems}
+                                        flexDirection={item.flexDirection ?? "row"}
+                                    >
+                                        {formBody(key, item)}
+                                    </Grid>
+                                ) : (
+                                    formBody(key, item)
+                                )}
+                            </Fragment>
+                        ))}
                     </Grid>
-            }
-            <Box sx={{ display: freeAction ? 'none' : 'inline-flex' }}>
+                )}
+            <Box sx={{ display: freeAction ? "none" : "inline-flex" }}>
                 <button
                     onClick={handleSubmit(freeAction)}
                     hidden
-                    ref={refSubmitButton} />
-                {
-                    formActions &&
+                    ref={refSubmitButton}
+                />
+                {formActions &&
                     formActions.map((item) => (
                         <Box key={item.label} sx={item.cnt_sx}>
                             {item.isSubmit === true ? (
@@ -610,7 +591,7 @@ const SearchBox2 = ({
                                     startIcon={item.icon && <item.icon color="default" />}
                                     endIcon={item.endIcon && <item.endIcon color="default" />}
                                     color={item.color ?? "secondary"}
-                                    size={item.size ?? 'medium'}
+                                    size={item.size ?? "medium"}
                                     sx={item.sx}
                                     variant={item.variant ?? "contained"}
                                     disableElevation
@@ -620,13 +601,12 @@ const SearchBox2 = ({
                                     {item.label}
                                 </LoadingButton>
                             ) : (
-
                                 <Button
                                     onClick={item.action}
                                     startIcon={item.icon && <item.icon color="default" />}
                                     endIcon={item.endIcon && <item.endIcon color="default" />}
                                     color={item.color ?? "secondary"}
-                                    size={item.size ?? 'medium'}
+                                    size={item.size ?? "medium"}
                                     sx={item.sx}
                                     variant={item.variant ?? "contained"}
                                     disableElevation

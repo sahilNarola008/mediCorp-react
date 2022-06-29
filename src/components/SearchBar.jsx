@@ -1,8 +1,8 @@
-import { Avatar, Button, Grid, IconButton, Paper, Stack, Tooltip, Typography } from "@mui/material"
+import { Avatar, Button, Chip, Grid, IconButton, Paper, Stack, Tooltip, Typography } from "@mui/material"
 import { SearchBox, useStyles, useTableIcons, SearchBox2 } from "@medicorp"
 import React from "react"
 
-const SearchBar = ({ options, CTAButtons, CTAButton2, filterReportLabel }) => {
+const SearchBar = ({ options, CTAButtons, CTAButton2, clearCTAButton, filterReportLabel }) => {
     const { title, searchItems, handleSearch, spacing, variant } = options
     const classes = useStyles()
     const { tableIcons } = useTableIcons()
@@ -53,13 +53,32 @@ const SearchBar = ({ options, CTAButtons, CTAButton2, filterReportLabel }) => {
                 />
             </Grid>
             <Grid container direction="row" alignContent='çenter'>
-                <Grid item xs={12} sx={{ alignSelf: 'center' }}>
+                <Grid item xs={4} sx={{ alignSelf: 'center' }}>
                     <Stack direction="row" spacing={2}>
-                        {/* <Typography variant="body1" sx={{ fontWeight: 500, mr: 1.5 }}>Report Label:</Typography> */}
-                        {filterReportLabel}
+                        <Typography variant="body1" sx={{ fontWeight: 500, mr: 1.5 }}>Report Label:</Typography>
+                        <Stack direction="row" spacing={1}>
+                            {
+                                filterReportLabel && filterReportLabel.map((val) =>
+                                    <Chip label={val} color="primary" />
+                                )
+                            }
+                        </Stack>
                     </Stack>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={3} sx={{ alignSelf: 'center' }}>
+                    <Stack direction="row" spacing={2} sx={{ justifyContent: "center" }}>
+                        <Button
+                            key={clearCTAButton.title}
+                            onClick={clearCTAButton.handleClick}
+                            variant="contained"
+                            sx={classes.grayButton}
+                            size="small"
+                        >
+                            {clearCTAButton.title}
+                        </Button>
+                    </Stack>
+                </Grid>
+                <Grid item xs={5}>
                     <Stack direction="row" justifyContent="end" spacing={1.5}>{searchAction}</Stack>
                 </Grid>
             </Grid>

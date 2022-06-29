@@ -15,14 +15,17 @@ const Presentation = () => {
     searchOptions,
     AllPresentation,
     presentationData,
-    allPresentationLoading
+    allPresentationLoading,
+    clearCTAButton,
+    filterReportLabel,
+    CTAButtons
   } = usePresentation();
   const { presentationColumns } = presentationDataColumns();
   const { materialTableStyle: tableStyle } = useStyles();
   return (
     <>
       <Card>
-        <SearchBar options={searchOptions} />
+        <SearchBar options={searchOptions} clearCTAButton={clearCTAButton} CTAButtons={CTAButtons} filterReportLabel={filterReportLabel} />
 
         <MaterialTable
           columns={presentationColumns}

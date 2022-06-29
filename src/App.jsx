@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
-import { Alert, CssBaseline, Slide, Snackbar } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { Themeify, Startup, ConfirmProvider, Provider, } from '@medicorp'
+import { Themeify, Startup, ConfirmProvider, Provider, ErrorFallback } from '@medicorp'
+import { ErrorBoundary } from 'react-error-boundary'
 
 const App = () => {
 
@@ -9,16 +9,18 @@ const App = () => {
 
     return (
         <div>
-            <ConfirmProvider>
-                <Themeify>
-                    <Router>
-                        <Provider>
-                            <Startup />
-                        </Provider>
-                    </Router>
-                    <CssBaseline />
-                </Themeify>
-            </ConfirmProvider>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <ConfirmProvider>
+                    <Themeify>
+                        <Router>
+                            <Provider>
+                                <Startup />
+                            </Provider>
+                        </Router>
+                        <CssBaseline />
+                    </Themeify>
+                </ConfirmProvider>
+            </ErrorBoundary>
         </div>
     )
 }

@@ -29,6 +29,7 @@ const SmartDialog = ({
     const [selectedImage, setSelectedImage] = useState();
     const [dropZoneOpen, setdropZoneOpen] = useState(false)
     const [uploadImgViewURL, setUploadImgViewURL] = useState()
+    const [showPassword, setShowPassword] = useState(false)
 
     const Input = styled('input')({
         display: 'none',
@@ -350,7 +351,7 @@ const SmartDialog = ({
                                                                 size={item.size}
                                                                 variant={item.variant}
                                                                 label={item.label}
-                                                                type={item.showPassword ? "text" : "password"}
+                                                                type={item.showPassword || showPassword ? "text" : "password"}
                                                                 disabled={
                                                                     (item.disabled && true) ||
                                                                     (isReadOnly ?? false)
@@ -361,6 +362,7 @@ const SmartDialog = ({
                                                                     item.onTextChange && item.onTextChange(e)
                                                                 }}
                                                                 InputProps={{
+                                                                    autoComplete: 'new-password',
                                                                     endAdornment: (
                                                                         <InputAdornment position="end">
                                                                             <IconButton
@@ -368,11 +370,10 @@ const SmartDialog = ({
                                                                                 sx={classes.no_pading}
                                                                                 onMouseDown={handleMouseDownPassword}
                                                                                 onClick={() =>
-                                                                                    item.setShowPassword(getValues(`${key}`)
-                                                                                    )
+                                                                                    setShowPassword(!showPassword)
                                                                                 }
                                                                             >
-                                                                                <Icon fontSize="small">{`visibility${!!!item.showPassword && "_off"}`}</Icon>
+                                                                                <Icon fontSize="small">{`visibility${showPassword && "_off"}`}</Icon>
                                                                             </IconButton>
                                                                         </InputAdornment>
                                                                     ),
@@ -880,7 +881,11 @@ const SmartDialog = ({
                                                                 {...field}
                                                                 fileObjects={[]}
                                                                 open={dropZoneOpen}
-                                                                onSave={item.handleSave}
+                                                                onSave={(e, data) => {
+                                                                    field.onChange(e, data)
+                                                                    item.handleSave(e, data)
+                                                                    setdropZoneOpen(false)
+                                                                }}
                                                                 acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
                                                                 showPreviews={true}
                                                                 maxFileSize={item.maxFileSize ? item.maxFileSize : 5000000}

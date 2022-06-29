@@ -25,7 +25,7 @@ const SingleLevel = ({ item, classes, nav }) => {
                 component={Link}
                 to={to}
                 selected={selected}
-                sx={[classes.menuList, { padding: "16px 20px" }]}
+                sx={[classes.menuList, { padding: "8px 20px" }]}
             >
                 {ItemIcon && <ListItemIcon><ItemIcon /></ListItemIcon>}
                 <ListItemText primary={title} />
@@ -37,7 +37,7 @@ const SingleLevel = ({ item, classes, nav }) => {
 const MultiLevel = ({ item, classes, nav }) => {
     const { id: itemId, icon: ItemIcon, title, children } = item
     const navigate = useNavigate()
-
+    const { menuItem } = useStyles()
     const [anchorEl, setAnchorEl] = useState(null)
 
     const [selectedListItem, setSelectedListItem] = useState(false)
@@ -94,6 +94,7 @@ const MultiLevel = ({ item, classes, nav }) => {
                 </Toolbar>
                 {children.map((child, index) => child.isVisible && (
                     <MenuItem
+                        sx={menuItem}
                         key={child.id}
                         onClick={() => setAnchorEl(null)}
                         selected={index === selectedMenuIndex}
@@ -143,9 +144,9 @@ const Flyout = (props) => {
                         <Paper sx={classes.paddedMenuMobile} square elevation={1}>
                             <Grid item sx={classes.title}>
                                 {/* <img src={appSettings.appLogo} alt="Medicorp" style={{ height: '1.5rem' }} /> */}
-                                <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', height: '1.5rem' }}>
+                                {/* <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', height: '1.5rem' }}>
                                     MEDICORP
-                                </Typography>
+                                </Typography> */}
                             </Grid>
                         </Paper>
                         <Box component="div" sx={classes.drawerContainer} >

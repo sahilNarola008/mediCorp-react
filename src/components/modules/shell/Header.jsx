@@ -20,7 +20,9 @@ export default function Header(props) {
     modalActions,
     modalFormResetKeys,
     modalTaskRunning,
-    handleActionClick
+    handleActionClick,
+    userDetails,
+    setChangePasswordModalData
   } = useHeader()
   const classes = useStyles();
   const { mainClass, handleDrawerToggle } = props;
@@ -58,8 +60,8 @@ export default function Header(props) {
             <nav aria-label="main mailbox folders">
               <List
                 subheader={
-                  <ListSubheader component="div" id="nested-list-subheader">
-                    {Strings.COLUMN_USER_NAME}
+                  <ListSubheader component="div" sx={{ color: "#2196f3" }} id="nested-list-subheader">
+                    {userDetails?.data?.userName}
                   </ListSubheader>
                 }
               >
@@ -70,7 +72,7 @@ export default function Header(props) {
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton>
-                    <ListItemText primary="Change Password" />
+                    <ListItemText primary="Change Password" onClick={setChangePasswordModalData} />
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>

@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { Context, useTableIcons, appSettings, useAxios, useConfirm, format, validator, doctorsDataColumns, getDefaultValueArray, Strings } from "@medicorp"
 
 export default function useDoctors() {
-    const { logMessage } = useContext(Context);
+    const { logMessage, setIsLoading } = useContext(Context);
     const { endpointConfig, fieldTypes, statusType } = appSettings;
     const { tableIcons } = useTableIcons();
     const confirm = useConfirm();
@@ -68,12 +68,16 @@ export default function useDoctors() {
             icon: tableIcons.Edit,
             tooltip: Strings.EDIT_APPLICATION,
             onClick: (event, rowData) => new Promise((resolve) => {
+                setIsLoading(true)
                 setModalFormResetKeys([])
                 refetchDoctorsById({ url: format(endpointConfig.doctors.getDoctorsById, rowData.doctorId) }).then(res => {
                     if (res.status === 200) {
                         resolve(res.data.data)
                     }
-                }).catch(err => err)
+                }).catch(err => {
+                    console.log(err)
+                    setIsLoading(false)
+                })
             }).then(data => handleActionClick(event, true, false, data))
         },
         {
@@ -108,6 +112,7 @@ export default function useDoctors() {
     ]
 
     const handleActionClick = (event, isEdit = false, isView = false, rowData = {}) => {
+        setIsLoading(false)
         setModalFormResetKeys([])
         setModalHeader({
             isForm: true,
@@ -241,6 +246,15 @@ export default function useDoctors() {
                 })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
                 equalityComparer: (option, value) => option.cityId === value,
             },
+            isActive: {
+                label: Strings.COLUMN_USERS_IS_ACTIVE,
+                size: "small",
+                variant: "outlined",
+                col: 12,
+                type: fieldTypes.checkbox.type,
+                value: rowData?.isActive ?? true,
+                disabled: isView === true,
+            },
         })
         setModalActions(isView === true ? [] : [
             {
@@ -304,7 +318,6 @@ export default function useDoctors() {
                 doctorId: Number(id),
                 organizationId: 1,
                 specialityId: data.specialityId.id,
-                isActive: true,
                 isDelete: false,
                 stateId: data.stateId.id,
                 cityId: data.cityId.id,
@@ -316,7 +329,6 @@ export default function useDoctors() {
                 // doctorId: 0,
                 organizationId: 1,
                 specialityId: data.specialityId.id,
-                isActive: true,
                 isDelete: false,
                 stateId: data.stateId.id,
                 cityId: data.cityId.id,

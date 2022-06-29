@@ -1,5 +1,6 @@
 import { indigo, red, amber, lightBlue } from "@mui/material/colors";
 const appSettings = {
+  imageBaseURL: `${process.env.REACT_APP_API_BASE_URL}`,
   appLogo: `${process.env.PUBLIC_URL}/img/logo.svg`,
   oktaConfig: {
     clientId: `${process.env.REACT_APP_CLIENT_ID}`,

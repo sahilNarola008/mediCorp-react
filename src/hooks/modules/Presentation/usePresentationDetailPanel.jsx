@@ -10,7 +10,7 @@ const usePresentationDetailPanel = (presentationId) => {
     const [producstsData, setProducstsData] = useState([])
     // const [{ data: producstsData, loading: producstsDataLoading }, refetchProducstsData] = useAxios(endpointConfig.products.getAll)
     const [{ data: doctorsData, loading: doctorsDataLoading }, refetchdoctorsData] = useAxios(endpointConfig.doctors.getAll)
-    const [{ }, presentationProduct,] = useAxios(endpointConfig.presentation.getPresentationProductByPresentationId, { manual: true });
+    const [{ data: presentationProductData, loading: presentationProductLoading }, presentationProduct,] = useAxios(endpointConfig.presentation.getPresentationProductByPresentationId, { manual: true });
 
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const usePresentationDetailPanel = (presentationId) => {
                 presentationId
             ),
         }).then((res) => {
-            setProducstsData(res.data)
+            setProducstsData(res.data.data.products)
         })
     }, [])
     const handleChange = (event, newValue) => {
@@ -34,6 +34,7 @@ const usePresentationDetailPanel = (presentationId) => {
         doctorsCoumns,
         producstsData,
         doctorsData,
+        presentationProductLoading
 
     }
 }

@@ -12,6 +12,7 @@ function ContextProvider(props) {
   const [menus, setMenus] = useState([])
   const { getAppItem } = useLocalStorage();
 
+  const [isLoading, setIsLoading] = useState(false)
   const [token, setToken] = useState(getAppItem("token"));
   //#region axios interceptors
   // axios.interceptors.request.use(
@@ -76,7 +77,9 @@ function ContextProvider(props) {
         setJobName,
         isManipulation,
         setIsManipulation,
-        setToken
+        setToken,
+        setIsLoading,
+        isLoading
       }}
     >
       {props.children}

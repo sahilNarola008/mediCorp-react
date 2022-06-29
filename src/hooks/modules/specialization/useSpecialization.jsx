@@ -58,69 +58,34 @@ function useSpecialization() {
       tooltip: "Add User",
       isFreeAction: true,
       onClick: (event, rowData) => handleActionClick(event, false, false, {}),
-    },
-    // {
-    //   icon: tableIcons.Edit,
-    //   tooltip: "Edit Application",
-    //   onClick: (event, rowData) =>
-    //     new Promise((resolve) => {
-    //       setModalFormResetKeys([]);
-    //       refetchSpecializationById({
-    //         url: format(
-    //           endpointConfig.specialization.getSpecializationById,
-    //           rowData.specialityId
-    //         ),
-    //       })
-    //         .then((res) => {
-    //           if (res.status === 200) {
-    //             resolve(res.data);
-    //           }
-    //         })
-    //         .catch((err) => err);
-    //     }).then((data) => handleActionClick(event, true, false, data)),
-    // },
-    // {
-    //   icon: tableIcons.Delete,
-    //   tooltip: "Delete Specialization ",
-    //   onClick: (event, rowData) =>
-    //     new Promise((resolve) => {
-    //       confirm({ description: "Are you sure you want to Delete" }).then(
-    //         () => {
-    //           setModalFormResetKeys([]);
-    //           deleteSpecialization({
-    //             url: format(
-    //               endpointConfig.specialization.deleteSpecializationById,
-    //               rowData.specialityId
-    //             ),
-    //           })
-    //             .then((res) => {
-    //               const { msg, errorMessage, message, title } = res.data;
-    //               if (res.status === 200) {
-    //                 refetchSpecialization();
-    //                 resolve();
-    //               }
-    //               logMessage({
-    //                 severity:
-    //                   res.status === 200
-    //                     ? statusType.success
-    //                     : statusType.error,
-    //                 msg: msg ?? errorMessage ?? message ?? title,
-    //               });
-    //             })
-    //             .catch((err) => err);
-    //         }
-    //       );
-    //     }),
-    // },
+    }
   ];
 
   const editable = {
     onRowUpdate: (newData, oldData) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          handleSubmit(newData, true)
-          resolve();
-        }, 1000)
+      new Promise(async (resolve, reject) => {
+        await updateSpecialization({
+          data: {
+            ...newData,
+            organizationId: 1,
+            isDelete: false,
+          },
+        }).then(async (res) => {
+          const { msg, errorMessage, message, title, isError } = res.data;
+          if (res.status === 200) {
+            await refetchSpecialization();
+            resolve();
+          }
+          logMessage({
+            severity: !isError ? statusType.success : statusType.error,
+            msg: msg ?? errorMessage ?? message ?? title ?? Strings.DATA_ADDED_SUCCESSFULLY
+          });
+        })
+          .catch((err) => {
+            console.log(err)
+            reject()
+          })
+          .finally(() => setModalTaskRunning(false))
       }),
     onRowDelete: oldData =>
       new Promise((resolve, reject) => {
@@ -182,7 +147,7 @@ function useSpecialization() {
         type: fieldTypes.textArea.type,
         value: rowData?.specialityDescription ?? "",
         disabled: isView === true,
-        validator:validator.requiredValidator(Strings.COLUMN_DESCRIPTION)
+        validator: validator.requiredValidator(Strings.COLUMN_DESCRIPTION)
       },
       isActive: {
         label: Strings.COLUMN_ACTIVE,
@@ -217,24 +182,24 @@ function useSpecialization() {
       isEdit === true
         ? updateSpecialization({
           data: {
+            ...data,
             organizationId: 1,
             isDelete: false,
-            ...data,
           },
         })
         : postSpecialization({
           data: {
+            ...data,
             organizationId: 1,
             isDelete: false,
-            ...data,
           },
         });
     response
-      .then((res) => {
+      .then(async (res) => {
         const { msg, errorMessage, message, title, isError } = res.data;
         if (res.status === 200) {
+          await refetchSpecialization();
           handleModalClose();
-          refetchSpecialization();
         }
         logMessage({
           severity: !isError ? statusType.success : statusType.error,

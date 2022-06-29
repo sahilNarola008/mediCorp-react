@@ -53,47 +53,35 @@ function useCategories() {
       tooltip: Strings.ADD_CATEGORY,
       isFreeAction: true,
       onClick: (event, rowData) => handleActionClick(event, false, false, {})
-    },
-    // {
-    //     icon: tableIcons.Edit,
-    //     tooltip: 'Edit Category',
-    //     onClick: (event, rowData) => new Promise((resolve) => {
-    //         setModalFormResetKeys([])
-    //         refetchCategoriesById({ url: format(endpointConfig.categories.getCategoriesById, rowData.categoryId) })
-    //             .then(res => {
-    //                 if (res.status === 200) {
-    //                     resolve(res.data)
-    //                 }
-    //             }).catch(err => err)
-    //     }).then(data => handleActionClick(event, true, false, data.data[0]))
-    // },
-    // {
-    //     icon: tableIcons.Delete,
-    //     tooltip: 'Delete Category',
-    //     onClick: (event, rowData) => new Promise((resolve) => {
-    //         confirm({ description: 'Are you sure you want to delete?' })
-    //             .then(() => {
-    //                 setModalFormResetKeys([])
-    //                 deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, rowData.categoryId) })
-    //                     .then((res) => {
-    //                         if (res.status === 200) {
-    //                             refetchAllCategories()
-    //                             resolve(res.data)
-    //                         }
-    //                     })
-    //                     .catch(err => err)
-    //             })
-    //     })
-    // }
+    }
   ]
 
   const editable = {
     onRowUpdate: (newData, oldData) =>
       new Promise((resolve, reject) => {
-        setTimeout(() => {
-          handleSubmit(newData, true)
-          resolve();
-        }, 1000)
+        updateCategories({
+          url: format(endpointConfig.categories.updateCategories),
+          data: {
+            ...newData,
+            organizationId: 1,
+            isDelete: false,
+          }
+        }).then(async (res) => {
+          const { msg, errorMessage, message, title, isError } = res.data
+          if (res.status === 200 || res.status === 201) {
+            await refetchAllCategories()
+            resolve()
+          }
+          logMessage({
+            severity:
+              !isError ? statusType.success : statusType.error,
+            msg: msg ?? errorMessage ?? message ?? title ?? Strings.CATEGORY_ADDED_SUCCESSFULLY
+          })
+        })
+          .catch(err => {
+            console.log(err)
+            reject()
+          })
       }),
     onRowDelete: oldData =>
       new Promise((resolve, reject) => {

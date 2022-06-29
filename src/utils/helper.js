@@ -51,8 +51,16 @@ export const validator = {
       message: "Address not more than 150 characters",
     },
   },
+
+  passwordValidator: {
+    required: { value: true, message: "Password is required" },
+    pattern: {
+      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+      message: "Minimum six characters, at least one letter, one number and one special character",
+    },
+  },
   numberValidator: {
-    required: { value: true, message: "MRP is required" },
+    required: { value: true, message: "Value is required" },
     pattern: {
       value: /^[0-9]{2,5}(?:\.[0-9]{1,2})?$/,
       message: "Enter Invalid value",
@@ -208,6 +216,28 @@ export const mainMenuItems = [
     isVisible: true,
   },
 ];
+
+export const getBase64 = file => {
+  return new Promise(resolve => {
+    let fileInfo;
+    let baseURL = "";
+    // Make new FileReader
+    let reader = new FileReader();
+
+    // Convert the file to base64 text
+    reader.readAsDataURL(file);
+
+    // on reader load somthing...
+    reader.onload = () => {
+      // Make a fileInfo Object
+      console.log("Called", reader);
+      baseURL = reader.result;
+      console.log(baseURL);
+      resolve(baseURL);
+    };
+    console.log(fileInfo);
+  });
+};
 
 export const getAppMenus = (userMenus) => {
   const getMappedChildMenu = (oc, ac) =>

@@ -11,13 +11,13 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
         value,
         handleChange,
         productsColumn,
-        doctorsCoumns,
         producstsData,
-        doctorsData,
+        presentationProductLoading
     } = usePresentationDetailPanel(presentationId)
 
     const { materialTableStyle: tableStyle } = useStyles()
     const navigate = useNavigate()
+    console.log(producstsData);
     return (
         <>
             <Box sx={{ typography: 'body1' }}>
@@ -45,10 +45,11 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
                     <TabPanel sx={{ backgroundColor: 'grey.200' }} value="1">
                         <MaterialTable
                             columns={productsColumn}
-                            data={producstsData?.data}
+                            data={producstsData ? producstsData : []}
                             components={{
                                 Toolbar: props => <></>
                             }}
+                            isLoading={presentationProductLoading}
                             options={{
                                 ...tableStyle,
                                 selection: false,

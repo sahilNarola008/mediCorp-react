@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from "react"
 import {
     useTableIcons,
     useConfirm,
@@ -15,213 +15,249 @@ const usePresentation = () => {
     const { tableIcons } = useTableIcons()
     const { fieldTypes, endpointConfig } = appSettings
 
-
     const [presentationData, setPresentationData] = useState()
+    const [filterReportLabel, setFilterReportLabel] = useState(["All"])
+    const [filters, setFilters] = useState([])
 
-    const [{ data: AllPresentation, loading: allPresentationLoading }, refetchAllPresentation,] = useAxios(endpointConfig.presentation.getAll);
-    const [{ data: searchDoctorsMenuItems, loading: searchDoctorsMenuItemsLoading }, refetchSearchDoctorsMenuItems,] = useAxios(endpointConfig.doctors.getAll);
-    const [{ data: searchUserMenuItems, loading: searchUserMenuItemsLoading }, refetchSearchUserMenuItems,] = useAxios(endpointConfig.users.getAll);
-    const [{ }, getPresentationByDoctorId] = useAxios(endpointConfig.presentation.getPresentationByDoctorId, { manual: true });
-    const [{ }, getPresentationByUserId] = useAxios(endpointConfig.presentation.getPresentationByUserId, { manual: true });
-    // const [filterReportLabel, setFilterReportLabel] = useState("")
+    const [searchOptions, setSearchOptions] = useState({})
     const [searchData, setSearchData] = useState({
-        sSearchText: [],
-        sFromDate: null,
-        sToDate: null,
-        sCommand: ""
+        sSearchText: null,
+        sDoctor: null,
+        sUser: null,
     })
 
-    const [openSearchData, setOpenSearchData] = useState({
-        sFromDate: null,
-        sToDate: null,
-        sType: "",
-    });
+    const [
+        { data: AllPresentation, loading: allPresentationLoading },
+        refetchAllPresentation,
+    ] = useAxios(endpointConfig.presentation.getAll)
+    const [
+        { data: searchDoctorsMenuItems, loading: searchDoctorsMenuItemsLoading },
+        refetchSearchDoctorsMenuItems,
+    ] = useAxios(endpointConfig.doctors.getAll)
+    const [
+        { data: searchUserMenuItems, loading: searchUserMenuItemsLoading },
+        refetchSearchUserMenuItems,
+    ] = useAxios(endpointConfig.users.getAll)
+    const [{ }, getPresentationByDoctorId] = useAxios(
+        endpointConfig.presentation.getPresentationByDoctorId,
+        { manual: true }
+    )
+    const [{ }, getPresentationByUserId] = useAxios(
+        endpointConfig.presentation.getPresentationByUserId,
+        { manual: true }
+    )
 
-    // AllPresentation?.data && AllPresentation?.data.map(
-    //     async (data) => {
-    //         Object.assign(data, { fullName: `${data.firstName} ${data.lastName}` })
-    //         return data
-    //     })
-
-    // const searchDoctorsMenuItems = [
-    //     { val: "Doctor1", text: "Doctor1" },
-    //     { val: "Doctor2", text: "Doctor2" },
-    //     { val: "Doctor3", text: "Doctor3" },
-    //     { val: "Doctor4", text: "Doctor4" },
-    //     { val: "Doctor5", text: "Doctor5" },
-    // ]
-    // const searchUserMenuItems = [
-    //     { val: "User1", text: "User1" },
-    //     { val: "User2", text: "User2" },
-    //     { val: "User3", text: "User3" },
-    //     { val: "User4", text: "User4" },
-    //     { val: "User5", text: "User5" },
-    // ]
-
-    // const actions = [
-    //     {
-    //         icon: tableIcons.Add,
-    //         tooltip: 'Add Job',
-    //         isFreeAction: true,
-    //         onClick: () => { }
-    //     },
-    //     {
-    //         icon: tableIcons.Edit,
-    //         tooltip: 'Edit Jobs',
-    //         position: 'row',
-    //         onClick: (event, rowData) => { }
-    //     },
-    //     {
-    //         icon: tableIcons.Delete,
-    //         tooltip: 'Delete Job',
-    //         position: 'row',
-    //         onClick: (event, rowData) => new Promise((resolve) => {
-    //             confirm({ description: 'Are you sure you want to delete?' })
-    //                 .then(() => { })
-    //         })
-    //     },
-    //     rowData => ({
-    //         icon: tableIcons.Delete,
-    //         tooltip: 'Delete Selected Job(s)',
-    //         position: (props) => 'row',
-    //         onClick: (event, rowData) => new Promise((resolve) => {
-    //             const deleteIds = rowData.map(item => item.id)
-    //             confirm({ description: 'Are you sure you want to delete?' })
-    //                 .then(() => { })
-    //         })
-    //     })
-    // ]
 
     const detailPanel = [
         {
-            tooltip: 'View details',
-            render: ({ rowData }) => <PresentationDetailPanel presentationId={rowData.presentationId} />,
+            tooltip: "View details",
+            render: ({ rowData }) => (
+                <PresentationDetailPanel presentationId={rowData.presentationId} />
+            ),
+        },
+    ]
+
+    const handleSelectionChange = (data, sFieldName) => {
+        switch (sFieldName) {
+            case "sSearchText":
+                setSearchData(prev => ({ ...prev, sSearchText: { value: data?.target?.value, name: data?.target?.value } }))
+                // searchData["sSearchText"] = [...searchData["sSearchText"], { value: data?.target?.value, name: data?.target?.value }]
+                // if (searchData["sSearchText"].length > 0) {
+                //     searchData["sSearchText"] = [...searchData["sSearchText"], { value: data?.target?.value, name: data?.target?.value }]
+                // } else {
+                //     // setSearchData(prev => ({ ...prev, sSearchText: { value: data?.target?.value, name: data?.target?.value } }))
+                //     searchData["sSearchText"] = [{ value: data?.target?.value, name: data?.target?.value }]
+                // }
+                break;
+            case "sDoctor":
+                setSearchData(prev => ({ ...prev, sDoctor: { value: data?.value, name: data?.children } }))
+                // searchData["sDoctor"] = { value: data?.value, name: data?.children }
+                break;
+            case "sUser":
+                setSearchData(prev => ({ ...prev, sUser: { value: data?.value, name: data?.children } }))
+                // searchData["sUser"] = { value: data?.value, name: data?.children }
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+    useEffect(() => {
+        setSearchOptionsData()
+    }, [searchDoctorsMenuItems, searchUserMenuItems])
+
+
+    const setSearchOptionsData = () => {
+        setSearchOptions({
+            title: "",
+            spacing: 1,
+            searchItems: {
+                search: {
+                    label: Strings.SEARCH_TITLE,
+                    type: fieldTypes.search.type,
+                    size: "small",
+                    variant: "outlined",
+                    col: 4,
+                    value: "",
+                    handleSearchChange: (e) => {
+                        handleSelectionChange(e, "sSearchText")
+                    },
+                },
+                doctorList: {
+                    label: Strings.SEARCH_TITLE_DOCTOR,
+                    type: fieldTypes.select.type,
+                    size: "small",
+                    variant: "outlined",
+                    col: 4,
+                    value: "",
+                    menuItems: searchDoctorsMenuItems?.data
+                        ? searchDoctorsMenuItems?.data
+                            .map((g) => ({
+                                text: `${g.firstName} ${g.lastName}`,
+                                val: g.doctorId,
+                            }))
+                            .sort((a, b) => (a.text ?? "").localeCompare(b.text ?? ""))
+                        : [],
+                    onSelectionChange: (e, data) => {
+                        handleSelectionChange(data, "sDoctor")
+                    },
+                },
+                userList: {
+                    label: Strings.SEARCH_TITLE_USER,
+                    type: fieldTypes.select.type,
+                    size: "small",
+                    variant: "outlined",
+                    col: 4,
+                    value: "",
+                    menuItems: searchUserMenuItems?.data
+                        ? searchUserMenuItems?.data
+                            .map((g) => ({
+                                text: `${g.firstName} ${g.lastName}`,
+                                val: g.id,
+                            }))
+                            .sort((a, b) => (a.text ?? "").localeCompare(b.text ?? ""))
+                        : [],
+                    onSelectionChange: (e, data) => {
+                        handleSelectionChange(data, "sUser")
+                    },
+                },
+            },
+        })
+    }
+
+    const handleSearch = () => {
+        console.log(searchData);
+        setPresentationData([])
+        setFilterReportLabel([])
+        let presentationFilteredData;
+
+        new Promise(async (resolve, reject) => {
+            if (searchData["sSearchText"] !== null) {
+                presentationFilteredData = await AllPresentation?.data && AllPresentation?.data.filter((val) => {
+                    if (val.doctorName.toLowerCase().match(searchData["sSearchText"].value.toLowerCase())) {
+                        return val
+                    }
+                    if (val.userName.toLowerCase().match(searchData["sSearchText"].value.toLowerCase())) {
+                        return val
+                    }
+                    if (val.presentationId == searchData["sSearchText"].value) {
+                        return val
+                    }
+
+                })
+            }
+            if (searchData["sDoctor"] !== null) {
+                if (presentationFilteredData) {
+                    presentationFilteredData = await presentationFilteredData && presentationFilteredData.filter((val) => {
+                        if (searchData["sDoctor"]?.value === val?.doctorId) {
+                            return val
+                        }
+                    })
+                } else {
+                    await getPresentationByDoctorId({
+                        url: format(
+                            endpointConfig.presentation.getPresentationByDoctorId,
+                            searchData["sDoctor"]?.value
+                        ),
+                    }).then((res) => {
+                        res.data.data && setPresentationData(prev => [...prev, ...res.data.data])
+                        presentationFilteredData = res.data.data
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }
+
+            }
+
+            if (searchData["sUser"] !== null) {
+                if (presentationFilteredData) {
+                    presentationFilteredData = await presentationFilteredData && presentationFilteredData.filter((val) => {
+                        if (searchData["sUser"]?.value === val?.userId) {
+                            return val
+                        }
+                    })
+                } else {
+                    await getPresentationByUserId({
+                        url: format(
+                            endpointConfig.presentation.getPresentationByUserId,
+                            searchData["sUser"]?.value
+                        ),
+                    }).then((res) => {
+                        res.data.data && setPresentationData(prev => [...prev, ...res.data.data])
+                        presentationFilteredData = res.data.data
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }
+            }
+            resolve(presentationFilteredData)
+        }).then((res) => {
+            setPresentationData(res)
+            if (searchData["sDoctor"] !== null || searchData["sUser"] !== null || searchData["sSearchText"] !== null) {
+                Object.values(searchData).map((val) => {
+                    if (val?.name && val?.name !== undefined) {
+                        setFilterReportLabel((prev) => [...prev, val.name])
+                    }
+                })
+            } else {
+                setFilterReportLabel(["All"])
+            }
+
+        }).catch((err) => {
+            console.log(err);
+        })
+
+
+
+
+    }
+
+
+    const CTAButtons = [
+        {
+            title: <tableIcons.Search />,
+            handleClick: handleSearch,
+            id: 1,
         }
     ]
 
+    const clearCTAButton = {
+        title: Strings.CLEAR_FILTER,
+        handleClick: () => {
+            setFilterReportLabel(["All"])
+            setSearchData({
+                sSearchText: null,
+                sDoctor: null,
+                sUser: null,
+            })
 
-    const handleSearchChange = () => { }
-    const handleOpenSearch = () => { }
-    const searchOptions = {
-        title: "",
-        spacing: 1,
-        searchItems: {
-            // Daterange: {
-            //     label: Strings.SEARCH_TITLE_DATERANGE,
-            //     size: "small",
-            //     variant: "outlined",
-            //     col: 4,
-            //     type: fieldTypes.dateRange.type,
-            //     minDate: new Date("1900-01-01"),
-            //     maxDate: new Date().toLocaleDateString(),
-            //     value: [openSearchData["sFromDate"], openSearchData["sToDate"]],
-            //     onChange: handleSearchChange,
-            // },
-            // categories: {
-            //     label: Strings.SEARCH_TITLE_CATEGORY,
-            //     type: fieldTypes.select.type,
-            //     size: "small",
-            //     variant: "outlined",
-            //     col: 4,
-            //     value: "",
-            //     menuItems: searchCategoryMenuItems.map(g => ({
-            //         text: g.text,
-            //         val: g.value
-            //     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-            //     onSelectionChange: handleSearchChange
-            // },
-            // products: {
-            //     label: Strings.SEARCH_TITLE_PRODUCTS,
-            //     type: fieldTypes.select.type,
-            //     size: "small",
-            //     variant: "outlined",
-            //     col: 4,
-            //     value: "",
-            //     menuItems: searchProductsMenuItems.map(g => ({
-            //         text: g.text,
-            //         val: g.value
-            //     })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
-            //     onSelectionChange: handleSearchChange
-            // },
-            search: {
-                label: Strings.SEARCH_TITLE,
-                type: fieldTypes.search.type,
-                size: "small",
-                variant: "outlined",
-                col: 4,
-                onSelectionChange: handleSearchChange
-            },
-            doctorList: {
-                label: Strings.SEARCH_TITLE_DOCTOR,
-                type: fieldTypes.select.type,
-                size: "small",
-                variant: "outlined",
-                col: 4,
-                menuItems: searchDoctorsMenuItems?.data ? searchDoctorsMenuItems?.data.map(g => ({
-                    text: g.firstName,
-                    val: g.doctorId
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
-                onSelectionChange: (e) => {
-                    getPresentationByDoctorId({
-                        url: format(
-                            endpointConfig.presentation.getPresentationByDoctorId,
-                            e.target.value)
-                    }).then((res) => {
-                        setPresentationData(res.data.data)
-                    }).catch((err) => {
-                        console.log(err)
-                    })
-                }
-            },
-            userList: {
-                label: Strings.SEARCH_TITLE_USER,
-                type: fieldTypes.select.type,
-                size: "small",
-                variant: "outlined",
-                col: 4,
-                menuItems: searchUserMenuItems?.data ? searchUserMenuItems?.data.map(g => ({
-                    text: g.userName,
-                    val: g.id
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
-                onSelectionChange: (e) => {
-                    getPresentationByDoctorId({
-                        url: format(
-                            endpointConfig.presentation.getPresentationByUserId,
-                            e.target.value)
-                    }).then((res) => {
-                        setPresentationData(res.data.data)
-                    }).catch((err) => {
-                        console.log(err)
-                    })
-                }
-            },
+            setSearchOptionsData()
+            setPresentationData()
 
-        },
-        handleSearch: handleOpenSearch,
-    };
-
-
-
-    // const CTAButtons = [
-    //     {
-    //         title: "Clear Filter",
-    //         handleClick: () => {
-    //             setSearchData({
-    //                 sSearchText: [],
-    //                 sFromDate: null,
-    //                 sToDate: null,
-    //                 sCommand: null
-    //             })
-    //             // refreshInsightsData('All', moment().format('l'))
-    //         }
-    //     },
-    //     {
-    //         title: "T-2",
-    //         handleClick: () => { }
-    //     },
-
-    // ]
-
+        }
+    }
 
     return {
         tableRef,
@@ -229,10 +265,10 @@ const usePresentation = () => {
         searchOptions,
         AllPresentation,
         presentationData,
-        allPresentationLoading
-        // filterReportLabel,
-        // CTAButtons
-
+        allPresentationLoading,
+        clearCTAButton,
+        filterReportLabel,
+        CTAButtons
     }
 }
 

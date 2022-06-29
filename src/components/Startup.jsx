@@ -5,13 +5,16 @@ import {
   Provider,
   AppShell,
   appSettings,
-  Context
+  Context,
+  useStyles
 } from "@medicorp"
 import { Alert, Slide, Snackbar } from "@mui/material"
+import { ClipLoader } from "react-spinners"
 
 const Startup = () => {
   const navigate = useNavigate()
-  const { snak_open, setSnackOpen, snackContent } = useContext(Context)
+  const { spinnerContainer, spinnerMain } = useStyles()
+  const { snak_open, setSnackOpen, snackContent, isLoading } = useContext(Context)
   const { defaultDuration, statusType } = appSettings
   const { login } = appSettings.routeConfig
   return (
@@ -33,6 +36,8 @@ const Startup = () => {
           {snackContent.msg}
         </Alert>
       </Snackbar>
+
+      {isLoading && <div style={spinnerContainer}><ClipLoader cssOverride={spinnerMain} /></div>}
     </>
   )
 }

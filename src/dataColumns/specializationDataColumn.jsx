@@ -1,9 +1,16 @@
 import { Strings } from "@medicorp"
+import { Chip } from "@mui/material"
 function specializationDataColumn() {
     const columns = [
 
         { title: Strings.COLUMN_ID, field: 'specialityId', editable: 'never' },
-        { title: Strings.COLUMN_SPECIALIZATION, field: "title" },
+        {
+            title: Strings.COLUMN_SPECIALIZATION, field: "title", render: rowData => (
+                <Chip
+                    label={rowData.title}
+                    color={"info"} />
+            )
+        },
         {
             title: Strings.COLUMN_FIELD_DESCRIPTION,
             field: "specialityDescription",
