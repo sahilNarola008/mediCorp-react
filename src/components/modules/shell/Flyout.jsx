@@ -144,9 +144,9 @@ const Flyout = (props) => {
                         <Paper sx={classes.paddedMenuMobile} square elevation={1}>
                             <Grid item sx={classes.title}>
                                 {/* <img src={appSettings.appLogo} alt="Medicorp" style={{ height: '1.5rem' }} /> */}
-                                {/* <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', height: '1.5rem' }}>
+                                <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', height: '1.5rem' }}>
                                     MEDICORP
-                                </Typography> */}
+                                </Typography>
                             </Grid>
                         </Paper>
                         <Box component="div" sx={classes.drawerContainer} >
@@ -157,10 +157,19 @@ const Flyout = (props) => {
                         sx={[classes.smDown, drawerClass]}
                         variant="permanent">
                         <Toolbar variant="dense" disableGutters>
-                            <IconButton
-                                onClick={() => handleDrawerToggle(false)} sx={[classes.smDown, classes.menuIcon]}>
-                                <MenuIcon />
-                            </IconButton>
+                            <Grid container spacing={2}>
+                                <Grid item xs={4} >
+                                    <IconButton
+                                        onClick={() => handleDrawerToggle(false)} sx={[classes.smDown, classes.menuIcon]}>
+                                        <MenuIcon />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item xs={8} sx={classes.title}>
+                                    <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', margin: '4px' }}>
+                                        MEDICORP
+                                    </Typography>
+                                </Grid>
+                            </Grid>
                         </Toolbar>
                         <Divider sx={classes.lightDivider} />
                         <Box component="div" sx={classes.drawerContainer}>

@@ -200,7 +200,7 @@ export default function useDoctors() {
                 validator: validator.textAreaValidator
             },
             countryId: {
-                label: Strings.COLUMN_DOCTORS_COUNTRY,
+                label: Strings.COLUMN_COUNTRY,
                 type: fieldTypes.autoComplete.type,
                 size: "small",
                 variant: "outlined",
@@ -229,7 +229,8 @@ export default function useDoctors() {
                     id: g.stateId
                 })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
                 equalityComparer: (option, value) => option.stateId === value,
-                onSelectionChange: (id) => { handleSelectionChange(id, "state") }
+                onSelectionChange: (id) => { handleSelectionChange(id, "state") },
+                disabled: stateData.length == 0 ? true : false
             },
             cityId: {
                 label: Strings.COLUMN_CITY,
@@ -245,6 +246,7 @@ export default function useDoctors() {
                     id: g.cityId
                 })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
                 equalityComparer: (option, value) => option.cityId === value,
+                disabled: cityData.length == 0 ? true : false
             },
             isActive: {
                 label: Strings.COLUMN_USERS_IS_ACTIVE,
@@ -269,7 +271,6 @@ export default function useDoctors() {
         ])
         setOpenDialog(true)
     }
-
 
     const handleSelectionChange = (data, dataType) => {
         const { id } = data
@@ -307,7 +308,6 @@ export default function useDoctors() {
             })
         }
     }
-
 
     const handleSubmit = (data, isEdit, id, organizationName, organizationId) => {
         setModalFormResetKeys([])
@@ -364,10 +364,13 @@ export default function useDoctors() {
         setModalContent(prevContent => ({
             ...prevContent,
             stateId: {
-                ...prevContent["stateId"], menuItems: stateData && stateData.map(g => ({
+                ...prevContent["stateId"],
+                menuItems: stateData && stateData.map(g => ({
                     label: g.stateName,
                     id: g.stateId
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? ""))
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+                disabled: stateData.length > 0 && false,
+                value: null
             }
         }))
     }, [stateData])
@@ -376,10 +379,13 @@ export default function useDoctors() {
         setModalContent(prevContent => ({
             ...prevContent,
             cityId: {
-                ...prevContent["cityId"], menuItems: cityData && cityData.map(g => ({
+                ...prevContent["cityId"],
+                menuItems: cityData && cityData.map(g => ({
                     label: g.cityName,
                     id: g.cityId
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? ""))
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")),
+                disabled: cityData.length > 0 && false,
+                value: null
             }
         }))
     }, [cityData])

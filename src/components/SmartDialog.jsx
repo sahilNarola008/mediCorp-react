@@ -863,42 +863,45 @@ const SmartDialog = ({
                                                     control={control}
                                                     rules={item.validator}
                                                     defaultValue={item.value}
-                                                    render={({ field }) => (
-                                                        <>
-                                                            <Button
-                                                                variant="contained"
-                                                                component="span"
-                                                                size={item.size}
-                                                                disabled={
-                                                                    (item.disabled && true) ||
-                                                                    (isReadOnly ?? false)
-                                                                }
-                                                                onClick={() => { setdropZoneOpen(!dropZoneOpen) }}
-                                                            >
-                                                                {item.label || <UploadFile />}
-                                                            </Button>
-                                                            <DropzoneDialog
-                                                                {...field}
-                                                                fileObjects={[]}
-                                                                open={dropZoneOpen}
-                                                                onSave={(e, data) => {
-                                                                    field.onChange(e, data)
-                                                                    item.handleSave(e, data)
-                                                                    setdropZoneOpen(false)
-                                                                }}
-                                                                acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
-                                                                showPreviews={true}
-                                                                maxFileSize={item.maxFileSize ? item.maxFileSize : 5000000}
-                                                                filesLimit={item.filesLimit ? item.filesLimit : 3}
-                                                                onClose={() => { setdropZoneOpen(false) }}
-                                                            />
-                                                            {errors[`${key}`] && (
-                                                                <Typography variant="subtitle1" sx={classes.invalid}>
-                                                                    {errors[`${key}`].message}
-                                                                </Typography>
-                                                            )}
-                                                        </>
-                                                    )}
+                                                    render={({ field }) => {
+                                                        return (
+                                                            <>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    component="span"
+                                                                    size={item.size}
+                                                                    disabled={
+                                                                        (item.disabled && true) ||
+                                                                        (isReadOnly ?? false)
+                                                                    }
+                                                                    onClick={() => { setdropZoneOpen(!dropZoneOpen) }}
+                                                                >
+                                                                    {item.label || <UploadFile />}
+                                                                </Button>
+                                                                <DropzoneDialog
+                                                                    {...field}
+                                                                    fileObjects={[]}
+                                                                    open={dropZoneOpen}
+                                                                    initialFiles={[item?.value]}
+                                                                    onSave={(e, data) => {
+                                                                        field.onChange(data)
+                                                                        item.handleSave(e, data)
+                                                                        setdropZoneOpen(false)
+                                                                    }}
+                                                                    acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                                                                    showPreviews={true}
+                                                                    maxFileSize={item.maxFileSize ? item.maxFileSize : 5000000}
+                                                                    filesLimit={item.filesLimit ? item.filesLimit : 3}
+                                                                    onClose={() => { setdropZoneOpen(false) }}
+                                                                />
+                                                                {errors[`${key}`] && (
+                                                                    <Typography variant="subtitle1" sx={classes.invalid}>
+                                                                        {errors[`${key}`].message}
+                                                                    </Typography>
+                                                                )}
+                                                            </>
+                                                        )
+                                                    }}
                                                 />
                                                 {/* ------------------------------------------ Image DropZone End ----------------------------------------------------- */}
 

@@ -1,6 +1,6 @@
 import { indigo, red, amber, lightBlue } from "@mui/material/colors";
 const appSettings = {
-  imageBaseURL: `${process.env.REACT_APP_API_BASE_URL}`,
+  imageBaseURL: `${process.env.REACT_APP_API_IMAGE_BASE_URL}/orga/`,
   appLogo: `${process.env.PUBLIC_URL}/img/logo.svg`,
   oktaConfig: {
     clientId: `${process.env.REACT_APP_CLIENT_ID}`,
@@ -77,6 +77,7 @@ const appSettings = {
       getAll: "/ApiProductMaster/GetProduct",
       addProducts: "/ApiProductMaster/CreateProduct",
       updateProducts: "/ApiProductMaster/UpdateProduct",
+      UploadProductImage: "/ApiProductMaster/UploadProductImage",
       getProductsById: "/ApiProductMaster/GetProductById?id={0}",
       deleteProductsById: "/ApiProductMaster/DeleteProduct?id={0}",
     },

@@ -17,7 +17,6 @@ export {
   getActualDates,
   enumerateDaysBetweenDates,
   mainMenuItems,
-  getBase64
 } from "utils/helper";
 //#endregion
 

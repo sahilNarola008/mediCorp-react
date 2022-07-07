@@ -282,6 +282,7 @@ const Strings = {
   DATA_ADDED_SUCCESSFULLY: "Data Added Successfully.",
   PRODUCT_EDITED_SUCCESSFULLY: "Edited Successfully",
   ERROR_OCCURED_WHILE_ADDING_DATA: "Error Occured While Adding Data!",
+  ERROR_OCCURED_WHILE_UPLOADING_IMAGE_DATA: "Error Occured While Uploading Image  Data!",
   ERROR_OCCURED_WHILE_FETCHING_DATA: "Error Occured While Fetching Data!",
   ERROR_EDITING_DATA: "Error Editing Data!",
   ERROR_DELETING_DATA: "Error Deleting Data!",

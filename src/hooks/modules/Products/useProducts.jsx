@@ -46,6 +46,14 @@ const useProducts = () => {
     },
     { manual: true }
   );
+  const [{ }, UploadProductImage] = useAxios(
+    {
+      url: endpointConfig.products.UploadProductImage,
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
+    },
+    { manual: true }
+  );
   const [{ }, updateProduct] = useAxios(
     {
       url: endpointConfig.products.updateProducts,
@@ -214,20 +222,10 @@ const useProducts = () => {
         size: "small",
         col: 12,
         type: fieldTypes.imageDropzone.type,
-        value: rowData?.images ?? [],
+        value: `https://pragalbhsoftware.blob.core.windows.net/orga/${rowData?.images[0]?.imageUrl}` ?? [],
         handleSave: (e, data) => {
-          debugger
-          getBase64(e[0])
-            .then(result => {
-              productImages = result
-            })
-            .catch(err => {
-              console.log(err);
-            });
-
-          console.log(data)
+          productImages = e[0]
         },
-        validator: validator.imageValidator,
         filesLimit: 1,
         maxFileSize: 10000000,
       },
@@ -244,60 +242,81 @@ const useProducts = () => {
   };
 
   const handleSubmit = (data, isEdit, rowData) => {
-    console.log(data);
-    console.log(productImages);
-    debugger
-    setModalTaskRunning(true);
-    setModalFormResetKeys([]);
-    const response =
-      isEdit === true
-        ? updateProduct({
-          url: format(
-            endpointConfig.products.updateProducts,
-            rowData.productId
-          ),
-          data: {
-            productId: Number(rowData.productId),
-            organizationId: 1,
-            ...data,
-          },
-        })
-        : postProduct({
-          data: {
-            ...data,
-            isDelete: false,
-            organizationId: 1,
-            imageMasterViewModel: [
-              {
-                organizationId: 1,
-                imageUrl: productImages,
-                isActive: true,
-                isDelete: false
-              }
-            ]
+    const formData = new FormData()
+    formData.append("uploadedFile", productImages);
+    UploadProductImage({ data: formData }).then((res) => {
+      const { imageFile, imageUrl } = res?.data
+      setModalTaskRunning(true);
+      setModalFormResetKeys([]);
+      const response =
+        isEdit === true
+          ? updateProduct({
+            url: format(
+              endpointConfig.products.updateProducts,
+              rowData.productId
+            ),
+            data: {
+              ...data,
+              productId: rowData.productId,
+              isDelete: false,
+              organizationId: 1,
+              imageMasterViewModel: [
+                {
+                  productId: rowData.productId,
+                  organizationId: 1,
+                  imageUrl: imageUrl,
+                  isActive: true,
+                  isDelete: false,
+                  imageFile: imageFile
+                }
+              ]
+            },
+          })
+          : postProduct({
+            data: {
+              ...data,
+              isDelete: false,
+              organizationId: 1,
+              imageMasterViewModel: [
+                {
+                  organizationId: 1,
+                  imageUrl: imageUrl,
+                  isActive: true,
+                  isDelete: false,
+                  imageFile: imageFile
+                }
+              ]
+            }
+          });
+      response
+        .then((res) => {
+          const { msg, errorMessage, message, title, isError, status, errors } =
+            res.data;
+          console.log(res.data);
+          if (res.status === 200 || res.status === 201) {
+            handleModalClose();
+            refetchAllProducts();
           }
-        });
-    response
-      .then((res) => {
-        const { msg, errorMessage, message, title, isError, status, errors } =
-          res.data;
-        console.log(res.data);
-        if (res.status === 200 || res.status === 201) {
-          handleModalClose();
-          refetchAllProducts();
-        }
-        logMessage({
-          severity: errors === null ? statusType.success : statusType.error,
-          msg:
-            message ?? errors !== null
-              ? Strings.ERROR_OCCURED_WHILE_ADDING_DATA
-              : isEdit === true
-                ? Strings.PRODUCT_EDITED_SUCCESSFULLY
-                : Strings.DATA_ADDED_SUCCESSFULLY,
-        });
-      })
-      .catch((err) => err)
-      .finally(() => setModalTaskRunning(false));
+          logMessage({
+            severity: !isError ? statusType.success : statusType.error,
+            msg:
+              message ?? isError
+                ? Strings.ERROR_OCCURED_WHILE_ADDING_DATA
+                : isEdit === true
+                  ? Strings.PRODUCT_EDITED_SUCCESSFULLY
+                  : Strings.DATA_ADDED_SUCCESSFULLY,
+          });
+        })
+        .catch((err) => err)
+        .finally(() => setModalTaskRunning(false));
+    }).catch((err) => {
+      console.log(err)
+      logMessage({
+        severity: statusType.error,
+        msg: Strings.ERROR_OCCURED_WHILE_UPLOADING_IMAGE_DATA
+      });
+    })
+
   };
 
   return {
