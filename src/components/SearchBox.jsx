@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import propTypes from "prop-types"
-import { Strings, MaskedInput, AdapterMoment } from "@medicorp"
+import { Strings, AdapterMoment } from "@medicorp"
 import { TextField, MenuItem, InputAdornment, IconButton, Box } from '@mui/material'
 import { CalendarToday } from '@mui/icons-material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { DatePicker, DateRangePicker, LocalizationProvider } from "@mui/lab"
-function CardMaskInput(props) {
-    const { inputRef, ...other } = props;
+// function CardMaskInput(props) {
+//     const { inputRef, ...other } = props;
 
-    return (
-        <MaskedInput
-            {...other}
-            ref={(ref) => {
-                inputRef(ref ? ref.inputElement : null);
-            }}
-            mask={[/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-            keepCharPositions
-            guide
-            placeholderChar='X'
-            placeholder="XXXX-XXXX-XXXX-XXXX"
-        />
-    );
-}
+//     return (
+//         <MaskedInput
+//             {...other}
+//             ref={(ref) => {
+//                 inputRef(ref ? ref.inputElement : null);
+//             }}
+//             mask={[/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+//             keepCharPositions
+//             guide
+//             placeholderChar='X'
+//             placeholder="XXXX-XXXX-XXXX-XXXX"
+//         />
+//     );
+// }
 
-CardMaskInput.propTypes = {
-    inputRef: propTypes.func.isRequired,
-};
+// CardMaskInput.propTypes = {
+//     inputRef: propTypes.func.isRequired,
+// };
 
 function SearchBox(props) {
     const { name, defaultValue, fullWidth, variant, label, type, isSelect, menuItems, isMaskedInput, onChange, size, isDisable, minDate, maxDate } = props
@@ -135,9 +135,9 @@ function SearchBox(props) {
                                     value={value}
                                     onChange={handleChange}
                                     disabled={isDisable}
-                                    InputProps={{
-                                        inputComponent: CardMaskInput,
-                                    }}
+                                // InputProps={{
+                                //     inputComponent: CardMaskInput,
+                                // }}
                                 /> :
                                 <TextField
                                     name={name}

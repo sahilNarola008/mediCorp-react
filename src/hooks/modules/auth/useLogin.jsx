@@ -5,13 +5,15 @@ import {
   useLocalStorage,
   config,
   Context,
+  Strings,
+  validator,
 } from "@medicorp";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const useLogin = () => {
   const { parseJwt } = config();
-  const { fieldTypes, endpointConfig } = appSettings;
+  const { fieldTypes, endpointConfig, statusType } = appSettings;
   const { setAppItem, getAppItem } = useLocalStorage();
   const { tableIcons } = useTableIcons();
   const navigate = useNavigate();
@@ -21,11 +23,28 @@ const useLogin = () => {
   const [formResetKeys, setFormResetKeys] = useState([]);
   const [formTaskRunning, setFormTaskRunning] = useState(false);
   const [freeAction, setFreeAction] = useState(null);
-  const { logMessage } = useContext(Context);
+  const [isForgotPassword, setIsForgotPassword] = useState(false)
+  const [resetPassword, setResetPassword] = useState(false)
+  const { logMessage, setToken: setContextToken } = useContext(Context);
+
+  const [userInputData, setUserInputData] = useState()
 
   const [token, setToken] = useState(getAppItem("token") || null);
   const [statusCode, setstatusCode] = useState();
 
+  const [{ }, forgotPasswordSendOTP] = useAxios(
+    {
+      url: endpointConfig.password.forgotPassword,
+      method: "POST",
+    },
+    { manual: true })
+
+  const [{ }, handeleResetPassword] = useAxios(
+    {
+      url: endpointConfig.password.resetPassword,
+      method: "POST",
+    },
+    { manual: true })
   const [{ }, authData] = useAxios(
     {
       url: endpointConfig.authentication.authentication,
@@ -35,63 +54,175 @@ const useLogin = () => {
   );
 
   const handleSubmit = (data) => {
-    setFormTaskRunning(true);
-    authData({
-      data: {
-        userName: data.email,
-        password: data.password,
-        fcmToken: "",
-        organizationId: 1,
-      },
-    })
+    setFormTaskRunning(true)
+    setUserInputData(data)
+    isForgotPassword ? forgotPasswordSendOTP({ data })
       .then((res) => {
-        setstatusCode(res.status);
-        // const useDetails = parseJwt(res.data);
-        // console.log(useDetails);
-        setAppItem("token", res.data);
-        setInterval(() => {
-          setFormTaskRunning(false);
-        }, 2000);
-        navigate(`/`);
+        if (res.status === 200) {
+          logMessage({
+            severity: statusType.success,
+            msg: "We Have Sent An OTP On Your Email Address."
+          })
+          setResetPassword(true)
+          setIsForgotPassword(false)
+          setFormTaskRunning(false)
+        } else {
+          logMessage({
+            severity: statusType.error,
+            msg: "Invalid Email Address!",
+          })
+          setFormTaskRunning(false)
+        }
       })
-      .catch((error) => {
-        const { msg, errorMessage, message } = error;
-        console.log(error);
+      .catch((err) => {
+        const { msg, errorMessage, message } = err;
         logMessage({
-          msg: msg ?? errorMessage ?? message ?? " Invalid Login Details!",
-        });
-      })
-      .finally(() => setFormTaskRunning(false));
+          severity: statusType.error,
+          msg: msg ?? errorMessage ?? message ?? Strings.TRY_AGAIN_AFTER_SOME_TIME,
+        })
+        setFormTaskRunning(false)
+      }) :
+      (
+        resetPassword ? handeleResetPassword({ data }).then((res) => {
+          const { msg, errorMessage, message } = res;
+          if (res.status === 200) {
+            logMessage({
+              severity: statusType.success,
+              msg: msg ?? "Password Updated Sucessfully.."
+            })
+            setResetPassword(false)
+            setIsForgotPassword(false)
+            navigate(`/`)
+            setFormTaskRunning(false)
+          } else {
+            logMessage({
+              severity: statusType.error,
+              msg: "Invalid Email Address!",
+            })
+            setFormTaskRunning(false)
+          }
+        }).catch((err) => {
+          const { msg, errorMessage, message } = err;
+          logMessage({
+            severity: statusType.error,
+            msg: msg ?? errorMessage ?? message ?? Strings.TRY_AGAIN_AFTER_SOME_TIME,
+          })
+          setFormTaskRunning(false)
+        }) :
+          authData({
+            data: {
+              userName: data.email,
+              password: data.password,
+              fcmToken: "",
+              organizationId: 1,
+            },
+          }).then((res) => {
+            setstatusCode(res.status);
+            if (res.status == 200) {
+              setInterval(() => {
+                // const useDetails = parseJwt(res.data);
+                // console.log(useDetails);
+                setFormTaskRunning(false);
+              }, 2000);
+              setAppItem("token", res.data);
+              setContextToken(res.data)
+              navigate(`/`);
+            } else {
+              const { msg, errorMessage, message } = res;
+              logMessage({
+                severity: statusType.error,
+                msg: msg ?? errorMessage ?? message ?? res.data ?? Strings.INVALID_LOGIN_DETAILS,
+              });
+            }
+          }).catch((error) => {
+            const { msg, errorMessage, message } = error;
+            logMessage({
+              severity: statusType.error,
+              msg: msg ?? errorMessage ?? message ?? Strings.TRY_AGAIN_AFTER_SOME_TIME,
+            });
+          }).finally(() => setFormTaskRunning(false)))
   };
 
   const setLoginFormContent = () => {
-    setFormContent({
-      email: {
-        label: "Email",
-        type: fieldTypes.text.type,
-        size: "small",
-        variant: "outlined",
-        col: 12,
-        validator: {
-          required: { value: true, message: "Please Enter Email Address" },
-        },
-      },
-      password: {
-        label: "Password",
-        size: "small",
-        variant: "outlined",
-        col: 12,
-        type: fieldTypes.password.type,
-        value: "",
-        validator: {
-          required: { value: true, message: "Password is required" },
-        },
-      },
-    });
+    setFormResetKeys([])
+    setFormContent(
+      isForgotPassword ?
+        {
+          email: {
+            label: Strings.EMAIL,
+            type: fieldTypes.text.type,
+            size: "small",
+            variant: "outlined",
+            col: 12,
+            validator: validator.requiredValidator(Strings.EMAIL)
+          }
+        } :
+        (resetPassword ?
+          {
+            email: {
+              label: Strings.EMAIL,
+              type: fieldTypes.text.type,
+              size: "small",
+              variant: "outlined",
+              col: 12,
+              value: userInputData.email,
+              disabled: true,
+              validator: validator.requiredValidator(Strings.EMAIL)
+            },
+            otp: {
+              label: Strings.OTP,
+              type: fieldTypes.text.type,
+              size: "small",
+              variant: "outlined",
+              col: 12,
+              value: "",
+              validator: validator.numberValidator
+            },
+            newPassword: {
+              label: Strings.NEW_PASSWORD,
+              size: "small",
+              variant: "outlined",
+              col: 12,
+              type: fieldTypes.password.type,
+              value: "",
+              validator: validator.requiredValidator(Strings.NEW_PASSWORD)
+            },
+            confirmPassword: {
+              label: Strings.CONFIRM_NEW_PASSWORD,
+              size: "small",
+              variant: "outlined",
+              col: 12,
+              type: fieldTypes.password.type,
+              value: "",
+              validator: validator.requiredValidator(Strings.CONFIRM_NEW_PASSWORD)
+            },
+          } :
+          {
+            email: {
+              label: Strings.EMAIL,
+              type: fieldTypes.text.type,
+              size: "small",
+              variant: "outlined",
+              col: 12,
+              value: "",
+              validator: validator.requiredValidator(Strings.EMAIL)
+            },
+            password: {
+              label: Strings.PASSWORD,
+              size: "small",
+              variant: "outlined",
+              col: 12,
+              type: fieldTypes.password.type,
+              value: "",
+              validator: validator.requiredValidator(Strings.PASSWORD)
+            },
+          }
+        )
+    );
     setFormActions([
       {
-        label: "Login",
-        endIcon: tableIcons.Login,
+        label: isForgotPassword ? Strings.SEND_OTP : (resetPassword ? Strings.RESET_PASSWORD : Strings.LOGIN),
+        endIcon: (!isForgotPassword && !resetPassword) && tableIcons.Login,
         loadingPosition: "end",
         isSubmit: true,
         color: "primary",
@@ -104,10 +235,14 @@ const useLogin = () => {
     ]);
   };
 
+  const handleForgotPassword = (val) => {
+    setIsForgotPassword(val)
+    setResetPassword(val)
+  }
+
   useEffect(() => {
     setLoginFormContent();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isForgotPassword]);
 
   return {
     formHeader,
@@ -118,6 +253,9 @@ const useLogin = () => {
     freeAction,
     token,
     statusCode,
+    handleForgotPassword,
+    isForgotPassword,
+    resetPassword
   };
 };
 

@@ -22,13 +22,13 @@ const Products = () => {
     <>
       <MaterialTable
         columns={productsColumn}
-        data={AllProducts?.data}
+        data={AllProducts?.data ? AllProducts?.data : []}
         title={Strings.MENU_PRODUCTS_TITLE}
         actions={actions}
         options={{
           ...tableStyle,
           selection: false,
-          
+
         }}
         isLoading={allProductsLoading}
       />

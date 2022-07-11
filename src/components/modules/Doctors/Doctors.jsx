@@ -26,13 +26,13 @@ export default function Doctors() {
     <>
       <MaterialTable
         columns={columns}
-        data={doctors && doctors?.data}
+        data={doctors?.data ? doctors?.data : []}
         title={Strings.COLUMN_DOCTORS_TITLE}
         actions={actions}
         options={{
           ...tableStyle,
           selection: false,
-          
+
         }}
         isLoading={doctorsLoading}
       />

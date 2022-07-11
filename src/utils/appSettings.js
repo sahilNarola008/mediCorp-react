@@ -1,5 +1,6 @@
 import { indigo, red, amber, lightBlue } from "@mui/material/colors";
 const appSettings = {
+  imageBaseURL: `${process.env.REACT_APP_API_IMAGE_BASE_URL}/orga/`,
   appLogo: `${process.env.PUBLIC_URL}/img/logo.svg`,
   oktaConfig: {
     clientId: `${process.env.REACT_APP_CLIENT_ID}`,
@@ -42,11 +43,21 @@ const appSettings = {
   },
 
   endpointConfig: {
+    password: {
+      forgotPassword: "/ApiMemberMaster/ForgotPassword",
+      resetPassword: "/ApiMemberMaster/ResetPassword",
+      changePassword: "/ApiMemberMaster/ChangePassword",
+    },
+    SignOut: {
+      SignOut: "/ApiMemberMaster/SignOut",
+    },
     register: {
       register: "/ApiAccount/Register",
     },
     authentication: {
       authentication: "/ApiAccount/Authenticate",
+      getLogedInUserDetail: "/ApiAccount/GetLogedInUserDetail",
+      updateUser: "/ApiAccount/UpdateUser",
     },
     sources: {
       getAll: "/Source",
@@ -66,6 +77,7 @@ const appSettings = {
       getAll: "/ApiProductMaster/GetProduct",
       addProducts: "/ApiProductMaster/CreateProduct",
       updateProducts: "/ApiProductMaster/UpdateProduct",
+      UploadProductImage: "/ApiProductMaster/UploadProductImage",
       getProductsById: "/ApiProductMaster/GetProductById?id={0}",
       deleteProductsById: "/ApiProductMaster/DeleteProduct?id={0}",
     },
@@ -81,14 +93,24 @@ const appSettings = {
       postSpecialization: "/ApiSpecialityMaster/CreateSpeciality",
       updateSpecialization: "/ApiSpecialityMaster/UpdateSpeciality",
       getSpecializationById: "/ApiSpecialityMaster/GetSpecialityById?id={0}",
-      deleteSpecializationById: "/ApiSpecialityMaster/DeleteSpeciality",
+      deleteSpecializationById: "/ApiSpecialityMaster/DeleteSpeciality?id={0}",
     },
     users: {
-      getAll: "/UserMaster/GetUser",
+      getAll: "/ApiUserMaster/GetAllUsers",
       postUsers: "/UserMaster/InsertUser",
       updateUsers: "/UserMaster/UpdateUser",
-      getUsersById: "/UserMaster/GetUser/{0}",
-      deleteUsersById: "/UserMaster/DeleteUser/{0}",
+      getUsersById: "/ApiUserMaster/GetUserById?id={0}",
+      deleteUsersById: "/ApiUserMaster/DeleteUser?id={0}",
+    },
+    presentation: {
+      getAll: "/ApiUserPresentation/GetPresentation",
+      getPresentationByPresentationId: "/ApiUserPresentation/GetPresentationByPresentationId?id={0}",
+      getPresentationByUserId: "/ApiUserPresentation/GetPresentationByUserId?id={0}",
+      getPresentationByDoctorId: "/ApiUserPresentation/GetPresentationByDoctorId?id={0}",
+      getPresentationProductByPresentationId: "/ApiUserPresentation/GetPresentationProductByPresentationId?id={0}",
+      createPresentation: "/ApiUserPresentation/CreatePresentation",
+      updatePresentation: "/ApiUserPresentation/UpdatePresentation",
+      deletePresentation: "/ApiUserPresentation/DeletePresentation?id=5",
     },
     city: {
       getAll: "/ApiCityMaster/GetCity",
@@ -138,6 +160,7 @@ const appSettings = {
     time: { type: "time", group: "nullable" },
     dateTime: { type: "datetime", group: "nullable" },
     image: { type: "image", group: "array" },
+    imageDropzone: { type: "imageDropzone", group: "array" },
     dateRange: { type: "dateRange", group: "array" },
     label: { type: "label" },
     counter: { type: "counter", group: "nullable" },

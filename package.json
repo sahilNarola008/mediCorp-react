@@ -23,12 +23,14 @@
     "react-awesome-lightbox": "^1.8.1",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2",
+    "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.27.1",
     "react-mui-counter": "^1.0.9",
+    "react-mui-dropzone": "^4.0.6",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
-    "react-string-format": "^1.0.0",
-    "react-text-mask": "^5.4.3"
+    "react-spinners": "^0.13.1",
+    "react-string-format": "^1.0.0"
   },
   "scripts": {
     "start": "set PORT=3006 && env-cmd -f ./config/.env.dev react-scripts start",

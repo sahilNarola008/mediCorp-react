@@ -15,6 +15,7 @@ import Lightbox from "react-awesome-lightbox";
 import "ace-builds/src-noconflict/mode-csharp";
 import "ace-builds/src-noconflict/theme-textmate";
 import "react-awesome-lightbox/build/style.css";
+import { DropzoneDialog } from "react-mui-dropzone";
 
 const SmartDialog = ({
     open,
@@ -26,7 +27,10 @@ const SmartDialog = ({
     modalTaskRunning,
 }) => {
     const [selectedImage, setSelectedImage] = useState();
+    const [dropZoneOpen, setdropZoneOpen] = useState(false)
     const [uploadImgViewURL, setUploadImgViewURL] = useState()
+    const [showPassword, setShowPassword] = useState(false)
+
     const Input = styled('input')({
         display: 'none',
     });
@@ -51,7 +55,8 @@ const SmartDialog = ({
         for (let i = 0; i < imgeObj[0].length; i++) {
             imgArray.push(imgeObj[0][i])
         }
-        setSelectedImage(imgArray)
+        setSelectedImage(prev => [...prev, ...imgArray])
+        return selectedImage
     }
 
     const removeSelectedImage = (imgName) => {
@@ -64,6 +69,7 @@ const SmartDialog = ({
             }
         }
         setSelectedImage(newSelectedValue);
+        return selectedImage
     }
 
     const viewSelectedImage = (imgUrl, imgTitle) => {
@@ -345,7 +351,7 @@ const SmartDialog = ({
                                                                 size={item.size}
                                                                 variant={item.variant}
                                                                 label={item.label}
-                                                                type={item.showPassword ? "text" : "password"}
+                                                                type={item.showPassword || showPassword ? "text" : "password"}
                                                                 disabled={
                                                                     (item.disabled && true) ||
                                                                     (isReadOnly ?? false)
@@ -356,6 +362,7 @@ const SmartDialog = ({
                                                                     item.onTextChange && item.onTextChange(e)
                                                                 }}
                                                                 InputProps={{
+                                                                    autoComplete: 'new-password',
                                                                     endAdornment: (
                                                                         <InputAdornment position="end">
                                                                             <IconButton
@@ -363,11 +370,10 @@ const SmartDialog = ({
                                                                                 sx={classes.no_pading}
                                                                                 onMouseDown={handleMouseDownPassword}
                                                                                 onClick={() =>
-                                                                                    item.setShowPassword(getValues(`${key}`)
-                                                                                    )
+                                                                                    setShowPassword(!showPassword)
                                                                                 }
                                                                             >
-                                                                                <Icon fontSize="small">{`visibility${!!!item.showPassword && "_off"}`}</Icon>
+                                                                                <Icon fontSize="small">{`visibility${showPassword && "_off"}`}</Icon>
                                                                             </IconButton>
                                                                         </InputAdornment>
                                                                     ),
@@ -757,7 +763,7 @@ const SmartDialog = ({
                                                         </>
                                                     )}
                                                 />
-
+                                                {/* ------------------------------------------ Image Upload Begin ----------------------------------------------------- */}
                                                 <Controller
                                                     case={fieldTypes.image.type}
                                                     name={`${key}`}
@@ -767,14 +773,17 @@ const SmartDialog = ({
                                                     render={({ field }) => (
                                                         <>
 
-                                                            <label htmlFor="contained-button-file" >
+                                                            <label htmlFor="contained-button-file" {...field} >
                                                                 <Input
-                                                                    {...field}
                                                                     accept="image/*"
                                                                     id="contained-button-file"
                                                                     multiple
                                                                     type="file"
-                                                                    onChange={imageChange}
+                                                                    onChange={(e) => {
+                                                                        item?.onChange && item?.onChange(e.target.files)
+                                                                        // e.target.values = e.target.files
+                                                                        imageChange(e)
+                                                                    }}
                                                                     error={!!errors[`${key}`]}
                                                                 />
                                                                 <Button
@@ -839,6 +848,63 @@ const SmartDialog = ({
                                                         </>
                                                     )}
                                                 />
+
+
+                                                {/* ------------------------------------------ Image Upload End ----------------------------------------------------- */}
+
+
+
+                                                {/* ------------------------------------------ Image DropZone Begin ----------------------------------------------------- */}
+
+
+                                                <Controller
+                                                    case={fieldTypes.imageDropzone.type}
+                                                    name={`${key}`}
+                                                    control={control}
+                                                    rules={item.validator}
+                                                    defaultValue={item.value}
+                                                    render={({ field }) => {
+                                                        return (
+                                                            <>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    component="span"
+                                                                    size={item.size}
+                                                                    disabled={
+                                                                        (item.disabled && true) ||
+                                                                        (isReadOnly ?? false)
+                                                                    }
+                                                                    onClick={() => { setdropZoneOpen(!dropZoneOpen) }}
+                                                                >
+                                                                    {item.label || <UploadFile />}
+                                                                </Button>
+                                                                <DropzoneDialog
+                                                                    {...field}
+                                                                    fileObjects={[]}
+                                                                    open={dropZoneOpen}
+                                                                    initialFiles={[item?.value]}
+                                                                    onSave={(e, data) => {
+                                                                        field.onChange(data)
+                                                                        item.handleSave(e, data)
+                                                                        setdropZoneOpen(false)
+                                                                    }}
+                                                                    acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+                                                                    showPreviews={true}
+                                                                    maxFileSize={item.maxFileSize ? item.maxFileSize : 5000000}
+                                                                    filesLimit={item.filesLimit ? item.filesLimit : 3}
+                                                                    onClose={() => { setdropZoneOpen(false) }}
+                                                                />
+                                                                {errors[`${key}`] && (
+                                                                    <Typography variant="subtitle1" sx={classes.invalid}>
+                                                                        {errors[`${key}`].message}
+                                                                    </Typography>
+                                                                )}
+                                                            </>
+                                                        )
+                                                    }}
+                                                />
+                                                {/* ------------------------------------------ Image DropZone End ----------------------------------------------------- */}
+
 
                                             </Switch>
                                         }

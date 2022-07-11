@@ -7,26 +7,34 @@ import {
   useStyles,
 } from "@medicorp";
 import { Card } from "@mui/material";
-
-import React from "react";
-
 const Presentation = () => {
-  const { tableRef, presentationData, actions, detailPanel, searchOptions } =
-    usePresentation();
+  const {
+    tableRef,
+    actions,
+    detailPanel,
+    searchOptions,
+    AllPresentation,
+    presentationData,
+    allPresentationLoading,
+    clearCTAButton,
+    filterReportLabel,
+    CTAButtons
+  } = usePresentation();
   const { presentationColumns } = presentationDataColumns();
   const { materialTableStyle: tableStyle } = useStyles();
   return (
     <>
       <Card>
-        <SearchBar options={searchOptions} />
+        <SearchBar options={searchOptions} clearCTAButton={clearCTAButton} CTAButtons={CTAButtons} filterReportLabel={filterReportLabel} />
 
         <MaterialTable
           columns={presentationColumns}
           tableRef={tableRef}
-          data={presentationData}
+          data={presentationData !== undefined ? presentationData : AllPresentation?.data ? AllPresentation?.data : []}
           title={Strings.MENU_PRESENTATIONSS_TITLE}
           actions={actions}
           detailPanel={detailPanel}
+          isLoading={allPresentationLoading}
           options={{
             ...tableStyle,
             selection: true,

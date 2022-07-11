@@ -27,7 +27,7 @@ const Categories = () => {
         <>
             <MaterialTable
                 columns={columns}
-                data={AllCategories?.data}
+                data={AllCategories?.data ? AllCategories?.data : []}
                 title={Strings.MENU_CATEGORIESS_TITLE}
                 actions={actions}
                 editable={editable}

@@ -51,8 +51,16 @@ export const validator = {
       message: "Address not more than 150 characters",
     },
   },
+
+  passwordValidator: {
+    required: { value: true, message: "Password is required" },
+    pattern: {
+      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+      message: "Minimum six characters, at least one letter, one number and one special character",
+    },
+  },
   numberValidator: {
-    required: { value: true, message: "MRP is required" },
+    required: { value: true, message: "Value is required" },
     pattern: {
       value: /^[0-9]{2,5}(?:\.[0-9]{1,2})?$/,
       message: "Enter Invalid value",
@@ -62,24 +70,40 @@ export const validator = {
     required: { value: true, message: `${title} is required!` },
   }),
   timeValidator: {
-    required: { value: true, message: "Time is required" },
+    required: { value: true, message: "Time is required !" },
     pattern: {
       value: /^([01]\d|2[0-3]):?([0-5]\d)$/g,
-      message: "Time is invalid",
+      message: "Time is invalid !",
     },
   },
+  imageValidator: {
+    required: {
+      value: true,
+      message: "Product image is required.",
+    },
+    // validate: {
+    //   lessThan10MB: (files) => {
+    //     console.log(files);
+    //     debugger
+    //     //   // files[0]?.size < 10000000 || "Max Limit of image upload is 10MB"
+    //   },
+    //   // acceptedFormats: (files) =>
+    //   //   ["image/jpeg", "image/png", "image/gif"].includes(files[0]?.type) ||
+    //   //   "Only PNG, JPEG e GIF",
+    // },
+  },
   hourValidator: {
-    required: { value: true, message: "Time is required" },
+    required: { value: true, message: "Time is required !" },
     pattern: {
       value: /^([0]{0,1}[1-9]{1}|[1]\d|[2][0-3])$/g,
       message: "Interval is invalid. Must be a whole number between 1 to 23",
     },
   },
   PriceValidator: {
-    required: { value: true, message: "MRP is required" },
+    required: { value: true, message: "MRP is required !" },
     pattern: {
       value: /^[0-9]*$/,
-      message: "Price is invalid",
+      message: "Price is invalid !",
     },
   },
 };
@@ -147,7 +171,7 @@ const menuItems = [
     to: users.baseURL,
   },
   {
-    id: "presentations",
+    id: "presentation",
     title: MENU_PRESENTATIONSS_TITLE,
     isVisible: true,
     icon: Slideshow,
@@ -187,11 +211,13 @@ export const mainMenuItems = [
     isVisible: true,
   },
   {
-    id: "presentations",
+    id: "presentation",
     children: null,
     isVisible: true,
   },
 ];
+
+
 
 export const getAppMenus = (userMenus) => {
   const getMappedChildMenu = (oc, ac) =>

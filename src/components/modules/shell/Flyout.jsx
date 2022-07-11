@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
 import {
-    Drawer, Toolbar, SwipeableDrawer, Paper, Grid, Box, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography, IconButton, Divider
+    Drawer, Toolbar, SwipeableDrawer, Paper, Grid, Box, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography, IconButton, Divider,
 } from "@mui/material"
 import { ChevronRight, Menu as MenuIcon } from '@mui/icons-material'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useStyles, PropTypes, appSettings, Context } from '@medicorp'
 
 const FlyoutMenuItem = ({ item, classes, nav }) => {
@@ -19,10 +19,17 @@ const SingleLevel = ({ item, classes, nav }) => {
 
         <>
             {hasDivider && <Divider sx={classes.lightDivider} />}
-            <ListItemButton onClick={() => navigate(to, { replace: true })} sx={classes.menuList} selected={selected}>
+            {hasDivider && <Divider sx={classes.lightDivider} />}
+            <MenuItem
+                onClick={() => navigate(to, { replace: true })}
+                component={Link}
+                to={to}
+                selected={selected}
+                sx={[classes.menuList, { padding: "8px 20px" }]}
+            >
                 {ItemIcon && <ListItemIcon><ItemIcon /></ListItemIcon>}
                 <ListItemText primary={title} />
-            </ListItemButton>
+            </MenuItem>
         </>
     )
 }
@@ -30,13 +37,11 @@ const SingleLevel = ({ item, classes, nav }) => {
 const MultiLevel = ({ item, classes, nav }) => {
     const { id: itemId, icon: ItemIcon, title, children } = item
     const navigate = useNavigate()
-
+    const { menuItem } = useStyles()
     const [anchorEl, setAnchorEl] = useState(null)
-
     const [selectedListItem, setSelectedListItem] = useState(false)
     const selectedMenuIndex = children.length > 0 ?
         children.findIndex(cItem => cItem.to.split('/').join('') === nav.location.split('/').join('')) : -1
-
     useEffect(() => {
         setSelectedListItem(nav.base === itemId)
     }, [nav])
@@ -73,6 +78,7 @@ const MultiLevel = ({ item, classes, nav }) => {
                     vertical: 'top',
                     horizontal: 'right',
                 }}
+                component={Link}
                 transformOrigin={{
                     vertical: 'top',
                     horizontal: 'left',
@@ -87,8 +93,9 @@ const MultiLevel = ({ item, classes, nav }) => {
                 </Toolbar>
                 {children.map((child, index) => child.isVisible && (
                     <MenuItem
+                        sx={menuItem}
                         key={child.id}
-                        onClick={() => handleMenuClick(child.to)}
+                        onClick={() => setAnchorEl(null)}
                         selected={index === selectedMenuIndex}
                     >
                         {child.title}
@@ -102,13 +109,14 @@ const MultiLevel = ({ item, classes, nav }) => {
 const Flyout = (props) => {
     const { window, menuObj } = props
     const { mobileOpen, handleDrawerToggle, open } = menuObj
+    const [isMenuOpen, setIsMenuOpen] = useState(true)
 
     const { menus } = useContext(Context)
     const classes = useStyles()
     const url = useLocation()
 
     const location = url.pathname.toLowerCase()
-    const base = location.split('/')[1]
+    const base = location.split('/')[2]
 
     const container = window !== undefined ? () => window().document.body : undefined
 
@@ -149,10 +157,22 @@ const Flyout = (props) => {
                         sx={[classes.smDown, drawerClass]}
                         variant="permanent">
                         <Toolbar variant="dense" disableGutters>
-                            <IconButton
-                                onClick={() => handleDrawerToggle(false)} sx={[classes.smDown, classes.menuIcon]}>
-                                <MenuIcon />
-                            </IconButton>
+                            <Grid container spacing={2}>
+                                <Grid item xs={4} >
+                                    <IconButton
+                                        onClick={() => {
+                                            handleDrawerToggle(false)
+                                            setIsMenuOpen(!isMenuOpen)
+                                        }} sx={[classes.smDown, classes.menuIcon]}>
+                                        <MenuIcon />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item xs={8} sx={classes.title}>
+                                    <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', margin: '4px', display: isMenuOpen ? 'block' : 'none' }}>
+                                        MEDICORP
+                                    </Typography>
+                                </Grid>
+                            </Grid>
                         </Toolbar>
                         <Divider sx={classes.lightDivider} />
                         <Box component="div" sx={classes.drawerContainer}>

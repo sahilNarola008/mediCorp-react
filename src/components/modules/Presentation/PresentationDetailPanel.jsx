@@ -11,13 +11,13 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
         value,
         handleChange,
         productsColumn,
-        doctorsCoumns,
         producstsData,
-        doctorsData
-    } = usePresentationDetailPanel()
+        presentationProductLoading
+    } = usePresentationDetailPanel(presentationId)
 
     const { materialTableStyle: tableStyle } = useStyles()
     const navigate = useNavigate()
+    console.log(producstsData);
     return (
         <>
             <Box sx={{ typography: 'body1' }}>
@@ -29,7 +29,7 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
                                 <TabList onChange={handleChange} aria-label="Job Tab" variant="scrollable"
                                     scrollButtons="auto">
                                     <Tab label="ProductList" value="1" />
-                                    <Tab label="Doctors Details" value="2" />
+                                    {/* <Tab label="Doctors Details" value="2" /> */}
 
                                     {isEditOption === true ? <Button
 
@@ -45,10 +45,11 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
                     <TabPanel sx={{ backgroundColor: 'grey.200' }} value="1">
                         <MaterialTable
                             columns={productsColumn}
-                            data={producstsData?.data}
+                            data={producstsData ? producstsData : []}
                             components={{
                                 Toolbar: props => <></>
                             }}
+                            isLoading={presentationProductLoading}
                             options={{
                                 ...tableStyle,
                                 selection: false,
@@ -63,7 +64,7 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
                             }} />
                     </TabPanel>
 
-                    <TabPanel sx={{ backgroundColor: 'grey.200' }} value="2">
+                    {/* <TabPanel sx={{ backgroundColor: 'grey.200' }} value="2">
                         <MaterialTable
                             columns={doctorsCoumns}
                             data={doctorsData?.data}
@@ -82,7 +83,7 @@ const PresentationDetailPanel = ({ presentationId, isEditOption = false }) => {
                                 sorting: false,
                                 paging: false
                             }} />
-                    </TabPanel>
+                    </TabPanel> */}
                 </TabContext>
             </Box>
         </>

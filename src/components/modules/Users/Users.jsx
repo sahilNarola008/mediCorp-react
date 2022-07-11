@@ -18,7 +18,6 @@ const Users = () => {
     modalFormResetKeys,
     modalTaskRunning,
     columns,
-    editable
   } = useUsers()
 
   const { materialTableStyle: tableStyle } = useStyles()
@@ -26,10 +25,9 @@ const Users = () => {
     <>
       <MaterialTable
         columns={columns}
-        data={user}
+        data={users?.data ? users?.data : []}
         title={Strings.COLUMN_USERS_TITLE}
         actions={actions}
-        editable={editable}
         options={{
           ...tableStyle,
           selection: false

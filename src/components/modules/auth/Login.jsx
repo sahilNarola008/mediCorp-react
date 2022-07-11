@@ -1,4 +1,4 @@
-import { useLogin, SmartContent } from "@medicorp";
+import { useLogin, SmartContent, Strings } from "@medicorp";
 import {
   Avatar,
   Box,
@@ -26,6 +26,9 @@ const Login = () => {
     freeAction,
     token,
     statusCode,
+    handleForgotPassword,
+    isForgotPassword,
+    resetPassword
   } = useLogin();
   return (
     <>
@@ -74,6 +77,7 @@ const Login = () => {
                 justifyContent: "center",
                 margin: "auto",
                 padding: "25px",
+                width: "65%"
               }}
             >
               <Avatar sx={{ m: 1, bgcolor: blue[500] }}>
@@ -84,7 +88,7 @@ const Login = () => {
                 variant="h5"
                 sx={{ fontWeight: "bold" }}
               >
-                Login
+                {!isForgotPassword ? "Login" : "Reset Password"}
               </Typography>
               {/* <Typography
                 variant="p"
@@ -102,6 +106,10 @@ const Login = () => {
                 formTaskRunning={formTaskRunning}
                 freeAction={freeAction}
               />
+              <Link onClick={() => {
+                !isForgotPassword && handleForgotPassword(!isForgotPassword)
+                resetPassword && handleForgotPassword(!resetPassword)
+              }}>{(isForgotPassword || resetPassword) ? Strings.BACK_TO_LOGIN : Strings.FORGOT_PASSWORD}</Link>
             </Box>
           </Grid>
         </Grid>
