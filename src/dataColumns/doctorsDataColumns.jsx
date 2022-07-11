@@ -18,6 +18,7 @@ export default function doctorsDataColumns() {
                             <Man />
                         </Avatar>
                     )
+
                 } else {
                     return (
                         <Avatar sx={{ bgcolor: pink[400] }}>
