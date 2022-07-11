@@ -222,7 +222,7 @@ const useProducts = () => {
         size: "small",
         col: 12,
         type: fieldTypes.imageDropzone.type,
-        value: `https://pragalbhsoftware.blob.core.windows.net/orga/${rowData?.images[0]?.imageUrl}` ?? [],
+        value: `https://pragalbhsoftware.blob.core.windows.net/orga/${rowData?.images?.[0]?.imageUrl}` ?? [],
         handleSave: (e, data) => {
           productImages = e[0]
         },

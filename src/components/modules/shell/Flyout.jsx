@@ -39,7 +39,6 @@ const MultiLevel = ({ item, classes, nav }) => {
     const navigate = useNavigate()
     const { menuItem } = useStyles()
     const [anchorEl, setAnchorEl] = useState(null)
-
     const [selectedListItem, setSelectedListItem] = useState(false)
     const selectedMenuIndex = children.length > 0 ?
         children.findIndex(cItem => cItem.to.split('/').join('') === nav.location.split('/').join('')) : -1
@@ -110,6 +109,7 @@ const MultiLevel = ({ item, classes, nav }) => {
 const Flyout = (props) => {
     const { window, menuObj } = props
     const { mobileOpen, handleDrawerToggle, open } = menuObj
+    const [isMenuOpen, setIsMenuOpen] = useState(true)
 
     const { menus } = useContext(Context)
     const classes = useStyles()
@@ -160,12 +160,15 @@ const Flyout = (props) => {
                             <Grid container spacing={2}>
                                 <Grid item xs={4} >
                                     <IconButton
-                                        onClick={() => handleDrawerToggle(false)} sx={[classes.smDown, classes.menuIcon]}>
+                                        onClick={() => {
+                                            handleDrawerToggle(false)
+                                            setIsMenuOpen(!isMenuOpen)
+                                        }} sx={[classes.smDown, classes.menuIcon]}>
                                         <MenuIcon />
                                     </IconButton>
                                 </Grid>
                                 <Grid item xs={8} sx={classes.title}>
-                                    <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', margin: '4px' }}>
+                                    <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', margin: '4px', display: isMenuOpen ? 'none' : 'block' }}>
                                         MEDICORP
                                     </Typography>
                                 </Grid>

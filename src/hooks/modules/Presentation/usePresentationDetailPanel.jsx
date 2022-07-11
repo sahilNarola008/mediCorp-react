@@ -20,7 +20,7 @@ const usePresentationDetailPanel = (presentationId) => {
                 presentationId
             ),
         }).then((res) => {
-            setProducstsData(res.data.data.products)
+            setProducstsData(res.data.data)
         })
     }, [])
     const handleChange = (event, newValue) => {

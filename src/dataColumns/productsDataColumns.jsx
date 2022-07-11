@@ -39,7 +39,7 @@ export default function productsDataColumns() {
         {
             title: Strings.COLUMN_PRODUCT_IMAGES, field: 'uploadImage', render: rowData => {
                 return (
-                    <Avatar alt={rowData.name} src={imageBaseURL + rowData?.images[0].imageUrl} sx={{ width: 56, height: 56 }} />
+                    <Avatar alt={rowData.name} src={rowData?.images[0]?.imageUrl} sx={{ width: 56, height: 56 }} />
                 )
             }
         },

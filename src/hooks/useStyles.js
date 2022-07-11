@@ -391,6 +391,14 @@ const useStyles = () => {
     menuItem: {
       padding: '10px 16px'
     },
+    footer: {
+      width: '100%',
+      position: 'fixed',
+      backgroundColor: '#363435',
+      bottom: '0',
+      color: 'white',
+      textAlign: 'center'
+    }
 
 
   };
