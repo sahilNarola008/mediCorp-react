@@ -168,7 +168,7 @@ const Flyout = (props) => {
                                     </IconButton>
                                 </Grid>
                                 <Grid item xs={8} sx={classes.title}>
-                                    <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', margin: '4px', display: isMenuOpen ? 'none' : 'block' }}>
+                                    <Typography variant="h6" gutterBottom component="div" style={{ color: "#94121a", fontWeight: 'bold', margin: '4px', display: isMenuOpen ? 'block' : 'none' }}>
                                         MEDICORP
                                     </Typography>
                                 </Grid>
