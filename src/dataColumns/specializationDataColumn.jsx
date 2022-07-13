@@ -6,9 +6,12 @@ function specializationDataColumn() {
         { title: Strings.COLUMN_ID, field: 'specialityId', editable: 'never' },
         {
             title: Strings.COLUMN_SPECIALIZATION, field: "title", render: rowData => (
-                <Chip
+                rowData.title ? <Chip
                     label={rowData.title}
-                    color={"info"} />
+                    color={"info"} /> :
+                    <Chip
+                        label={rowData}
+                        color={"info"} />
             )
         },
         {

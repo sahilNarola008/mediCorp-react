@@ -8,10 +8,11 @@ import {
   Strings,
   validator,
 } from "@medicorp";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const useLogin = () => {
+  const ref = useRef()
   const { parseJwt } = config();
   const { fieldTypes, endpointConfig, statusType } = appSettings;
   const { setAppItem, getAppItem } = useLocalStorage();
@@ -154,7 +155,7 @@ const useLogin = () => {
             size: "small",
             variant: "outlined",
             col: 12,
-            validator: validator.requiredValidator(Strings.EMAIL)
+            validator: validator.emailValidator
           }
         } :
         (resetPassword ?
@@ -167,7 +168,7 @@ const useLogin = () => {
               col: 12,
               value: userInputData.email,
               disabled: true,
-              validator: validator.requiredValidator(Strings.EMAIL)
+              validator: validator.emailValidator
             },
             otp: {
               label: Strings.OTP,
@@ -185,7 +186,7 @@ const useLogin = () => {
               col: 12,
               type: fieldTypes.password.type,
               value: "",
-              validator: validator.requiredValidator(Strings.NEW_PASSWORD)
+              validator: validator.passwordValidator
             },
             confirmPassword: {
               label: Strings.CONFIRM_NEW_PASSWORD,
@@ -194,7 +195,11 @@ const useLogin = () => {
               col: 12,
               type: fieldTypes.password.type,
               value: "",
-              validator: validator.requiredValidator(Strings.CONFIRM_NEW_PASSWORD)
+              match: {
+                field: "newPassword",
+                errorMsg: "both password are not matching!",
+              },
+              // validator: validator.confirmPasswordValidator("newPassword")
             },
           } :
           {
@@ -205,7 +210,7 @@ const useLogin = () => {
               variant: "outlined",
               col: 12,
               value: "",
-              validator: validator.requiredValidator(Strings.EMAIL)
+              validator: validator.emailValidator
             },
             password: {
               label: Strings.PASSWORD,
@@ -214,7 +219,7 @@ const useLogin = () => {
               col: 12,
               type: fieldTypes.password.type,
               value: "",
-              validator: validator.requiredValidator(Strings.PASSWORD)
+              validator: validator.passwordValidator
             },
           }
         )

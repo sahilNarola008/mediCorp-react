@@ -9,17 +9,25 @@ export default function categoriesDataColumns() {
                         title: Strings.MENU_CATEGORIESS_TITLE,
                         field: 'categoryName',
                         render: rowData => {
-                                if (rowData.isActive) {
-                                        return (
-                                                <Chip
-                                                        label={rowData.categoryName}
-                                                        sx={{ bgcolor: blue[500], color: 'white' }} />
-                                        )
+                                if (rowData?.isActive) {
+                                        if (rowData?.isActive) {
+                                                return (
+                                                        <Chip
+                                                                label={rowData?.categoryName}
+                                                                sx={{ bgcolor: blue[500], color: 'white' }} />
+                                                )
+                                        } else {
+                                                return (
+                                                        <Chip
+                                                                label={rowData?.categoryName}
+                                                                sx={{ bgcolor: grey[500], color: 'white' }} />
+                                                )
+                                        }
                                 } else {
                                         return (
                                                 <Chip
-                                                        label={rowData.categoryName}
-                                                        sx={{ bgcolor: grey[500], color: 'white' }} />
+                                                        label={rowData}
+                                                        sx={{ bgcolor: blue[500], color: 'white' }} />
                                         )
                                 }
                         }

@@ -9,17 +9,25 @@ export default function productsDataColumns() {
         {
             title: Strings.COLUMN_CATEGORY_NAME, field: 'categoryName',
             render: rowData => {
-                if (rowData.isActive) {
-                    return (
-                        <Chip
-                            label={rowData.categoryName}
-                            sx={{ bgcolor: blue[500], color: 'white' }} />
-                    )
+                if (rowData?.isActive !== undefined) {
+                    if (rowData.isActive) {
+                        return (
+                            <Chip
+                                label={rowData.categoryName}
+                                sx={{ bgcolor: blue[500], color: 'white' }} />
+                        )
+                    } else {
+                        return (
+                            <Chip
+                                label={rowData.categoryName}
+                                sx={{ bgcolor: grey[500], color: 'white' }} />
+                        )
+                    }
                 } else {
                     return (
                         <Chip
-                            label={rowData.categoryName}
-                            sx={{ bgcolor: grey[500], color: 'white' }} />
+                            label={rowData}
+                            sx={{ bgcolor: blue[500], color: 'white' }} />
                     )
                 }
             }

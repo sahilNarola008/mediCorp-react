@@ -66,6 +66,16 @@ export const validator = {
       message: "Enter Invalid value",
     },
   },
+  confirmPasswordValidator: (value) => {
+    debugger
+    return ({
+      required: { value: true, message: `password is required!` },
+      pattern: {
+        value: /^([01]\d|2[0-3]):?([0-5]\d)$/g,
+        message: "Time is invalid !",
+      },
+    })
+  },
   requiredValidator: (title) => ({
     required: { value: true, message: `${title} is required!` },
   }),

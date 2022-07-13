@@ -42,6 +42,7 @@ const SmartDialog = ({
         clearErrors,
         reset,
         getValues,
+        watch
     } = useForm()
     const classes = useStyles()
     const stylingOptions = classes.materialTableStyle
@@ -339,6 +340,7 @@ const SmartDialog = ({
                                                             ? {
                                                                 validate: (value) =>
                                                                     getValues(`${item.match.field}`) === value,
+                                                                errorMsg: item.match.errorMsg,
                                                             }
                                                             : item.validator
                                                     }
@@ -716,7 +718,7 @@ const SmartDialog = ({
                                                                         field.onChange(e)
                                                                         item.onChange && item.onChange(key, e)
                                                                     }}
-                                                                    renderInput={(params) => <TextField {...params} />}
+                                                                    renderInput={(params) => <TextField sx={{ width: '100%' }}  {...params} />}
                                                                 />
                                                             </LocalizationProvider>
                                                             {
