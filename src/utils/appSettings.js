@@ -40,6 +40,9 @@ const appSettings = {
     presentation: {
       baseURL: "/admin/presentation",
     },
+    presentationHistory: {
+      baseURL: "/admin/presentation-history",
+    },
   },
 
   endpointConfig: {
@@ -111,6 +114,10 @@ const appSettings = {
       createPresentation: "/ApiUserPresentation/CreatePresentation",
       updatePresentation: "/ApiUserPresentation/UpdatePresentation",
       deletePresentation: "/ApiUserPresentation/DeletePresentation?id=5",
+    },
+    presentationHistory: {
+      GetPresentationHistory: "/UserPresentationHistory/GetPresentationHistory",
+      CreatePresentationHistory: "/UserPresentationHistory/CreatePresentationHistory",
     },
     city: {
       getAll: "/ApiCityMaster/GetCity",

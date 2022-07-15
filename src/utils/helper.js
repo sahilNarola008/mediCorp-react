@@ -4,6 +4,7 @@ import {
   Group,
   Inventory,
   Slideshow,
+  WorkHistory
 } from "@mui/icons-material";
 import { Strings, appSettings, uuidv4, moment, PropTypes } from "@medicorp";
 
@@ -126,6 +127,7 @@ const {
   specialization,
   users,
   presentation,
+  presentationHistory
 } = appSettings.routeConfig;
 const {
   MENU_DASHBOARD_TITLE,
@@ -135,6 +137,7 @@ const {
   MENU_DOCTORS_SPECIALIZATION_TITLE,
   MENU_USERS_TITLE,
   MENU_PRESENTATIONSS_TITLE,
+  MENU_PRESENTATIONS_HISTORY_TITLE
 } = Strings;
 
 const menuItems = [
@@ -187,6 +190,13 @@ const menuItems = [
     icon: Slideshow,
     to: presentation.baseURL,
   },
+  {
+    id: "presentationHistory",
+    title: MENU_PRESENTATIONS_HISTORY_TITLE,
+    isVisible: true,
+    icon: WorkHistory,
+    to: presentationHistory.baseURL,
+  },
 ];
 
 export const mainMenuItems = [
@@ -222,6 +232,11 @@ export const mainMenuItems = [
   },
   {
     id: "presentation",
+    children: null,
+    isVisible: true,
+  },
+  {
+    id: "presentationHistory",
     children: null,
     isVisible: true,
   },

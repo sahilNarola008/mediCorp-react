@@ -486,16 +486,16 @@ const SmartDialog = ({
                                                                     {...field}
                                                                     checked={field.value === item.selectedValue}
                                                                     color="primary"
-                                                                    disabled={
-                                                                        (item.disabled && true) ||
-                                                                        (isReadOnly ?? false)
-                                                                    }
                                                                     onChange={(e) => {
                                                                         field.onChange(e)
                                                                         item.onCheckedChange && item.onCheckedChange(e.target.value)
                                                                     }}
                                                                 // sx={item.display ?? classes.shown}
                                                                 />
+                                                            }
+                                                            disabled={
+                                                                (item.disabled && true) ||
+                                                                (isReadOnly ?? false)
                                                             }
                                                             label={item.label}
                                                             labelPlacement="end"
@@ -510,7 +510,12 @@ const SmartDialog = ({
                                                     rules={item.validator}
                                                     defaultValue={item.value}
                                                     render={({ field }) => (
-                                                        <FormControl>
+                                                        <FormControl
+                                                            disabled={
+                                                                (item.disabled && true) ||
+                                                                (isReadOnly ?? false)
+                                                            }
+                                                        >
                                                             <FormLabel>{item.label}</FormLabel>
                                                             <RadioGroup
                                                                 {...field}
