@@ -20,6 +20,7 @@ const PresentationHistory = () => {
         modalTaskRunning,
         handleModalClose,
         openDialog,
+        actions
     } = usePresentationHistory();
 
     const { materialTableStyle: tableStyle } = useStyles();
@@ -32,7 +33,7 @@ const PresentationHistory = () => {
                     tableRef={tableRef}
                     data={AllPresentationHistory?.data ?? []}
                     title={Strings.MENU_PRESENTATIONSS_TITLE}
-                    // actions={actions}
+                    actions={actions}
                     // detailPanel={detailPanel}
                     isLoading={AllPresentationHistoryLoading}
                     options={{

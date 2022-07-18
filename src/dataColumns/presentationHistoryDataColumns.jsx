@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Chip, IconButton } from "@mui/material"
 import { LoadingButton, Strings } from "@medicorp"
 import { blue } from "@mui/material/colors"
 import { Place } from "@mui/icons-material"
-export default function presentationHistoryDataColumns(handleDoctorNameClick, isDoctorLoading, handleUserNameClick, isUserLoading, handlePresentationClick, isPresentationLoading) {
+export default function presentationHistoryDataColumns(handleDoctorNameClick, handleUserNameClick, handlePresentationClick) {
     const presentationHistoryColumns = [
         { title: Strings.COLUMN_ID, field: 'historyId' },
         { title: Strings.COLUMN_PRESENTATION_ID, field: 'presentationId' },
@@ -11,9 +11,9 @@ export default function presentationHistoryDataColumns(handleDoctorNameClick, is
             render: rowData => <LoadingButton
                 size="small"
                 onClick={() => { handleDoctorNameClick(rowData?.doctorId) }}
-                loading={isDoctorLoading}
                 // loadingIndicator="Loading…"
                 variant="outlined"
+                key={rowData?.doctorName + rowData?.doctorId}
             >
                 {rowData?.doctorName}
             </LoadingButton>
@@ -22,10 +22,12 @@ export default function presentationHistoryDataColumns(handleDoctorNameClick, is
             title: Strings.COLUMNS_USERNAME_TILTLE, field: 'userName',
             render: rowData => <LoadingButton
                 size="small"
-                onClick={() => { handleUserNameClick(rowData?.userId) }}
-                loading={isUserLoading}
+                onClick={() => {
+                    handleUserNameClick(rowData?.userId)
+                }}
                 // loadingIndicator="Loading…"
                 variant="outlined"
+                key={rowData?.userName + rowData?.userId}
             >
                 {rowData?.userName}
             </LoadingButton>
@@ -35,9 +37,9 @@ export default function presentationHistoryDataColumns(handleDoctorNameClick, is
             render: rowData => <LoadingButton
                 size="small"
                 onClick={() => { handlePresentationClick(rowData?.presentationId) }}
-                loading={isPresentationLoading}
                 // loadingIndicator="Loading…"
                 variant="outlined"
+                key={rowData?.presenationTitle + rowData?.presentationId}
             >
                 {rowData?.presenationTitle}
             </LoadingButton>

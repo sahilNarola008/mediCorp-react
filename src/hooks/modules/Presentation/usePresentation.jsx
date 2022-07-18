@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import {
     useTableIcons,
     useConfirm,
@@ -7,13 +7,16 @@ import {
     appSettings,
     useAxios,
     format,
+    Context,
 } from "@medicorp"
+import * as XLSX from "xlsx"
 
 const usePresentation = () => {
     const tableRef = useRef()
     const confirm = useConfirm()
+    const { setIsLoading, logMessage } = useContext(Context)
     const { tableIcons } = useTableIcons()
-    const { fieldTypes, endpointConfig } = appSettings
+    const { fieldTypes, endpointConfig, statusType } = appSettings
 
     const [presentationData, setPresentationData] = useState()
     const [filterReportLabel, setFilterReportLabel] = useState(["All"])
@@ -25,7 +28,10 @@ const usePresentation = () => {
         sDoctor: null,
         sUser: null,
     })
-
+    const [
+        { data: AllProducts, loading: allProductsLoading },
+        refetchAllProducts,
+    ] = useAxios(endpointConfig.products.getAll);
     const [
         { data: AllPresentation, loading: allPresentationLoading },
         refetchAllPresentation,
@@ -46,6 +52,50 @@ const usePresentation = () => {
         endpointConfig.presentation.getPresentationByUserId,
         { manual: true }
     )
+
+    const [{ }, presentationProduct,] = useAxios(endpointConfig.presentation.getPresentationProductByPresentationId, { manual: true });
+
+    const downloadToExcel = () => {
+
+        setIsLoading(true)
+        try {
+            const excelExportData = AllPresentation?.data.map((presentationData) => {
+                return ({
+                    presentationId: presentationData.presentationId,
+                    doctorName: presentationData.doctorName,
+                    userName: presentationData.userName,
+                    // presentationProduct: presentationData.products
+                })
+            })
+            const workSheet = XLSX.utils.json_to_sheet(excelExportData)
+            const workBook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workBook, workSheet, "Presentation")
+            let buf = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" })
+            XLSX.write(workBook, { bookType: "xlsx", type: "binary" })
+            XLSX.writeFile(workBook, "Presentation.xlsx")
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 1000);
+        } catch (error) {
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 1000);
+            console.log(error)
+            logMessage({
+                severity: statusType.error,
+                msg: "Error Downloading File!"
+            })
+        }
+    }
+
+    const actions = [
+        {
+            icon: tableIcons.FileDownload,
+            tooltip: "Export to Excel",
+            isFreeAction: true,
+            onClick: () => downloadToExcel(),
+        },
+    ];
 
 
     const detailPanel = [
@@ -268,7 +318,8 @@ const usePresentation = () => {
         allPresentationLoading,
         clearCTAButton,
         filterReportLabel,
-        CTAButtons
+        CTAButtons,
+        actions
     }
 }
 

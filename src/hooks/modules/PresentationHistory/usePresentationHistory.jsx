@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import {
     useTableIcons,
     useConfirm,
@@ -9,12 +9,14 @@ import {
     format,
     presentationHistoryDataColumns,
     presentationDataColumns,
+    Context,
 } from "@medicorp"
-
+import * as XLSX from "xlsx"
 const usePresentationHistory = () => {
     const tableRef = useRef()
     const confirm = useConfirm()
     const { tableIcons } = useTableIcons()
+    const { setIsLoading } = useContext(Context);
     const { fieldTypes, endpointConfig } = appSettings
 
     const [openDialog, setOpenDialog] = useState(false);
@@ -47,16 +49,57 @@ const usePresentationHistory = () => {
         {
             tooltip: "View details",
             render: ({ rowData }) => {
-                debugger
                 return (
-                    <PresentationDetailPanel presentationId={rowData.presentationId} />
+                    <PresentationDetailPanel presentationId={rowData?.presentationId} />
                 )
             },
         },
     ]
 
+
+
+    const downloadToExcel = () => {
+
+        const excelExportData = AllPresentationHistory?.data.map((data) => {
+            console.log(Object.keys(data))
+            return (
+                {
+                    historyId: data?.historyId,
+                    presentationId: data?.presentationId,
+                    doctorName: data?.doctorName,
+                    userName: data?.userName,
+                    presenationTitle: data?.presenationTitle,
+                    cityName: data?.cityName,
+                    stateName: data?.stateName,
+                    countryName: data?.countryName,
+                    organizationName: data?.organizationName,
+                    emailId: data?.emailId,
+                    presentationStartDate: data?.presentationStartDate,
+                    presentationEndDate: data?.presentationEndDate
+                }
+            )
+        })
+        const workSheet = XLSX.utils.json_to_sheet(excelExportData)
+        const workBook = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(workBook, workSheet, "PresentationHistory")
+        let buf = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" })
+        XLSX.write(workBook, { bookType: "xlsx", type: "binary" })
+        XLSX.writeFile(workBook, "PresentationHistory.xlsx")
+    }
+
+    const actions = [
+        {
+            icon: tableIcons.FileDownload,
+            tooltip: "Export to Excel",
+            isFreeAction: true,
+            onClick: () => downloadToExcel(),
+        },
+    ];
+
+
+
     const handlePresentationClick = (presentationId) => {
-        setIsPresentationLoading(true)
+        setIsLoading(true)
         getPresentationByPresentationId(format(endpointConfig.presentation.getPresentationByPresentationId, presentationId)).then((res) => {
             const { data } = res?.data
             setModalHeader({
@@ -86,12 +129,12 @@ const usePresentationHistory = () => {
         }).catch((err) => {
             console.log(err)
         }).finally((res) => {
-            setIsPresentationLoading(false)
+            setIsLoading(false)
         })
     }
 
     const handleDoctorNameClick = (doctorId) => {
-        setIsDoctorLoading(true)
+        setIsLoading(true)
         getDoctorsById(format(endpointConfig.doctors.getDoctorsById, doctorId)).then((res) => {
             const { data } = res?.data
             const genderOptions = [
@@ -257,12 +300,12 @@ const usePresentationHistory = () => {
         }).catch((err) => {
             console.log(err)
         }).finally((res) => {
-            setIsDoctorLoading(false)
+            setIsLoading(false)
         })
     }
 
     const handleUserNameClick = (userId) => {
-        setIsUserLoading(true)
+        setIsLoading(true)
         getUsersById(format(endpointConfig.users.getUsersById, userId)).then(async (res) => {
             const { data } = res?.data
             setModalHeader({
@@ -326,7 +369,7 @@ const usePresentationHistory = () => {
         }).catch((err) => {
             console.log(err)
         }).finally((res) => {
-            setIsUserLoading(false)
+            setIsLoading(false)
         })
     }
 
@@ -334,7 +377,7 @@ const usePresentationHistory = () => {
         setOpenDialog(false);
         setModalFormResetKeys([]);
     };
-    const { presentationHistoryColumns } = presentationHistoryDataColumns(handleDoctorNameClick, isDoctorLoading, handleUserNameClick, isUserLoading, handlePresentationClick, isPresentationLoading);
+    const { presentationHistoryColumns } = presentationHistoryDataColumns(handleDoctorNameClick, handleUserNameClick, handlePresentationClick);
     return {
         tableRef,
         AllPresentationHistory,
@@ -347,6 +390,7 @@ const usePresentationHistory = () => {
         modalTaskRunning,
         handleModalClose,
         openDialog,
+        actions
     }
 }
 
