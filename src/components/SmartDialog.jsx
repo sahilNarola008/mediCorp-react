@@ -42,6 +42,7 @@ const SmartDialog = ({
         clearErrors,
         reset,
         getValues,
+        watch
     } = useForm()
     const classes = useStyles()
     const stylingOptions = classes.materialTableStyle
@@ -153,7 +154,7 @@ const SmartDialog = ({
                     <Grid container spacing={2}>
                         {modalContent &&
                             Object.entries(modalContent).map(([key, item]) =>
-                                item.type === fieldTypes.table.type ? (
+                                item.type === fieldTypes?.table8?.type ? (
                                     <Grid key={key} item xs={12} md={item.col}>
                                         <MaterialTable
                                             title={item.label}
@@ -187,6 +188,41 @@ const SmartDialog = ({
                                         {
                                             <Switch on={item.type ?? fieldTypes.text.type}>
                                                 <Typography case={fieldTypes.label.type} variant={item.variant} sx={item.sx}>{item.value}</Typography>
+                                                <Controller
+                                                    case={fieldTypes.table.type}
+                                                    control={control}
+                                                    rules={item.validator}
+                                                    name={`${key}`}
+                                                    defaultValue={item.value}
+                                                    render={({ field }) => (
+                                                        <>
+                                                            <Grid key={key} item xs={12} md={item.col}>
+                                                                <MaterialTable
+                                                                    title={item.label}
+                                                                    tableRef={item.ref}
+                                                                    icons={tableIcons}
+                                                                    columns={item.columns}
+                                                                    data={item.data}
+                                                                    editable={item.editable}
+                                                                    detailPanel={item.detailPanel}
+                                                                    components={item.components}
+                                                                    localization={item.localization}
+                                                                    options={{
+                                                                        ...stylingOptions,
+                                                                        pageSize: 3,
+                                                                        pageSizeOptions: [3, 5, 10, 20],
+                                                                        search: true,
+                                                                        padding: "dense",
+                                                                        ...item.tableOptions,
+                                                                    }}
+                                                                    onChange={(e) => {
+                                                                        field.onChange(e)
+                                                                    }}
+                                                                />
+                                                            </Grid>
+                                                        </>
+                                                    )}
+                                                />
                                                 <Controller
                                                     case={fieldTypes.select.type}
                                                     control={control}
@@ -339,6 +375,7 @@ const SmartDialog = ({
                                                             ? {
                                                                 validate: (value) =>
                                                                     getValues(`${item.match.field}`) === value,
+                                                                errorMsg: item.match.errorMsg,
                                                             }
                                                             : item.validator
                                                     }
@@ -484,16 +521,16 @@ const SmartDialog = ({
                                                                     {...field}
                                                                     checked={field.value === item.selectedValue}
                                                                     color="primary"
-                                                                    disabled={
-                                                                        (item.disabled && true) ||
-                                                                        (isReadOnly ?? false)
-                                                                    }
                                                                     onChange={(e) => {
                                                                         field.onChange(e)
                                                                         item.onCheckedChange && item.onCheckedChange(e.target.value)
                                                                     }}
                                                                 // sx={item.display ?? classes.shown}
                                                                 />
+                                                            }
+                                                            disabled={
+                                                                (item.disabled && true) ||
+                                                                (isReadOnly ?? false)
                                                             }
                                                             label={item.label}
                                                             labelPlacement="end"
@@ -508,7 +545,12 @@ const SmartDialog = ({
                                                     rules={item.validator}
                                                     defaultValue={item.value}
                                                     render={({ field }) => (
-                                                        <FormControl>
+                                                        <FormControl
+                                                            disabled={
+                                                                (item.disabled && true) ||
+                                                                (isReadOnly ?? false)
+                                                            }
+                                                        >
                                                             <FormLabel>{item.label}</FormLabel>
                                                             <RadioGroup
                                                                 {...field}
@@ -716,7 +758,7 @@ const SmartDialog = ({
                                                                         field.onChange(e)
                                                                         item.onChange && item.onChange(key, e)
                                                                     }}
-                                                                    renderInput={(params) => <TextField {...params} />}
+                                                                    renderInput={(params) => <TextField sx={{ width: '100%' }}  {...params} />}
                                                                 />
                                                             </LocalizationProvider>
                                                             {

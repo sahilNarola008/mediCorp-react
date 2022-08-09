@@ -40,6 +40,9 @@ const appSettings = {
     presentation: {
       baseURL: "/admin/presentation",
     },
+    presentationHistory: {
+      baseURL: "/admin/presentation-history",
+    },
   },
 
   endpointConfig: {
@@ -105,12 +108,17 @@ const appSettings = {
     presentation: {
       getAll: "/ApiUserPresentation/GetPresentation",
       getPresentationByPresentationId: "/ApiUserPresentation/GetPresentationByPresentationId?id={0}",
-      getPresentationByUserId: "/ApiUserPresentation/GetPresentationByUserId?id={0}",
+      getPresentationByUserId: "/ApiUserPresentation/GetUserPresentation?id={0}",
       getPresentationByDoctorId: "/ApiUserPresentation/GetPresentationByDoctorId?id={0}",
       getPresentationProductByPresentationId: "/ApiUserPresentation/GetPresentationProductByPresentationId?id={0}",
       createPresentation: "/ApiUserPresentation/CreatePresentation",
+      updatePresentationForMobile: "/ApiUserPresentation/UpdatePresentationForMobile",
       updatePresentation: "/ApiUserPresentation/UpdatePresentation",
       deletePresentation: "/ApiUserPresentation/DeletePresentation?id=5",
+    },
+    presentationHistory: {
+      GetPresentationHistory: "/ApiUserPresentationHistory/GetPresentationHistory",
+      CreatePresentationHistory: "/ApiUserPresentationHistory/CreatePresentationHistory",
     },
     city: {
       getAll: "/ApiCityMaster/GetCity",

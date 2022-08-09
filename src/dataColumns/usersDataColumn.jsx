@@ -12,18 +12,34 @@ function usersDataColumn() {
             title: Strings.COLUMN_GENDER,
             field: 'gender',
             render: rowData => {
-                if (rowData.gender === "Male") {
-                    return (
-                        <Avatar sx={{ bgcolor: blue[500] }}>
-                            <Man />
-                        </Avatar>
-                    )
+                if (rowData.gender !== undefined) {
+                    if (rowData.gender === "Male") {
+                        return (
+                            <Avatar sx={{ bgcolor: blue[500] }}>
+                                <Man />
+                            </Avatar>
+                        )
+                    } else {
+                        return (
+                            <Avatar sx={{ bgcolor: pink[400] }}>
+                                <Woman />
+                            </Avatar>
+                        )
+                    }
                 } else {
-                    return (
-                        <Avatar sx={{ bgcolor: pink[400] }}>
-                            <Woman />
-                        </Avatar>
-                    )
+                    if (rowData === "Male") {
+                        return (
+                            <Avatar sx={{ bgcolor: blue[500] }}>
+                                <Man />
+                            </Avatar>
+                        )
+                    } else {
+                        return (
+                            <Avatar sx={{ bgcolor: pink[400] }}>
+                                <Woman />
+                            </Avatar>
+                        )
+                    }
                 }
             }
         },

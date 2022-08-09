@@ -2,6 +2,7 @@ import MaterialTable from "@material-table/core";
 import {
   presentationDataColumns,
   SearchBar,
+  SmartDialog,
   Strings,
   usePresentation,
   useStyles,
@@ -9,6 +10,13 @@ import {
 import { Card } from "@mui/material";
 const Presentation = () => {
   const {
+    modalHeader,
+    modalContent,
+    modalActions,
+    modalFormResetKeys,
+    modalTaskRunning,
+    handleModalClose,
+    openDialog,
     tableRef,
     actions,
     detailPanel,
@@ -37,7 +45,7 @@ const Presentation = () => {
           isLoading={allPresentationLoading}
           options={{
             ...tableStyle,
-            selection: true,
+            selection: false,
             filtering: false,
             grouping: false,
             columnsButton: false,
@@ -48,6 +56,15 @@ const Presentation = () => {
           }}
         />
       </Card>
+      <SmartDialog
+        open={openDialog}
+        handleClose={handleModalClose}
+        modalHeader={modalHeader}
+        modalContent={modalContent}
+        modalActions={modalActions}
+        modalFormResetKeys={modalFormResetKeys}
+        modalTaskRunning={modalTaskRunning}
+      />
     </>
   );
 };

@@ -179,8 +179,8 @@ const useUsers = () => {
                 type: fieldTypes.radioGroup.type,
                 value: rowData?.gender ?? "",
                 options: [
-                    { text: "Male", val: "male" },
-                    { text: "Female", val: "female" }
+                    { text: "Male", val: "Male" },
+                    { text: "Female", val: "Female" }
                 ],
                 alignItems: 'center',
                 flexDirection: 'column',
@@ -204,7 +204,7 @@ const useUsers = () => {
                 variant: "outlined",
                 col: 6,
                 type: fieldTypes.text.type,
-                value: rowData?.phone ?? "",
+                value: rowData?.phoneNumber ?? "",
                 disabled: isView === true,
                 validator: validator.phoneValidator
             }

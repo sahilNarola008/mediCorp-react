@@ -83,26 +83,26 @@ function useCategories() {
             reject()
           })
       }),
-    onRowDelete: oldData =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, oldData.categoryId) })
-            .then((res) => {
-              if (res.status === 200) {
-                refetchAllCategories()
-                resolve(res.data)
-              }
-            })
-            .catch(err => {
-              console.log(err)
-              logMessage({
-                severity:
-                  statusType.error,
-                msg: Strings.ERROR_DELETING_CATEGORIES
-              })
-            })
-        }, 1000)
-      }),
+    // onRowDelete: oldData =>
+    //   new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       deleteCategories({ url: format(endpointConfig.categories.deleteCategoriesById, oldData.categoryId) })
+    //         .then((res) => {
+    //           if (res.status === 200) {
+    //             refetchAllCategories()
+    //             resolve(res.data)
+    //           }
+    //         })
+    //         .catch(err => {
+    //           console.log(err)
+    //           logMessage({
+    //             severity:
+    //               statusType.error,
+    //             msg: Strings.ERROR_DELETING_CATEGORIES
+    //           })
+    //         })
+    //     }, 1000)
+    //   }),
   }
 
 

@@ -4,6 +4,7 @@ import {
   Group,
   Inventory,
   Slideshow,
+  WorkHistory
 } from "@mui/icons-material";
 import { Strings, appSettings, uuidv4, moment, PropTypes } from "@medicorp";
 
@@ -66,6 +67,16 @@ export const validator = {
       message: "Enter Invalid value",
     },
   },
+  confirmPasswordValidator: (value) => {
+    debugger
+    return ({
+      required: { value: true, message: `password is required!` },
+      pattern: {
+        value: /^([01]\d|2[0-3]):?([0-5]\d)$/g,
+        message: "Time is invalid !",
+      },
+    })
+  },
   requiredValidator: (title) => ({
     required: { value: true, message: `${title} is required!` },
   }),
@@ -75,6 +86,22 @@ export const validator = {
       value: /^([01]\d|2[0-3]):?([0-5]\d)$/g,
       message: "Time is invalid !",
     },
+  },
+  imageValidator: {
+    required: {
+      value: true,
+      message: "Product image is required.",
+    },
+    // validate: {
+    //   lessThan10MB: (files) => {
+    //     console.log(files);
+    //     debugger
+    //     //   // files[0]?.size < 10000000 || "Max Limit of image upload is 10MB"
+    //   },
+    //   // acceptedFormats: (files) =>
+    //   //   ["image/jpeg", "image/png", "image/gif"].includes(files[0]?.type) ||
+    //   //   "Only PNG, JPEG e GIF",
+    // },
   },
   imageValidator: {
     required: {
@@ -116,6 +143,7 @@ const {
   specialization,
   users,
   presentation,
+  presentationHistory
 } = appSettings.routeConfig;
 const {
   MENU_DASHBOARD_TITLE,
@@ -125,6 +153,7 @@ const {
   MENU_DOCTORS_SPECIALIZATION_TITLE,
   MENU_USERS_TITLE,
   MENU_PRESENTATIONSS_TITLE,
+  MENU_PRESENTATIONS_HISTORY_TITLE
 } = Strings;
 
 const menuItems = [
@@ -177,6 +206,13 @@ const menuItems = [
     icon: Slideshow,
     to: presentation.baseURL,
   },
+  {
+    id: "presentationHistory",
+    title: MENU_PRESENTATIONS_HISTORY_TITLE,
+    isVisible: true,
+    icon: WorkHistory,
+    to: presentationHistory.baseURL,
+  },
 ];
 
 export const mainMenuItems = [
@@ -212,6 +248,11 @@ export const mainMenuItems = [
   },
   {
     id: "presentation",
+    children: null,
+    isVisible: true,
+  },
+  {
+    id: "presentationHistory",
     children: null,
     isVisible: true,
   },

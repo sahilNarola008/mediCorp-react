@@ -30,14 +30,15 @@
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
     "react-spinners": "^0.13.1",
-    "react-string-format": "^1.0.0"
+    "react-string-format": "^1.0.0",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "set PORT=3006 && env-cmd -f ./config/.env.dev react-scripts start",
     "start-staging": "env-cmd -f ./config/.env.staging react-scripts start",
     "start-prod": "env-cmd -f ./config/.env.prod react-scripts start",
     "start-qa": "env-cmd -f ./config/.env.qa react-scripts start",
-    "build": "rm -r build; env-cmd -f ./config/.env.dev react-scripts build",
+    "build": " env-cmd -f ./config/.env.dev react-scripts build",
     "build-staging": "rm -r build; env-cmd -f ./config/.env.staging react-scripts build",
     "build-prod": "rm -r build; env-cmd -f ./config/.env.prod react-scripts build",
     "build-qa": "rm -r build; env-cmd -f ./config/.env.qa react-scripts build",

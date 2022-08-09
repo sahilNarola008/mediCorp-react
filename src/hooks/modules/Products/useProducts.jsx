@@ -218,11 +218,11 @@ const useProducts = () => {
         value: rowData?.isActive ?? false,
         disabled: isView === true,
       },
-      imageMasterViewModel: {
+      imageMaster: {
         size: "small",
         col: 12,
         type: fieldTypes.imageDropzone.type,
-        value: `https://pragalbhsoftware.blob.core.windows.net/orga/${rowData?.images?.[0]?.imageUrl}` ?? [],
+        value: rowData?.images?.[0]?.imageUrl ?? [],
         handleSave: (e, data) => {
           productImages = e[0]
         },
@@ -260,7 +260,7 @@ const useProducts = () => {
               productId: rowData.productId,
               isDelete: false,
               organizationId: 1,
-              imageMasterViewModel: [
+              imageMaster: [
                 {
                   productId: rowData.productId,
                   organizationId: 1,
@@ -277,7 +277,7 @@ const useProducts = () => {
               ...data,
               isDelete: false,
               organizationId: 1,
-              imageMasterViewModel: [
+              imageMaster: [
                 {
                   organizationId: 1,
                   imageUrl: imageUrl,
@@ -303,7 +303,7 @@ const useProducts = () => {
               message ?? isError
                 ? Strings.ERROR_OCCURED_WHILE_ADDING_DATA
                 : isEdit === true
-                  ? Strings.PRODUCT_EDITED_SUCCESSFULLY
+                  ? Strings.EDITED_SUCCESSFULLY
                   : Strings.DATA_ADDED_SUCCESSFULLY,
           });
         })

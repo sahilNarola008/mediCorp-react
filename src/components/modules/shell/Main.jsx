@@ -2,13 +2,13 @@ import React, { useEffect, Suspense, lazy } from "react"
 import { Route, Routes, useNavigate, useLocation, matchPath } from "react-router-dom"
 import { Box, Toolbar } from "@mui/material"
 import {
-  appSettings, Categories, Users, Doctors, Specialization, Presentation, Products
+  appSettings, Categories, Users, Doctors, Specialization, Presentation, Products, PresentationHistory
 } from "@medicorp"
 
 const Dashboard = lazy(() => import('components/modules/Dashboard/Dashboard'))
 // const { Dashboard } = lazy(() => import('@medicorp'))
 function Main({ mainClassName }) {
-  const { dashboard, categories, products, doctors, specialization, users, presentation } = appSettings.routeConfig
+  const { dashboard, categories, products, doctors, specialization, users, presentation, presentationHistory } = appSettings.routeConfig
   const { pathname } = useLocation()
   const navigate = useNavigate()
   // const match = matchPath(
@@ -39,6 +39,7 @@ function Main({ mainClassName }) {
           <Route path={specialization.baseURL} element={<Specialization />} />
           <Route path={users.baseURL} element={<Users />} />
           <Route path={presentation.baseURL} element={<Presentation />} />
+          <Route path={presentationHistory.baseURL} element={<PresentationHistory />} />
         </Routes>
       </Suspense>
       <Toolbar />

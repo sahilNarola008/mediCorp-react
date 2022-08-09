@@ -45,6 +45,7 @@ export { format } from "react-string-format";
 export { default as Counter } from "react-mui-counter";
 export { default as moment } from "moment";
 export { v4 as uuidv4 } from "uuid";
+
 export { default as LRU } from "lru-cache";
 // export { default as MaskedInput } from "react-text-mask";
 
@@ -65,6 +66,7 @@ export { default as useDoctors } from "hooks/modules/Doctors/useDoctors";
 export { default as useSpecialization } from "hooks/modules/specialization/useSpecialization";
 export { default as useUsers } from "hooks/modules/Users/useUsers";
 export { default as usePresentation } from "hooks/modules/Presentation/usePresentation";
+export { default as usePresentationHistory } from "hooks/modules/PresentationHistory/usePresentationHistory";
 export { default as useTableIcons } from "hooks/useTableIcons";
 export { SearchBar } from "components/SearchBar";
 export { SearchBox } from "components/SearchBox";
@@ -104,6 +106,7 @@ export { default as Doctors } from "components/modules/Doctors/Doctors";
 export { default as Specialization } from "components/modules/specialization/Specialization";
 export { default as Users } from "components/modules/Users/Users";
 export { default as Presentation } from "components/modules/Presentation/Presentation";
+export { default as PresentationHistory } from "components/modules/PresentationHistory/PresentationHistory";
 export { default as Login } from "components/modules/auth/Login";
 export { default as Overview } from "components/modules/Dashboard/Overview/Overview";
 export { default as RecentScreens } from "components/modules/Dashboard/Recentscreens/Recentscreens";
@@ -121,6 +124,8 @@ export { default as doctorsDataColumns } from "dataColumns/doctorsDataColumns";
 export { default as specializationDataColumn } from "dataColumns/specializationDataColumn";
 export { default as usersDataColumn } from "dataColumns/usersDataColumn";
 export { default as presentationDataColumns } from "dataColumns/presentationDataColumns";
+export { default as presentationHistoryDataColumns } from "dataColumns/presentationHistoryDataColumns";
+export { default as presentationProductDataColumns } from "dataColumns/presentationProductDataColumns";
 
 //#endregion
 

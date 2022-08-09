@@ -164,8 +164,23 @@ export default function useDoctors() {
                 disabled: isView === true,
                 validator: validator.emailValidator
             },
+            specialityId: {
+                label: Strings.COLUMN_SPECIALITY_TITLE,
+                type: fieldTypes.autoComplete.type,
+                size: "small",
+                variant: "outlined",
+                col: 6,
+                titleProp: "country",
+                validator: validator.requiredValidator(Strings.SPECIALITY),
+                value: rowData?.specialityId && { label: rowData?.specialityTitle, id: rowData?.specialityId },
+                menuItems: speciality?.data ? speciality?.data.map(g => ({
+                    label: g?.title,
+                    id: g?.specialityId
+                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
+                equalityComparer: (option, value) => option.specialityId === value,
+            },
             mobileNumber: {
-                label: Strings.PHONE,
+                label: Strings.COLUMN_MOBILE_NUMBER,
                 size: "small",
                 variant: "outlined",
                 col: 4,
@@ -174,20 +189,41 @@ export default function useDoctors() {
                 disabled: isView === true,
                 validator: validator.phoneValidator
             },
-            specialityId: {
-                label: Strings.COLUMN_SPECIALITY_TITLE,
-                type: fieldTypes.autoComplete.type,
+            phoneNumber: {
+                label: Strings.COLUMN_PHONE_NUMBER,
                 size: "small",
                 variant: "outlined",
                 col: 4,
-                titleProp: "country",
-                validator: validator.requiredValidator(Strings.SPECIALITY),
-                value: rowData?.specialityId && { label: rowData.specialityTitle, id: rowData.specialityId },
-                menuItems: speciality?.data ? speciality?.data.map(g => ({
-                    label: g.title,
-                    id: g.specialityId
-                })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
-                equalityComparer: (option, value) => option.countryId === value,
+                type: fieldTypes.text.type,
+                value: rowData?.phoneNumber ?? "",
+                disabled: isView === true,
+            },
+            clinicPhoneNumber: {
+                label: Strings.COLUMN_CLINIC_PHONE_NUMBER,
+                size: "small",
+                variant: "outlined",
+                col: 4,
+                type: fieldTypes.text.type,
+                value: rowData?.clinicPhoneNumber ?? "",
+                disabled: isView === true,
+            },
+            anniversaryDate: {
+                label: Strings.COLUMN_ANNIVERSARY_DATE,
+                size: "small",
+                variant: "outlined",
+                col: 6,
+                type: fieldTypes.date.type,
+                value: rowData?.anniversaryDate ?? null,
+                disabled: isView === true,
+            },
+            dateOfBirth: {
+                label: Strings.COLUMN_DATE_OF_BIRTH,
+                size: "small",
+                variant: "outlined",
+                col: 6,
+                type: fieldTypes.date.type,
+                value: rowData?.dateOfBirth ?? null,
+                disabled: isView === true,
             },
             addresses: {
                 label: Strings.COLUMN_ADDRESS,
@@ -207,7 +243,7 @@ export default function useDoctors() {
                 col: 4,
                 titleProp: "country",
                 validator: validator.requiredValidator("Country"),
-                value: rowData?.countryId && { label: rowData.countryName, id: rowData.countryId },
+                value: rowData?.countryId && { label: rowData?.countryName, id: rowData?.countryId },
                 menuItems: countries?.data ? countries?.data.map(g => ({
                     label: g.countryName,
                     id: g.countryId
@@ -223,7 +259,7 @@ export default function useDoctors() {
                 col: 4,
                 titleProp: "State",
                 validator: validator.requiredValidator("State"),
-                value: rowData?.stateId && { label: rowData.stateName, id: rowData.stateId },
+                value: rowData?.stateId && { label: rowData?.stateName, id: rowData?.stateId },
                 menuItems: stateData ? stateData.map(g => ({
                     label: g.stateName,
                     id: g.stateId
@@ -240,10 +276,10 @@ export default function useDoctors() {
                 col: 4,
                 titleProp: "City",
                 validator: validator.requiredValidator("City"),
-                value: rowData.cityId && { label: rowData.cityName, id: rowData.cityId },
+                value: rowData?.cityId && { label: rowData?.cityName, id: rowData?.cityId },
                 menuItems: cityData ? cityData.map(g => ({
-                    label: g.cityName,
-                    id: g.cityId
+                    label: g?.cityName,
+                    id: g?.cityId
                 })).sort((a, b) => (a.text ?? "").localeCompare(b.text ?? "")) : [],
                 equalityComparer: (option, value) => option.cityId === value,
                 disabled: cityData.length == 0 ? true : false
