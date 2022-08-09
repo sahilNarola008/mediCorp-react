@@ -621,28 +621,26 @@ const usePresentation = () => {
     }
 
 
-}
-    }
 
-return {
-    tableRef,
-    detailPanel,
-    searchOptions,
-    AllPresentation,
-    presentationData,
-    allPresentationLoading,
-    clearCTAButton,
-    filterReportLabel,
-    CTAButtons,
-    actions,
-    modalHeader,
-    modalContent,
-    modalActions,
-    modalFormResetKeys,
-    modalTaskRunning,
-    handleModalClose,
-    openDialog,
-}
+    return {
+        tableRef,
+        detailPanel,
+        searchOptions,
+        AllPresentation,
+        presentationData,
+        allPresentationLoading,
+        clearCTAButton,
+        filterReportLabel,
+        CTAButtons,
+        actions,
+        modalHeader,
+        modalContent,
+        modalActions,
+        modalFormResetKeys,
+        modalTaskRunning,
+        handleModalClose,
+        openDialog,
+    }
 }
 
 export default usePresentation
