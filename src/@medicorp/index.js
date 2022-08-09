@@ -125,6 +125,7 @@ export { default as specializationDataColumn } from "dataColumns/specializationD
 export { default as usersDataColumn } from "dataColumns/usersDataColumn";
 export { default as presentationDataColumns } from "dataColumns/presentationDataColumns";
 export { default as presentationHistoryDataColumns } from "dataColumns/presentationHistoryDataColumns";
+export { default as presentationProductDataColumns } from "dataColumns/presentationProductDataColumns";
 
 //#endregion
 

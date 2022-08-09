@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Chip } from "@mui/material"
 import { Strings } from "@medicorp"
 export default function presentationDataColumns() {
     const presentationColumns = [
-        { title: Strings.COLUMN_ID, field: 'presentationId' },
+        { title: Strings.COLUMN_ID, field: 'presentationID' },
         { title: Strings.COLUMNS_DOCTORNAME_TILTLE, field: 'doctorName' },
         { title: Strings.COLUMNS_USERNAME_TILTLE, field: 'userName' },
         // {
