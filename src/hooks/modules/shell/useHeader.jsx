@@ -326,8 +326,7 @@ const useHeader = () => {
                 severity: statusType.error,
                 msg: msg ?? errorMessage ?? message ?? Strings.SOMETHING_WENT_WRONG,
             })
-        })
-            .finally(() => setModalTaskRunning(false))
+        }).finally(() => setModalTaskRunning(false))
     }
     const handleSubmit = (data) => {
         setModalTaskRunning(true)

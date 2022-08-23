@@ -59,7 +59,7 @@ const useLogin = () => {
     setUserInputData(data)
     isForgotPassword ? forgotPasswordSendOTP({ data })
       .then((res) => {
-        if (res.status === 200) {
+        if (res?.data?.statusCode === 200) {
           logMessage({
             severity: statusType.success,
             msg: "We Have Sent An OTP On Your Email Address."

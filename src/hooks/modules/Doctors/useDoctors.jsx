@@ -376,6 +376,7 @@ export default function useDoctors() {
             if (res.status === 200) {
                 // handleModalClose()
                 refetchDoctors()
+                handleModalClose()
             }
             logMessage({
                 severity: !isError && status != 400 ? statusType.success : statusType.error,
@@ -383,7 +384,7 @@ export default function useDoctors() {
             })
         })
             .catch(err => err)
-            .finally(() => setModalTaskRunning(false), handleModalClose())
+            .finally(() => setModalTaskRunning(false))
     }
 
     const handleModalClose = () => {

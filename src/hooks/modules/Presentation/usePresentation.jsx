@@ -523,7 +523,7 @@ const usePresentation = () => {
                     if (val.userName.toLowerCase().match(searchData["sSearchText"].value.toLowerCase())) {
                         return val
                     }
-                    if (val.presentationId == searchData["sSearchText"].value) {
+                    if (val.presentationID == searchData["sSearchText"].value) {
                         return val
                     }
 

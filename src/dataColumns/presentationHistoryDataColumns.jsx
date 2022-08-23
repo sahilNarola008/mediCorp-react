@@ -5,7 +5,7 @@ import { Place } from "@mui/icons-material"
 export default function presentationHistoryDataColumns(handleDoctorNameClick, handleUserNameClick, handlePresentationClick) {
     const presentationHistoryColumns = [
         { title: Strings.COLUMN_ID, field: 'historyId' },
-        { title: Strings.COLUMN_PRESENTATION_ID, field: 'presentationId' },
+        { title: Strings.COLUMN_PRESENTATION_ID, field: 'presentationID' },
         {
             title: Strings.COLUMNS_DOCTORNAME_TILTLE, field: 'doctorName',
             render: rowData => <LoadingButton
@@ -36,10 +36,10 @@ export default function presentationHistoryDataColumns(handleDoctorNameClick, ha
             title: Strings.COLUMNS_PRESENTATION_TITLE, field: 'presenationTitle',
             render: rowData => <LoadingButton
                 size="small"
-                onClick={() => { handlePresentationClick(rowData?.presentationId) }}
+                onClick={() => { handlePresentationClick(rowData?.presentationID) }}
                 // loadingIndicator="Loading…"
                 variant="outlined"
-                key={rowData?.presenationTitle + rowData?.presentationId}
+                key={rowData?.presenationTitle + rowData?.presentationID}
             >
                 {rowData?.presenationTitle}
             </LoadingButton>
