@@ -290,22 +290,27 @@ const useProducts = () => {
           });
       response
         .then((res) => {
-          const { msg, errorMessage, message, title, isError, status, errors } =
+          const { message, title, errorTitle, isError, status, errors } =
             res.data;
           console.log(res.data);
           if (res.status === 200 || res.status === 201) {
             handleModalClose();
             refetchAllProducts();
-          }
-          logMessage({
-            severity: !isError ? statusType.success : statusType.error,
-            msg:
-              message ?? isError
-                ? Strings.ERROR_OCCURED_WHILE_ADDING_DATA
-                : isEdit === true
+            logMessage({
+              severity: statusType.success,
+              msg:
+                isEdit === true
                   ? Strings.EDITED_SUCCESSFULLY
-                  : Strings.DATA_ADDED_SUCCESSFULLY,
-          });
+                  : Strings.DATA_ADDED_SUCCESSFULLY
+            });
+          }
+          if (res.status === 400) {
+            logMessage({
+              severity: (isError || Object.keys(errors).length > 0) ? statusType.error : statusType.success,
+              msg: message ?? errorTitle ?? title ?? Strings.ERROR_OCCURED_WHILE_ADDING_DATA
+            });
+          }
+
         })
         .catch((err) => err)
         .finally(() => setModalTaskRunning(false));
