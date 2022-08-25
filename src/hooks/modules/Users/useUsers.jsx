@@ -380,14 +380,14 @@ const useUsers = () => {
             }
         })
         response.then((res) => {
-            const { msg, errorMessage, message, title } = res.data
+            const { msg, errorMessage, message, title, error } = res.data
             if (res.status === 200) {
                 handleModalClose()
                 refetchUsers()
             }
             logMessage({
                 severity: res.status === 200 ? statusType.success : statusType.error,
-                msg: msg ?? errorMessage ?? message ?? title
+                msg: msg ?? error ?? errorMessage ?? message ?? title
             })
         })
             .catch(err => err)
