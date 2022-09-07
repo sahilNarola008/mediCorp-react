@@ -2,8 +2,8 @@ import { Avatar, Box, Button, Chip, IconButton } from "@mui/material"
 import { LoadingButton, Strings } from "@medicorp"
 import { blue } from "@mui/material/colors"
 import { Place } from "@mui/icons-material"
-export default function presentationHistoryDataColumns(handleDoctorNameClick, handleUserNameClick, handlePresentationClick) {
-    const presentationHistoryColumns = [
+export default function presentationHistoryByPresentationIdDataColumns(handleDoctorNameClick, handleUserNameClick, handlePresentationClick) {
+    const presentationHistoryByPresentationIdColumns = [
         { title: Strings.COLUMN_ID, field: 'historyId' },
         { title: Strings.COLUMN_PRESENTATION_ID, field: 'presentationID' },
         {
@@ -36,15 +36,6 @@ export default function presentationHistoryDataColumns(handleDoctorNameClick, ha
         },
         {
             title: Strings.COLUMNS_PRESENTATION_TITLE, field: 'presenationTitle',
-            render: rowData => <LoadingButton
-                size="small"
-                onClick={() => { handlePresentationClick(rowData?.presentationID) }}
-                // loadingIndicator="Loading…"
-                variant="outlined"
-                key={rowData?.presenationTitle + rowData?.presentationID}
-            >
-                {rowData?.presenationTitle}
-            </LoadingButton>
         },
         { title: Strings.COLUMN_CITY, field: 'cityName' },
         { title: Strings.COLUMN_STATE, field: 'stateName' },
@@ -63,5 +54,5 @@ export default function presentationHistoryDataColumns(handleDoctorNameClick, ha
                 </IconButton>
         },
     ]
-    return { presentationHistoryColumns }
+    return { presentationHistoryByPresentationIdColumns }
 }
