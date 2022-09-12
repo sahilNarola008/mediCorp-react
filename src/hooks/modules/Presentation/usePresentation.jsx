@@ -877,7 +877,6 @@ const usePresentation = () => {
         getPresentationHistoryByPresentationId(format(endpointConfig.presentationHistory.GetPresentationHistoryByPresentationId, presentationId)).then((res) => {
             const { data } = res?.data
             console.log(data);
-            debugger
             setModalHeader({
                 isForm: true,
                 title: Strings.MENU_PRESENTATIONS_HISTORY_TITLE,

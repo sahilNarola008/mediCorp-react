@@ -3,6 +3,7 @@ import {
   useTableIcons,
   useAxios,
   useLocalStorage,
+  useSessionStorage,
   config,
   Context,
   Strings,
@@ -16,6 +17,7 @@ const useLogin = () => {
   const { parseJwt } = config();
   const { fieldTypes, endpointConfig, statusType } = appSettings;
   const { setAppItem, getAppItem } = useLocalStorage();
+  const { setSessionAppItem, getSessionAppItem } = useSessionStorage();
   const { tableIcons } = useTableIcons();
   const navigate = useNavigate();
   const [formHeader, setFormHeader] = useState({});
@@ -30,7 +32,7 @@ const useLogin = () => {
 
   const [userInputData, setUserInputData] = useState()
 
-  const [token, setToken] = useState(getAppItem("token") || null);
+  const [token, setToken] = useState(getSessionAppItem("token") || null);
   const [statusCode, setstatusCode] = useState();
 
   const [{ }, forgotPasswordSendOTP] = useAxios(
@@ -125,7 +127,8 @@ const useLogin = () => {
                 // console.log(useDetails);
                 setFormTaskRunning(false);
               }, 2000);
-              setAppItem("token", res.data);
+              // setAppItem("token", res.data);
+              setSessionAppItem("token", res.data);
               setContextToken(res.data)
               navigate(`/`);
             } else {

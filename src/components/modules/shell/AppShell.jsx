@@ -10,6 +10,7 @@ import {
   appSettings,
   Context,
   useLocalStorage,
+  useSessionStorage,
   getAppMenus,
   mainMenuItems,
   Footer
@@ -17,16 +18,16 @@ import {
 
 const AppShell = () => {
   const { getAppItem } = useLocalStorage()
+  const { setSessionAppItem, getSessionAppItem } = useSessionStorage()
   const { setMenus } = useContext(Context)
   const { mobileOpen, handleDrawerToggle, open } = useMenuState()
   const classes = useStyles()
   const { routeConfig } = appSettings
-  const [token, setToken] = useState(getAppItem("token") || null)
+  const [token, setToken] = useState(getSessionAppItem("token") || null)
 
   useEffect(() => {
     if (token)
       setMenus(getAppMenus(mainMenuItems))
-
   }, [])
   return (
     <>

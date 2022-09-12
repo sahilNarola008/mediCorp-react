@@ -55,6 +55,7 @@ export { default as LRU } from "lru-cache";
 export { default as useStyles } from "hooks/useStyles";
 export { default as useStartup } from "hooks/useStartup";
 export { default as useLocalStorage } from "hooks/useLocalStorage";
+export { default as useSessionStorage } from "hooks/useSessionStorage";
 export { default as useMenuState } from "hooks/modules/shell/useMenuState";
 export { default as useNavTabs } from "hooks/modules/shell/useNavTabs";
 export { default as useHeader } from "hooks/modules/shell/useHeader";

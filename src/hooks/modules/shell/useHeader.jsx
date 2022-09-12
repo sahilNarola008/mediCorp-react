@@ -1,4 +1,4 @@
-import { appSettings, Context, format, Strings, useAxios, useLocalStorage, useStyles, useTableIcons, validator } from "@medicorp";
+import { appSettings, Context, format, Strings, useAxios, useLocalStorage, useStyles, useTableIcons, validator, useSessionStorage } from "@medicorp";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -31,6 +31,7 @@ const useHeader = () => {
     const { tableIcons } = useTableIcons()
     const { routeConfig, endpointConfig, fieldTypes, statusType } = appSettings;
     const { removeAppItem } = useLocalStorage();
+    const { removeSessionAppItem } = useSessionStorage();
     const navigate = useNavigate();
 
     const [{ data: countries, loading: countriesLoading }, refetchCountries] = useAxios(endpointConfig.country.getAll)
@@ -56,7 +57,7 @@ const useHeader = () => {
     ] = useAxios(endpointConfig.authentication.getLogedInUserDetail)
 
     const logout = async (e) => {
-        removeAppItem("token")
+        removeSessionAppItem("token")
         signOut()
         navigate(routeConfig.login)
     };

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { configure, axios, appSettings, useLocalStorage } from "@medicorp";
+import { configure, axios, appSettings, useSessionStorage, useLocalStorage } from "@medicorp";
 
 const Context = createContext();
 
@@ -11,9 +11,10 @@ function ContextProvider(props) {
   const [isManipulation, setIsManipulation] = useState(false);
   const [menus, setMenus] = useState([])
   const { getAppItem } = useLocalStorage();
+  const { getSessionAppItem } = useSessionStorage();
 
   const [isLoading, setIsLoading] = useState(false)
-  const [token, setToken] = useState(getAppItem("token"));
+  const [token, setToken] = useState(getSessionAppItem("token"));
   //#region axios interceptors
   // axios.interceptors.request.use(
   //     async (config) => {
